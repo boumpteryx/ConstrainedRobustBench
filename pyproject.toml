@@ -18,6 +18,9 @@ Jinja2="~3.1.2"
 autoattack = { git = "https://github.com/fra31/auto-attack.git", rev = "6482e4d6fbeeb51ae9585c41b16d50d14576aadc" }
 torchdiffeq = "^0.2.3"
 geotorch = "^0.3.0"
+scikit-learn = "^1.1.2"
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
 
 [build-system]
 requires = ["poetry-core"]
