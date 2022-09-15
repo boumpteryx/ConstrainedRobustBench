@@ -15,6 +15,9 @@ import random
 from autoattack.other_utils import L0_norm, L1_norm, L2_norm
 from autoattack.checks import check_zero_gradients
 
+from constraints.constraints_executor import PytorchConstraintsExecutor
+from constraints.relation_constraint import AndConstraint
+
 
 def L1_projection(x2, y2, eps1):
     '''
@@ -188,19 +191,23 @@ class APGDAttack():
 
         return x / (t.view(-1, *([1] * self.ndims)) + 1e-12)
 
+
+    def constraints_loss(self, x):
+        executor = PytorchConstraintsExecutor(
+            AndConstraint(self.constraints.relation_constraints),
+            feature_names=self.constraints.feature_names,
+        )
+        return executor.execute(x)
+
     def dlr_loss(self, x, y):
         x_sorted, ind_sorted = x.sort(dim=1)
         ind = (ind_sorted[:, -1] == y).float()
         u = torch.arange(x.shape[0])
 
         return -(x[u, y] - x_sorted[:, -2] * ind - x_sorted[:, -1] * (
-            1. - ind)) / (x_sorted[:, -1] - x_sorted[:, -3] + 1e-12)
+            1. - ind)) / (x_sorted[:, -1] - x_sorted[:, -3] + 1e-12) - self.constraints_loss(x)
 
-    ### TODO: import constraints
-    def constraints_loss(self, x, y):
 
-        return 0
-    #
     
     def attack_single_run(self, x, y, x_init=None):
         if len(x.shape) < self.ndims:
@@ -602,7 +609,7 @@ class APGDAttack_targeted(APGDAttack):
         u = torch.arange(x.shape[0])
 
         return -(x[u, y] - x[u, self.y_target]) / (x_sorted[:, -1] - .5 * (
-            x_sorted[:, -3] + x_sorted[:, -4]) + 1e-12)
+            x_sorted[:, -3] + x_sorted[:, -4]) + 1e-12) - self.constraints_loss(x)
 
     def ce_loss_targeted(self, x, y):
         return -1. * F.cross_entropy(x, self.y_target, reduction='none')
