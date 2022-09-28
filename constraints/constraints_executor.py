@@ -5,7 +5,7 @@ from typing import Any
 import numpy as np
 import numpy.typing as npt
 
-import pytorch as torch
+import torch
 
 from constrained_attacks.constraints.relation_constraint import (
     AndConstraint,
@@ -476,7 +476,7 @@ class PytorchConstraintsExecutor:
         self.feature_names = feature_names
 
     def execute(self, x: "torch.Tensor") -> "torch.Tensor":
-        visitor = NumpyConstraintsVisitor(
+        visitor = PytorchConstraintsVisitor(
             self.constraint, x, self.feature_names
         )
         return visitor.execute()

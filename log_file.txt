@@ -1,0 +1,125 @@
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+Warning: with only 2 classes it is not possible to use the DLR loss!
+initial accuracy: 41.70%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+Warning: with only 2 classes it is not possible to use the DLR loss!
+initial accuracy: 41.70%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.70%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+Warning: with only 2 classes it is not possible to use the DLR loss!
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+initial accuracy: 52.00%
+Warning: it seems that the output is a probability distribution, please be sure that the logits are used! See flags_doc.md for details.
+initial accuracy: 41.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+initial accuracy: 43.10%
+apgd-ce - 1/1 - 136 out of 431 successfully perturbed
+robust accuracy after APGD-CE: 29.50% (total time 0.4 s)
+max Linf perturbation: 10675926.00000, nan in tensor: 0, max: 10725245.00000, min: -2.00000
+robust accuracy: 29.50%
+initial accuracy: 43.10%
+apgd-ce - 1/1 - 136 out of 431 successfully perturbed
+robust accuracy after APGD-CE: 29.50% (total time 0.4 s)
+max Linf perturbation: 10675926.00000, nan in tensor: 0, max: 10725245.00000, min: -2.00000
+robust accuracy: 29.50%
+initial accuracy: 94.60%
+apgd-ce - 1/2 - 33 out of 500 successfully perturbed
+apgd-ce - 2/2 - 31 out of 446 successfully perturbed
+robust accuracy after APGD-CE: 88.20% (total time 1.0 s)
+max Linf perturbation: 10.81834, nan in tensor: 0, max: 42.75219, min: -1.94214
+robust accuracy: 88.20%
+initial accuracy: 94.60%
+apgd-ce - 1/2 - 33 out of 500 successfully perturbed
+apgd-ce - 2/2 - 31 out of 446 successfully perturbed
+robust accuracy after APGD-CE: 88.20% (total time 1.0 s)
+max Linf perturbation: 10.81834, nan in tensor: 0, max: 42.75219, min: -1.94214
+robust accuracy: 88.20%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+initial accuracy: 94.60%
+apgd-ce - 1/2 - 33 out of 500 successfully perturbed
+apgd-ce - 2/2 - 31 out of 446 successfully perturbed
+robust accuracy after APGD-CE: 88.20% (total time 1.3 s)
+max Linf perturbation: 10.81834, nan in tensor: 0, max: 42.75219, min: -1.94214
+robust accuracy: 88.20%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+apgd-ce - 1/2 - 72 out of 500 successfully perturbed
+apgd-ce - 2/2 - 39 out of 380 successfully perturbed
+robust accuracy after APGD-CE: 76.90% (total time 1.2 s)
+max Linf perturbation: 19.13427, nan in tensor: 0, max: 42.75219, min: -1.94214
+robust accuracy: 76.90%
+initial accuracy: 88.00%
+apgd-ce - 1/2 - 72 out of 500 successfully perturbed
+apgd-ce - 2/2 - 39 out of 380 successfully perturbed
+robust accuracy after APGD-CE: 76.90% (total time 1.3 s)
+max Linf perturbation: 19.13427, nan in tensor: 0, max: 42.75219, min: -1.94214
+robust accuracy: 76.90%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
+initial accuracy: 88.00%
