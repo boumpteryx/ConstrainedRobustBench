@@ -16,8 +16,8 @@ from autoattack.other_utils import L0_norm, L1_norm, L2_norm
 from autoattack.checks import check_zero_gradients
 
 from constraints.constraints_executor import PytorchConstraintsExecutor
-from constraints.relation_constraint import AndConstraint
-from constraints.constraints import Constraints
+from constrained_attacks.constraints.relation_constraint import AndConstraint
+from constrained_attacks.constraints.constraints import Constraints
 
 
 def L1_projection(x2, y2, eps1):

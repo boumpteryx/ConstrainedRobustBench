@@ -421,8 +421,8 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
                 raise NotImplementedError
 
         elif isinstance(constraint_node, SafeDivision):
-            dividend = constraint_node.dividend.accept(self)
-            divisor = constraint_node.divisor.accept(self)
+            dividend = torch.tensor(constraint_node.dividend.accept(self))
+            divisor = torch.tensor(constraint_node.divisor.accept(self))
             fill_value = constraint_node.fill_value.accept(self)
             return torch.divide(
                 dividend,
@@ -435,11 +435,12 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
 
         # ------ Binary
         elif isinstance(constraint_node, OrConstraint):
-            operands = [e.accept(self) for e in constraint_node.operands]
+            operands = torch.tensor([e.accept(self) for e in constraint_node.operands])
             return torch.min(operands, axis=0)
 
         elif isinstance(constraint_node, AndConstraint):
-            operands = [e.accept(self) for e in constraint_node.operands]
+            my_object = [e.accept(self).values.numpy() for e in constraint_node.operands]
+            operands = torch.tensor(my_object)
             return torch.sum(operands, axis=0)
 
         # ------ Comparison
@@ -447,18 +448,20 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
             left_operand = constraint_node.left_operand.accept(self)
             right_operand = constraint_node.right_operand.accept(self)
             zeros = self.get_zeros_np([left_operand, right_operand])
-            return torch.max([zeros, (left_operand - right_operand)], axis=0)
+            my_sub = (left_operand - right_operand)
+            my_test = np.array([zeros.detach().numpy(), my_sub.detach().numpy()])
+            return torch.max(torch.tensor(my_test), dim=0)
 
         elif isinstance(constraint_node, LessConstraint):
             left_operand = constraint_node.left_operand.accept(self) + EPS
             right_operand = constraint_node.right_operand.accept(self)
             zeros = self.get_zeros_np([left_operand, right_operand])
-            return torch.max([zeros, (left_operand - right_operand)], axis=0)
+            return torch.max(torch.tensor([zeros, (left_operand - right_operand)]), axis=0)
 
         elif isinstance(constraint_node, EqualConstraint):
             left_operand = constraint_node.left_operand.accept(self)
             right_operand = constraint_node.right_operand.accept(self)
-            return torch.abs(left_operand - right_operand)
+            return torch.abs(torch.tensor(left_operand - right_operand))
 
         else:
             raise NotImplementedError

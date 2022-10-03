@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 
-from constrained_attacks.constraints.constraints_executor import (
+from constraints.constraints_executor import (
     PytorchConstraintsExecutor,
 )
 from constrained_attacks.constraints.relation_constraint import AndConstraint
