@@ -106,7 +106,7 @@ class APGDAttack:
     def __init__(
         self,
         predict,
-        constraints: Constraints,
+        constraints: Constraints=None,
         n_iter=100,
         norm="Linf",
         n_restarts=1,
@@ -207,7 +207,7 @@ class APGDAttack:
             x_sorted[:, -1] - x_sorted[:, -3] + 1e-12
         )
 
-    def ce_loss(self,x,y):
+    def ce_loss(self,logits,x,y):
         return nn.CrossEntropyLoss(reduction="none") + self.constraints_loss(x)
 
     def attack_single_run(self, x, y, x_init=None):
@@ -244,7 +244,8 @@ class APGDAttack:
 
         if not self.is_tf_model:
             if self.loss == "ce":
-                criterion_indiv = self.ce_loss # nn.CrossEntropyLoss(reduction="none")  # + self.constraints_loss
+                # criterion_indiv = self.ce_loss # nn.CrossEntropyLoss(reduction="none")  # + self.constraints_loss
+                criterion_indiv = nn.CrossEntropyLoss(reduction="none")  # + self.constraints_loss
             elif self.loss == "ce-targeted-cfts":
                 criterion_indiv = lambda x, y: -1.0 * F.cross_entropy(
                     x, y, reduction="none"
@@ -276,7 +277,11 @@ class APGDAttack:
                 with torch.enable_grad():
                     logits = self.model(x_adv)
                     loss_indiv = criterion_indiv(logits, y)
-                    loss = loss_indiv.sum()
+                    constraints_loss = self.constraints_loss(x)
+                    if self.constraints != None:
+                        loss = loss_indiv.sum() - constraints_loss.sum()
+                    else:
+                        loss = loss_indiv.sum()
 
                 grad += torch.autograd.grad(loss, [x_adv])[0].detach()
             else:
