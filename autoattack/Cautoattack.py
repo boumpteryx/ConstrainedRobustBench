@@ -155,6 +155,12 @@ class AutoAttack():
                         self.apgd.loss = 'ce'
                         self.apgd.seed = self.get_seed()
                         adv_curr = self.apgd.perturb(x, y) #cheap=True
+
+                    elif attack == 'apgd-ce-constrained':
+                        # apgd on cross-entropy loss
+                        self.apgd.loss = 'ce-constrained'
+                        self.apgd.seed = self.get_seed()
+                        adv_curr = self.apgd.perturb(x, y) #cheap=True
                     
                     elif attack == 'apgd-dlr':
                         # apgd on dlr loss
@@ -175,6 +181,12 @@ class AutoAttack():
                     
                     elif attack == 'apgd-t':
                         # targeted apgd
+                        self.apgd_targeted.seed = self.get_seed()
+                        adv_curr = self.apgd_targeted.perturb(x, y) #cheap=True
+
+                    elif attack == 'apgd-t-constrained':
+                        # targeted apgd
+                        self.apgd_targeted.loss = 'ce-targeted-constrained'
                         self.apgd_targeted.seed = self.get_seed()
                         adv_curr = self.apgd_targeted.perturb(x, y) #cheap=True
                     

@@ -106,7 +106,7 @@ class APGDAttack:
     def __init__(
         self,
         predict,
-        constraints: Constraints=None,
+        constraints: Constraints = None,
         n_iter=100,
         norm="Linf",
         n_restarts=1,
@@ -207,7 +207,7 @@ class APGDAttack:
             x_sorted[:, -1] - x_sorted[:, -3] + 1e-12
         )
 
-    def ce_loss(self,logits,x,y):
+    def ce_loss(self, logits, x, y):
         return nn.CrossEntropyLoss(reduction="none") + self.constraints_loss(x)
 
     def attack_single_run(self, x, y, x_init=None):
@@ -244,8 +244,9 @@ class APGDAttack:
 
         if not self.is_tf_model:
             if self.loss == "ce":
-                # criterion_indiv = self.ce_loss # nn.CrossEntropyLoss(reduction="none")  # + self.constraints_loss
-                criterion_indiv = nn.CrossEntropyLoss(reduction="none")  # + self.constraints_loss
+                criterion_indiv = nn.CrossEntropyLoss(reduction="none")
+            elif self.loss == "ce-constrained":
+                criterion_indiv = nn.CrossEntropyLoss(reduction="none")
             elif self.loss == "ce-targeted-cfts":
                 criterion_indiv = lambda x, y: -1.0 * F.cross_entropy(
                     x, y, reduction="none"
@@ -255,14 +256,14 @@ class APGDAttack:
             elif self.loss == "dlr-targeted":
                 criterion_indiv = self.dlr_loss_targeted
             elif self.loss == "ce-targeted":
-                criterion_indiv = self.ce_loss_targeted  # + self.constraints_loss
+                criterion_indiv = self.ce_loss_targeted
+            elif self.loss == "ce-targeted-constrained":
+                criterion_indiv = self.ce_loss_targeted
             else:
                 raise ValueError("unknowkn loss")
         else:
             if self.loss == "ce":
-                criterion_indiv = (
-                    self.model.get_logits_loss_grad_xent
-                )  # + self.constraints_loss
+                criterion_indiv = self.model.get_logits_loss_grad_xent
             elif self.loss == "dlr":
                 criterion_indiv = self.model.get_logits_loss_grad_dlr
             elif self.loss == "dlr-targeted":
@@ -278,7 +279,9 @@ class APGDAttack:
                     logits = self.model(x_adv)
                     loss_indiv = criterion_indiv(logits, y)
                     constraints_loss = self.constraints_loss(x)
-                    if self.constraints != None:
+                    if self.constraints != None and self.loss == "ce-constrained":
+                        loss = loss_indiv.sum() - constraints_loss.sum()
+                    elif self.constraints != None and self.loss == "ce-targeted-constrained":
                         loss = loss_indiv.sum() - constraints_loss.sum()
                     else:
                         loss = loss_indiv.sum()
@@ -512,7 +515,7 @@ class APGDAttack:
                             are returned, otherwise adversarial examples
         """
 
-        assert self.loss in ["ce", "dlr"]  #'ce-targeted-cfts'
+        assert self.loss in ["ce", "dlr", "ce-constrained"]  #'ce-targeted-cfts'
         if not y is None and len(y.shape) == 0:
             x.unsqueeze_(0)
             y.unsqueeze_(0)
@@ -678,7 +681,8 @@ class APGDAttack_targeted(APGDAttack):
         self.y_target = None
         self.n_target_classes = n_target_classes
 
-    def constraints_loss(self, x):
+
+    def constraints_loss_targeted(self, x):
         executor = PytorchConstraintsExecutor(
             AndConstraint(self.constraints.relation_constraints),
             feature_names=self.constraints.feature_names,
@@ -694,15 +698,15 @@ class APGDAttack_targeted(APGDAttack):
         ) - self.constraints_loss(x)
 
     def ce_loss_targeted(self, x, y):
-        return -1.0 * F.cross_entropy(x, self.y_target, reduction="none") + self.constraints_loss(x)
+        return -1.0 * F.cross_entropy(x, self.y_target, reduction="none")
 
     def perturb(self, x, y=None, x_init=None):
         """
         :param x:           clean images
         :param y:           clean labels, if None we use the predicted labels
         """
-
-        assert self.loss in ["dlr-targeted"]  #'ce-targeted'
+        print(self.loss)
+        assert self.loss in ["ce-targeted-constrained", "ce-targeted", "dlr-targeted"]
         if not y is None and len(y.shape) == 0:
             x.unsqueeze_(0)
             y.unsqueeze_(0)

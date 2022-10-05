@@ -440,7 +440,7 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
 
         elif isinstance(constraint_node, AndConstraint):
             my_object = [e.accept(self).values.numpy() for e in constraint_node.operands]
-            operands = torch.tensor(my_object)
+            operands = torch.tensor(np.array(my_object))
             return torch.sum(operands, axis=0)
 
         # ------ Comparison
