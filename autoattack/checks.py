@@ -121,11 +121,11 @@ def check_n_classes(n_cls, attacks_to_run, apgd_targets, fab_targets,
         if n_cls <= 2:
             msg = f'with only {n_cls} classes it is not possible to use the DLR loss!'
         elif n_cls == 3:
-            msg = f'with only {n_cls} classes it is not possible to use the targeted DLR loss!'
-        elif 'apgd-t' in attacks_to_run and \
+            msg = f'with only {n_cls} classes it is not possible to use the targeted DLR or CE constrained loss!'
+        elif 'apgd-t' in attacks_to_run or 'apgd-t-constrained' in attacks_to_run and \
             apgd_targets + 1 > n_cls:
             msg = f'it seems that more target classes ({apgd_targets})' + \
-                f' than possible ({n_cls - 1}) are used in {"apgd-t".upper()}!'
+                f' than possible ({n_cls - 1}) are used in {"apgd-t".upper()} or in {"apgd-t-constrained".upper()}!'
     if 'fab-t' in attacks_to_run and fab_targets + 1 > n_cls:
         if msg is None:
             msg = f'it seems that more target classes ({apgd_targets})' + \

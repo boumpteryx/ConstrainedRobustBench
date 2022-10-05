@@ -45,7 +45,7 @@ class Net(nn.Module):
     def __init__(self, preprocessor):
         super().__init__()
         self.preprocessor = preprocessor
-        self.fc0 = nn.Linear(63, 64)  # first input is # of features
+        self.fc0 = nn.Linear(24222, 64)  # first input is # of features
         self.fc1 = nn.Linear(64, 32)
         self.fc2 = nn.Linear(32, 16)
         self.fc3 = nn.Linear(16, 2)  # last input is # of classes
@@ -110,11 +110,11 @@ def run(config: dict):
     preprocessor = dataset.get_preprocessor()
     splits = dataset.get_splits()
     preprocessor.fit(x.iloc[splits["train"]])
-    # x = preprocessor.transform(x)
+    x = preprocessor.transform(x)
 
     net = Net(preprocessor)
     train(net, x[splits["train"]], y[splits["train"]], 10, 32)
-    path = "./tests/resources/pytorch_models/url_torch.pth"
+    path = "./tests/resources/pytorch_models/malware_torch.pth"
     torch.save(net.state_dict(), path)
     y_scores = predict(net, x[splits["test"]], y[splits["test"]])
     print(compute_binary_metrics(y[splits["test"]], y_scores))

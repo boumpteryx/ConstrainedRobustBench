@@ -279,10 +279,10 @@ class APGDAttack:
                     logits = self.model(x_adv)
                     loss_indiv = criterion_indiv(logits, y)
                     constraints_loss = self.constraints_loss(x)
-                    if self.constraints != None and self.loss == "ce-constrained":
-                        loss = loss_indiv.sum() - constraints_loss.sum()
-                    elif self.constraints != None and self.loss == "ce-targeted-constrained":
-                        loss = loss_indiv.sum() - constraints_loss.sum()
+                    if self.constraints != None and self.loss in ["ce-constrained", "ce-targeted-constrained", "dlr-constrained", "dlr-targeted-constrained"]:
+                        print(constraints_loss.sum())
+                        print("loss_indiv", loss_indiv.sum())
+                        loss = loss_indiv.sum() + constraints_loss.sum()
                     else:
                         loss = loss_indiv.sum()
 
@@ -299,7 +299,7 @@ class APGDAttack:
         grad /= float(self.eot_iter)
         grad_best = grad.clone()
 
-        if self.loss in ["dlr", "dlr-targeted"]:
+        if self.loss in ["dlr", "dlr-targeted", "dlr-constrained", "dlr-targeted-constrained"]:
             # check if there are zero gradients
             check_zero_gradients(grad, logger=self.logger)
 

@@ -30,8 +30,16 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
 
-    # load_data_url
-    dataset = datasets.load_dataset("url")
+    my_datasets = ["lcld_v2_time", "ctu_13_neris", "url", "malware"]
+    my_models = ['./tests/resources/pytorch_models/lcld_v2_time_torch.pth',
+                 './tests/resources/pytorch_models/ctu_13_neris_torch.pth',
+                 './tests/resources/pytorch_models/url_torch.pth',
+                 './tests/resources/pytorch_models/malware_torch.pth']
+    data_indicator = 2
+    args.model = my_models[data_indicator]
+
+    # load_data
+    dataset = datasets.load_dataset(my_datasets[data_indicator])
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
     splits = dataset.get_splits()
@@ -102,10 +110,10 @@ if __name__ == '__main__':
     
     # example of custom version
     if args.version == 'custom':
-        adversary.attacks_to_run = ['apgd-ce', 'apgd-ce-constrained']  # 'apgd-t-constrained'
+        adversary.attacks_to_run = ['apgd-ce', 'apgd-ce-constrained']  # 'apgd-t-ce-constrained'
         adversary.apgd.n_restarts = 2
         # adversary.fab.n_restarts = 2
-    
+
     # run attack and save images
     with torch.no_grad():
         if not args.individual:

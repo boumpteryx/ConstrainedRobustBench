@@ -167,6 +167,12 @@ class AutoAttack():
                         self.apgd.loss = 'dlr'
                         self.apgd.seed = self.get_seed()
                         adv_curr = self.apgd.perturb(x, y) #cheap=True
+
+                    elif attack == 'apgd-dlr-constrained':
+                        # apgd on dlr loss
+                        self.apgd.loss = 'dlr-constrained'
+                        self.apgd.seed = self.get_seed()
+                        adv_curr = self.apgd.perturb(x, y) #cheap=True
                     
                     elif attack == 'fab':
                         # fab
@@ -185,6 +191,12 @@ class AutoAttack():
                         adv_curr = self.apgd_targeted.perturb(x, y) #cheap=True
 
                     elif attack == 'apgd-t-constrained':
+                        # targeted apgd
+                        self.apgd_targeted.loss = 'dlr-targeted-constrained'
+                        self.apgd_targeted.seed = self.get_seed()
+                        adv_curr = self.apgd_targeted.perturb(x, y) #cheap=True
+
+                    elif attack == 'apgd-t-ce-constrained':
                         # targeted apgd
                         self.apgd_targeted.loss = 'ce-targeted-constrained'
                         self.apgd_targeted.seed = self.get_seed()
