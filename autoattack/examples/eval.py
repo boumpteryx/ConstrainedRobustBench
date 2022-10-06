@@ -20,7 +20,7 @@ if __name__ == '__main__':
     parser.add_argument('--data_dir', type=str, default='./data')
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=8./255.)
-    parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_test_torch.pth')
+    parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
     parser.add_argument('--n_ex', type=int, default=1000)
     parser.add_argument('--individual', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./results')
@@ -31,11 +31,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     my_datasets = ["lcld_v2_time", "ctu_13_neris", "url", "malware"]
+    feature_number = [46,756,63,24222]
     my_models = ['./tests/resources/pytorch_models/lcld_v2_time_torch.pth',
                  './tests/resources/pytorch_models/ctu_13_neris_torch.pth',
                  './tests/resources/pytorch_models/url_torch.pth',
                  './tests/resources/pytorch_models/malware_torch.pth']
-    data_indicator = 2
+    data_indicator = 0
     args.model = my_models[data_indicator]
 
     # load_data
@@ -66,7 +67,7 @@ if __name__ == '__main__':
             return (input - self.meanl) / self.stdl
 
     # load model
-    model = Net(preprocessor)
+    model = Net(preprocessor, feature_number[data_indicator])
     ckpt = torch.load(args.model, map_location=torch.device('cpu'))
     model.load_state_dict(ckpt)
     #model.cuda()
@@ -97,7 +98,14 @@ if __name__ == '__main__':
     # load attack    
     from autoattack import AutoAttack
 
-    constraints = get_url_constraints()
+    if data_indicator == 0:
+        constraints = get_url_constraints()
+    elif data_indicator == 1:
+        constraints = get_url_constraints()
+    elif data_indicator == 2:
+        constraints = get_url_constraints()
+    elif data_indicator == 3:
+        constraints = get_url_constraints()
     adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon, log_path=args.log_path,
         version=args.version)
 

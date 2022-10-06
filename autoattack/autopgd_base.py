@@ -280,8 +280,8 @@ class APGDAttack:
                     loss_indiv = criterion_indiv(logits, y)
                     constraints_loss = self.constraints_loss(x)
                     if self.constraints != None and self.loss in ["ce-constrained", "ce-targeted-constrained", "dlr-constrained", "dlr-targeted-constrained"]:
-                        print(constraints_loss.sum())
-                        print("loss_indiv", loss_indiv.sum())
+                        # print(constraints_loss.sum())
+                        # print("loss_indiv", loss_indiv.sum())
                         loss = loss_indiv.sum() + constraints_loss.sum()
                     else:
                         loss = loss_indiv.sum()
