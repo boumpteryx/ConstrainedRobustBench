@@ -149,7 +149,7 @@ class Moeva2:
             constraints=constraints,
             fun_distance_preprocess=self.fun_distance_preprocess,
             norm=self.norm,
-            is_targeted=slef.is_targeted,
+            is_targeted=self.is_targeted,
         )
 
         algorithm = self._create_algorithm()

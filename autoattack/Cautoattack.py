@@ -48,8 +48,8 @@ class AutoAttack():
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed, device=self.device,
                 logger=self.logger)
 
-            #from moeva import Moeva2
-            #self.moeva = Moeva2(classifier_class = self.df , constraints = self.constraints)
+            from moeva import Moeva2
+            self.moeva2 = Moeva2(classifier_class = self.model , constraints = self.constraints)
     
         else:
             from .autopgd_base import APGDAttack
@@ -208,6 +208,14 @@ class AutoAttack():
                         self.fab.n_restarts = 1
                         self.fab.seed = self.get_seed()
                         adv_curr = self.fab.perturb(x, y)
+
+                    elif attack == 'moeva2':
+                        # self.moeva2.targeted = False
+                        az =1
+
+                    elif attack == 'moeva2-t':
+                        # self.moeva2.targeted = False
+                        aze = 1
                     
                     else:
                         raise ValueError('Attack not supported')
