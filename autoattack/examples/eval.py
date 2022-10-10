@@ -36,7 +36,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_torch.pth',
                  './tests/resources/pytorch_models/url_torch.pth',
                  './tests/resources/pytorch_models/malware_torch.pth']
-    data_indicator = 0
+    data_indicator = 2
     args.model = my_models[data_indicator]
 
     # load_data
