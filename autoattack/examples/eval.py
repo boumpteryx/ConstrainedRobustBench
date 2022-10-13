@@ -23,7 +23,7 @@ if __name__ == '__main__':
     parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
     parser.add_argument('--n_ex', type=int, default=1000)
     parser.add_argument('--individual', action='store_true')
-    parser.add_argument('--save_dir', type=str, default='./results')
+    parser.add_argument('--save_dir', type=str, default='./autoattack/examples/results')
     parser.add_argument('--batch_size', type=int, default=500)
     parser.add_argument('--log_path', type=str, default='./log_file.txt')
     parser.add_argument('--version', type=str, default='custom')
@@ -31,11 +31,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     my_datasets = ["lcld_v2_time", "ctu_13_neris", "url", "malware"]
-    feature_number = [46,756,63,24222]
+    # feature_number = [28,756,63,24222]
     my_models = ['./tests/resources/pytorch_models/lcld_v2_time_torch.pth',
-                 './tests/resources/pytorch_models/ctu_13_neris_torch.pth',
-                 './tests/resources/pytorch_models/url_torch.pth',
-                 './tests/resources/pytorch_models/malware_torch.pth']
+                 './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
+                 './tests/resources/pytorch_models/url_test_torch.pth',
+                 './tests/resources/pytorch_models/malware_test_torch.pth']
     data_indicator = 2
     args.model = my_models[data_indicator]
 
@@ -51,6 +51,7 @@ if __name__ == '__main__':
     mean, std = preprocessor.mean_, preprocessor.scale_
     mean = mean.reshape(1,-1).astype(np.float32)
     std = std.reshape(1,-1).astype(np.float32)
+    args.epsilon = 2*np.mean(std)
 
     x_test = torch.Tensor(x_test)
     y_test = torch.Tensor(y_test)
@@ -67,7 +68,7 @@ if __name__ == '__main__':
             return (input - self.meanl) / self.stdl
 
     # load model
-    model = Net(preprocessor, feature_number[data_indicator])
+    model = Net(preprocessor, x.shape[1])
     ckpt = torch.load(args.model, map_location=torch.device('cpu'))
     model.load_state_dict(ckpt)
     #model.cuda()
@@ -98,14 +99,7 @@ if __name__ == '__main__':
     # load attack    
     from autoattack import AutoAttack
 
-    if data_indicator == 0:
-        constraints = get_url_constraints()
-    elif data_indicator == 1:
-        constraints = get_url_constraints()
-    elif data_indicator == 2:
-        constraints = get_url_constraints()
-    elif data_indicator == 3:
-        constraints = get_url_constraints()
+    constraints = dataset.get_constraints()
     adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon, log_path=args.log_path,
         version=args.version)
 
@@ -118,7 +112,7 @@ if __name__ == '__main__':
     
     # example of custom version
     if args.version == 'custom':
-        adversary.attacks_to_run = ['apgd-ce', 'apgd-ce-constrained']  # 'apgd-t-ce-constrained'
+        adversary.attacks_to_run = ['apgd-ce-constrained', 'fab']  # 'apgd-t-ce-constrained'
         adversary.apgd.n_restarts = 2
         # adversary.fab.n_restarts = 2
 
@@ -128,8 +122,8 @@ if __name__ == '__main__':
             adv_complete = adversary.run_standard_evaluation(x_test[:args.n_ex], y_test[:args.n_ex],
                 bs=args.batch_size)
             
-            torch.save({'adv_complete': adv_complete}, '{}/{}_{}_1_{}_eps_{:.5f}.pth'.format(
-                args.save_dir, 'aa', args.version, adv_complete.shape[0], args.epsilon))
+            torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}.pth'.format(
+                args.save_dir, 'aa', args.version, my_datasets[data_indicator], args.norm, adv_complete.shape[0], args.epsilon))
 
         else:
             # individual version, each attack is run on all test points

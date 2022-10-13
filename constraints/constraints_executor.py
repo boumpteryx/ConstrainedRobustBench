@@ -12,6 +12,7 @@ from constrained_attacks.constraints.relation_constraint import (
     BaseRelationConstraint,
     Constant,
     ConstraintsNode,
+    Count,
     EqualConstraint,
     Feature,
     LessConstraint,
@@ -19,6 +20,8 @@ from constrained_attacks.constraints.relation_constraint import (
     MathOperation,
     OrConstraint,
     SafeDivision,
+    Log,
+    ManySum,
 )
 
 EPS: npt.NDArray[Any] = np.array(0.000001)
@@ -63,6 +66,7 @@ class NumpyConstraintsVisitor(ConstraintsVisitor):
         "*": lambda left, right: left * right,
         "/": lambda left, right: left / right,
         "**": lambda left, right: left**right,
+        "%": lambda left, right: left % right,
     }
 
     def __init__(
@@ -115,6 +119,20 @@ class NumpyConstraintsVisitor(ConstraintsVisitor):
                 out=np.full_like(dividend, fill_value),
                 where=divisor != 0,
             )
+        elif isinstance(constraint_node, Log):
+            operand = constraint_node.operand.accept(self)
+            if constraint_node.safe_value is not None:
+                safe_value = constraint_node.safe_value.accept(self)
+                return np.log(
+                    operand,
+                    out=np.full_like(operand, fill_value=safe_value),
+                    where=(operand > 0),
+                )
+            return np.log(operand)
+
+        elif isinstance(constraint_node, ManySum):
+            operands = [e.accept(self) for e in constraint_node.operands]
+            return np.sum(operands, axis=0)
 
         # ------------ Constraints
 
@@ -144,6 +162,20 @@ class NumpyConstraintsVisitor(ConstraintsVisitor):
             left_operand = constraint_node.left_operand.accept(self)
             right_operand = constraint_node.right_operand.accept(self)
             return np.abs(left_operand - right_operand)
+
+            # ------ Extension
+
+        elif isinstance(constraint_node, Count):
+            operands = [e.accept(self) for e in constraint_node.operands]
+            if constraint_node.inverse:
+                operands = np.array(
+                    [(op != 0).astype(float) for op in operands]
+                )
+            else:
+                operands = np.array(
+                    [(op == 0).astype(float) for op in operands]
+                )
+            return np.sum(operands, axis=0)
 
         else:
             raise NotImplementedError
@@ -199,6 +231,7 @@ class TensorFlowConstraintsVisitor(ConstraintsVisitor):
             "*": lambda left, right: left * right,
             "/": lambda left, right: left / right,
             "**": lambda left, right: tf.math.pow(left, right),
+            "%": lambda left, right: left % right,
         }
 
     def visit(self, constraint_node: ConstraintsNode) -> "tf.Tensor":
@@ -294,6 +327,7 @@ class TextConstraintsVisitor(ConstraintsVisitor):
         "*": lambda left, right: left * right,
         "/": lambda left, right: left / right,
         "**": lambda left, right: left**right,
+        "%": lambda left, right: left % right,
     }
 
     def __init__(
@@ -378,6 +412,7 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
         "*": lambda left, right: left * right,
         "/": lambda left, right: left / right,
         "**": lambda left, right: left**right,
+        "%": lambda left, right: left % right,
     }
 
     def __init__(
@@ -418,6 +453,7 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
                     left_operand, right_operand
                 )
             else:
+                print(constraint_node)
                 raise NotImplementedError
 
         elif isinstance(constraint_node, SafeDivision):
@@ -428,20 +464,37 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
                 dividend,
                 divisor,
                 out=torch.full_like(dividend, fill_value),
-                where=divisor != 0,
+                #where=divisor != 0,
             )
+
+        elif isinstance(constraint_node, Log):
+            operand = constraint_node.operand.accept(self)
+            if constraint_node.safe_value is not None:
+                safe_value = constraint_node.safe_value.accept(self)
+                return torch.log(
+                    operand,
+                    out=torch.full_like(operand, fill_value=safe_value),
+                    # where=(operand > 0),
+                )
+            return torch.log(operand)
+
+        elif isinstance(constraint_node, ManySum):
+            operands = torch.stack([torch.tensor(e.accept(self)) for e in constraint_node.operands])
+            return torch.sum(operands, dim=0)
 
         # ------------ Constraints
 
         # ------ Binary
         elif isinstance(constraint_node, OrConstraint):
-            operands = torch.tensor([e.accept(self) for e in constraint_node.operands])
-            return torch.min(operands, axis=0)
+            operands = torch.stack([torch.tensor(e.accept(self)) for e in constraint_node.operands])
+            return torch.min(operands, dim=0).values
 
         elif isinstance(constraint_node, AndConstraint):
-            my_object = [e.accept(self).values.numpy() for e in constraint_node.operands]
-            operands = torch.tensor(np.array(my_object))
-            return torch.sum(operands, axis=0)
+            operands = [e.accept(self) for e in constraint_node.operands]
+            local_sum = operands[0]
+            for i in range(1, len(operands)):
+                local_sum = local_sum + operands[i]
+            return local_sum
 
         # ------ Comparison
         elif isinstance(constraint_node, LessEqualConstraint):
@@ -450,20 +503,35 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
             zeros = self.get_zeros_np([left_operand, right_operand])
             my_sub = (left_operand - right_operand)
             my_test = np.array([zeros.detach().numpy(), my_sub.detach().numpy()])
-            return torch.max(torch.tensor(my_test), dim=0)
+            return torch.max(torch.tensor(my_test), dim=0).values
 
         elif isinstance(constraint_node, LessConstraint):
             left_operand = constraint_node.left_operand.accept(self) + EPS
             right_operand = constraint_node.right_operand.accept(self)
             zeros = self.get_zeros_np([left_operand, right_operand])
-            return torch.max(torch.tensor([zeros, (left_operand - right_operand)]), axis=0)
+            return torch.max(torch.tensor([zeros, (left_operand - right_operand)]), dim=0).values
 
         elif isinstance(constraint_node, EqualConstraint):
             left_operand = constraint_node.left_operand.accept(self)
             right_operand = constraint_node.right_operand.accept(self)
             return torch.abs(torch.tensor(left_operand - right_operand))
 
+            # ------ Extension
+
+        elif isinstance(constraint_node, Count):
+            operands = [torch.tensor(e.accept(self)) for e in constraint_node.operands]
+            if constraint_node.inverse:
+                operands = torch.stack(
+                    [(op != 0).float() for op in operands]
+                )
+            else:
+                operands = torch.stack(
+                    [(op == 0).float() for op in operands]
+                )
+            return torch.sum(operands, dim=0)
+
         else:
+            print(constraint_node)
             raise NotImplementedError
 
     def execute(self) -> "torch.Tensor":

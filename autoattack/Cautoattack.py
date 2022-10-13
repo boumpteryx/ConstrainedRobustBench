@@ -48,7 +48,7 @@ class AutoAttack():
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed, device=self.device,
                 logger=self.logger)
 
-            from moeva import Moeva2
+            from constrained_attacks.attacks.moeva.moeva import Moeva2
             self.moeva2 = Moeva2(classifier_class = self.model , constraints = self.constraints)
     
         else:

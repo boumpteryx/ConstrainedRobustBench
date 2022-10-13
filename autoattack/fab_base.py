@@ -282,7 +282,7 @@ class FABAttack():
                         x_to_fool, y_to_fool = x[ind_to_fool].clone(), y[ind_to_fool].clone()
                         adv_curr = self.attack_single_run(x_to_fool, y_to_fool, use_rand_start=(counter > 0), is_targeted=False)
 
-                        acc_curr = self._predict_fn(adv_curr).max(1)[1] == y_to_fool
+                        acc_curr = self._predict_fn(adv_curr).max(1)[1] == y_to_fool # or not check_constraint # or not check constraints tbd
                         if self.norm == 'Linf':
                             res = (x_to_fool - adv_curr).abs().reshape(x_to_fool.shape[0], -1).max(1)[0]
                         elif self.norm == 'L2':

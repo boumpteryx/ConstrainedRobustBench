@@ -60,7 +60,7 @@ class ConstraintChecker:
                 self._check_relationship_constraints(x_adv),
                 self._check_boundary_constraints(x, x_adv),
                 self._check_type_constraints(x_adv),
-                self._check_mutable_constraints(x, x_adv),
+                self._check_mutable_constraints(x, x_adv), # uncomment and comment
             ]
         )
         constraints = np.min(constraints, axis=0)

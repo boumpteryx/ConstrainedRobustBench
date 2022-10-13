@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from constrained_attacks.datasets import load_dataset
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import (
     classification_report,
     roc_auc_score,
@@ -107,14 +108,14 @@ def run(config: dict):
     dataset = load_dataset(config["dataset"])
     dataset.drop_date = True
     x, y = dataset.get_x_y()
-    preprocessor = dataset.get_preprocessor()
+    preprocessor = StandardScaler()  # dataset.get_preprocessor()
     splits = dataset.get_splits()
     preprocessor.fit(x.iloc[splits["train"]])
     x = preprocessor.transform(x)
 
-    net = Net(preprocessor, 756)  # adapt this number for each dataset
+    net = Net(preprocessor, x.shape[1])  # adapt this number for each dataset
     train(net, x[splits["train"]], y[splits["train"]], 10, 32)
-    path = "./tests/resources/pytorch_models/ctu_13_neris_torch.pth"
+    path = "./tests/resources/pytorch_models/malware_test_torch.pth"
     torch.save(net.state_dict(), path)
     y_scores = predict(net, x[splits["test"]], y[splits["test"]])
     print(compute_binary_metrics(y[splits["test"]], y_scores))
