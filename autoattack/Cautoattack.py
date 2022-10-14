@@ -69,6 +69,9 @@ class AutoAttack():
             self.apgd_targeted = APGDAttack_targeted(self.model, n_restarts=1, n_iter=100, verbose=False,
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed, device=self.device,
                 is_tf_model=True, logger=self.logger)
+
+            # TODO: add moeva here
+
     
         if version in ['standard', 'plus', 'rand']:
             self.set_version(version)
@@ -227,11 +230,11 @@ class AutoAttack():
                         adv_curr = self.fab.perturb(x, y)
 
                     elif attack == 'moeva2':
-                        # self.moeva2.targeted = False
+                        self.moeva2.targeted = False
                         az =1
 
                     elif attack == 'moeva2-t':
-                        # self.moeva2.targeted = False
+                        self.moeva2.targeted = True
                         aze = 1
                     
                     else:

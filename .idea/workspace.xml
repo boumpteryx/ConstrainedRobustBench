@@ -4,12 +4,7 @@
     <list default="true" id="64d23c61-d57d-47e4-a0c8-6eee742820ec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/autoattack/Cautoattack.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/Cautoattack.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/autopgd_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/autopgd_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_Linf_1_1000_eps_63870.07812.pth" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_Linf_1_1000_eps_63870.07812.pth" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/autoattack/fab_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/fab_base.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/fab_pt.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/fab_pt.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/constraints/constraints_checker.py" beforeDir="false" afterPath="$PROJECT_DIR$/constraints/constraints_checker.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
