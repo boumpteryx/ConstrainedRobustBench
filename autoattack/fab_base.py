@@ -9,10 +9,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
+import numpy as np
 
 import time
 
 import torch
+from constraints.constraints_checker import ConstraintChecker
 
 from autoattack.fab_projections import projection_linf, projection_l2,\
     projection_l1
@@ -37,6 +39,7 @@ class FABAttack():
     def __init__(
             self,
             norm='Linf',
+            constraints = None,
             n_restarts=1,
             n_iter=100,
             eps=None,
@@ -48,10 +51,13 @@ class FABAttack():
             seed=0,
             targeted=False,
             device=None,
+            is_constrained=False,
             n_target_classes=9):
         """ FAB-attack implementation in pytorch """
 
         self.norm = norm
+        self.constraints = constraints
+        self.is_constrained = is_constrained
         self.n_restarts = n_restarts
         self.n_iter = n_iter
         self.eps = eps if eps is not None else DEFAULT_EPS_DICT_BY_NORM[norm]
@@ -282,7 +288,11 @@ class FABAttack():
                         x_to_fool, y_to_fool = x[ind_to_fool].clone(), y[ind_to_fool].clone()
                         adv_curr = self.attack_single_run(x_to_fool, y_to_fool, use_rand_start=(counter > 0), is_targeted=False)
 
-                        acc_curr = self._predict_fn(adv_curr).max(1)[1] == y_to_fool # or not check_constraint # or not check constraints tbd
+                        if self.is_constrained:
+                            checker = ConstraintChecker(self.constraints, tolerance = 0.01)
+                            acc_curr = np.logical_or(self._predict_fn(adv_curr).max(1)[1] == y_to_fool, np.logical_not(checker.check_constraints(x, adv_curr, pt=True)))
+                        else:
+                            acc_curr = self._predict_fn(adv_curr).max(1)[1] == y_to_fool
                         if self.norm == 'Linf':
                             res = (x_to_fool - adv_curr).abs().reshape(x_to_fool.shape[0], -1).max(1)[0]
                         elif self.norm == 'L2':
@@ -309,7 +319,8 @@ class FABAttack():
                             x_to_fool, y_to_fool = x[ind_to_fool].clone(), y[ind_to_fool].clone()
                             adv_curr = self.attack_single_run(x_to_fool, y_to_fool, use_rand_start=(counter > 0), is_targeted=True)
 
-                            acc_curr = self._predict_fn(adv_curr).max(1)[1] == y_to_fool
+                            checker = ConstraintChecker(self.constraints, tolerance=0.01)
+                            acc_curr = self._predict_fn(adv_curr).max(1)[1] == y_to_fool or not checker.check_constraints(x, adv_curr)
                             if self.norm == 'Linf':
                                 res = (x_to_fool - adv_curr).abs().reshape(x_to_fool.shape[0], -1).max(1)[0]
                             elif self.norm == 'L2':

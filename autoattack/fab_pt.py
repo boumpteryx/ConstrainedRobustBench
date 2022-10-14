@@ -35,6 +35,7 @@ class FABAttack_PT(FABAttack):
     def __init__(
             self,
             predict,
+            constraints = None,
             norm='Linf',
             n_restarts=1,
             n_iter=100,
@@ -52,6 +53,7 @@ class FABAttack_PT(FABAttack):
 
         self.predict = predict
         super().__init__(norm,
+                         constraints,
                          n_restarts,
                          n_iter,
                          eps,

@@ -10,6 +10,7 @@ from constrained_attacks.constraints.constraints import (
 from constrained_attacks.constraints.constraints_executor import (
     NumpyConstraintsExecutor,
 )
+
 from constrained_attacks.constraints.relation_constraint import AndConstraint
 
 
@@ -54,7 +55,10 @@ class ConstraintChecker:
             mutable_ok = np.ones(shape=x_adv.shape[:-1], dtype=np.bool)
         return mutable_ok
 
-    def check_constraints(self, x, x_adv) -> np.ndarray:
+    def check_constraints(self, x, x_adv, pt=False) -> np.ndarray:
+        if pt:
+            x = x.numpy()
+            x_adv = x_adv.numpy()
         constraints = np.array(
             [
                 self._check_relationship_constraints(x_adv),

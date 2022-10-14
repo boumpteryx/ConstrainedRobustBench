@@ -10,7 +10,7 @@ from autoattack import checks
 
 
 class AutoAttack():
-    def __init__(self, model, constraints, norm='Linf', eps=.3, seed=None, verbose=True,
+    def __init__(self, model, constraints=None, norm='Linf', eps=.3, seed=None, verbose=True,
                  attacks_to_run=[], version='standard', is_tf_model=False,
                  device='cpu', log_path=None):
         self.model = model
@@ -36,7 +36,7 @@ class AutoAttack():
                 device=self.device, logger=self.logger)
             
             from .fab_pt import FABAttack_PT
-            self.fab = FABAttack_PT(self.model, n_restarts=5, n_iter=100, eps=self.epsilon, seed=self.seed,
+            self.fab = FABAttack_PT(self.model, self.constraints, n_restarts=5, n_iter=100, eps=self.epsilon, seed=self.seed,
                 norm=self.norm, verbose=False, device=self.device)
         
             from .square import SquareAttack
@@ -177,6 +177,14 @@ class AutoAttack():
                     elif attack == 'fab':
                         # fab
                         self.fab.targeted = False
+                        self.fab.is_constrained = False
+                        self.fab.seed = self.get_seed()
+                        adv_curr = self.fab.perturb(x, y)
+
+                    elif attack == 'fab-constrained':
+                        # fab
+                        self.fab.targeted = False
+                        self.fab.is_constrained = True
                         self.fab.seed = self.get_seed()
                         adv_curr = self.fab.perturb(x, y)
                     
@@ -205,6 +213,15 @@ class AutoAttack():
                     elif attack == 'fab-t':
                         # fab targeted
                         self.fab.targeted = True
+                        self.fab.is_constrained = False
+                        self.fab.n_restarts = 1
+                        self.fab.seed = self.get_seed()
+                        adv_curr = self.fab.perturb(x, y)
+
+                    elif attack == 'fab-t-constrained':
+                        # fab targeted
+                        self.fab.targeted = True
+                        self.fab.is_constrained = True
                         self.fab.n_restarts = 1
                         self.fab.seed = self.get_seed()
                         adv_curr = self.fab.perturb(x, y)

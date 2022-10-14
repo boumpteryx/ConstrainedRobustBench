@@ -633,3 +633,84 @@ fab - 1/1 - 132 out of 132 successfully perturbed
 robust accuracy after FAB: 0.00% (total time 1.3 s)
 max Linf perturbation: 42.75219, nan in tensor: 0, max: 20.13427, min: -1.94214
 robust accuracy: 0.00%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+fab-constrained - 1/2 - 500 out of 500 successfully perturbed
+fab-constrained - 2/2 - 382 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 0.00% (total time 1.9 s)
+max Linf perturbation: 42.67006, nan in tensor: 0, max: 20.13427, min: -1.94214
+robust accuracy: 0.00%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+fab-constrained - 1/2 - 500 out of 500 successfully perturbed
+fab-constrained - 2/2 - 382 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 0.00% (total time 1.9 s)
+max Linf perturbation: 42.67006, nan in tensor: 0, max: 20.13427, min: -1.94214
+robust accuracy: 0.00%
+initial accuracy: 88.20%
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 88.20% (total time 9.5 s)
+max Linf perturbation: 0.00000, nan in tensor: 0, max: 42.75219, min: -1.94214
+robust accuracy: 88.20%
+initial accuracy: 88.20%
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 88.20% (total time 9.6 s)
+fab - 1/2 - 0 out of 500 successfully perturbed
+fab - 2/2 - 0 out of 382 successfully perturbed
+robust accuracy after FAB: 88.20% (total time 19.1 s)
+max Linf perturbation: 0.00000, nan in tensor: 0, max: 42.75219, min: -1.94214
+robust accuracy: 88.20%
+initial accuracy: 88.20%
+fab - 1/2 - 0 out of 500 successfully perturbed
+fab - 2/2 - 0 out of 382 successfully perturbed
+robust accuracy after FAB: 88.20% (total time 9.5 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 88.20% (total time 25.6 s)
+max Linf perturbation: 0.00000, nan in tensor: 0, max: 42.75219, min: -1.94214
+robust accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+fab - 1/2 - 500 out of 500 successfully perturbed
+fab - 2/2 - 382 out of 382 successfully perturbed
+robust accuracy after FAB: 0.00% (total time 1.9 s)
+max Linf perturbation: 42.67006, nan in tensor: 0, max: 20.13427, min: -1.94214
+robust accuracy: 0.00%
+initial accuracy: 88.20%
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 88.20% (total time 10.8 s)
+fab - 1/2 - 500 out of 500 successfully perturbed
+fab - 2/2 - 382 out of 382 successfully perturbed
+robust accuracy after FAB: 0.00% (total time 12.8 s)
+max Linf perturbation: 42.67006, nan in tensor: 0, max: 20.13427, min: -1.94214
+robust accuracy: 0.00%
