@@ -4,7 +4,6 @@ import time
 import numpy as np
 import torch
 
-#from autoattack.moeva import moeva
 from autoattack.other_utils import Logger
 from autoattack import checks
 from constrained_attacks.classifier.classifier import Classifier
@@ -50,7 +49,7 @@ class AutoAttack():
                 logger=self.logger)
 
             from constrained_attacks.attacks.moeva.moeva import Moeva2
-            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints)
+            #self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints)
 
         else:
             from .autopgd_base import APGDAttack
@@ -72,7 +71,8 @@ class AutoAttack():
                 is_tf_model=True, logger=self.logger)
 
             # TODO: add moeva here
-
+            from constrained_attacks.attacks.moeva.moeva import Moeva2
+            self.moeva2 = Moeva2(classifier_class=Classifier(self.model), constraints=self.constraints)
 
         if version in ['standard', 'plus', 'rand']:
             self.set_version(version)
