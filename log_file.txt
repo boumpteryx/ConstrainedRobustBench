@@ -768,3 +768,66 @@ fab - 2/2 - 493 out of 500 successfully perturbed
 robust accuracy after FAB: 1.20% (total time 151.0 s)
 max Linf perturbation: 1068.59436, nan in tensor: 0, max: 2151.33691, min: -0.58657
 robust accuracy: 1.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 88.20%
+initial accuracy: 94.80%
+initial accuracy: 88.20%
+moeva2 - 1/2 - 126 out of 500 successfully perturbed
+initial accuracy: 88.20%
+moeva2 - 1/2 - 127 out of 500 successfully perturbed
+moeva2 - 2/2 - 88 out of 382 successfully perturbed
+robust accuracy after MOEVA2: 66.70% (total time 1989.6 s)
+max Linf perturbation: 10459494.00000, nan in tensor: 0, max: 10459499.00000, min: -12.00000
+robust accuracy: 66.70%

@@ -812,6 +812,36 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
+name = "skorch"
+version = "0.12.0"
+description = "scikit-learn compatible neural network library for pytorch"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+numpy = ">=1.13.3"
+scikit-learn = ">=0.22.0"
+scipy = ">=1.1.0"
+tabulate = ">=0.7.7"
+tqdm = ">=4.14.0"
+
+[package.extras]
+docs = ["Sphinx", "numpydoc", "sphinx-rtd-theme"]
+testing = ["pytest", "pytest-cov"]
+
+[[package]]
+name = "tabulate"
+version = "0.9.0"
+description = "Pretty-print tabular data"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+widechars = ["wcwidth"]
+
+[[package]]
 name = "tensorboard"
 version = "2.10.0"
 description = "TensorBoard lets you watch Tensors Flow"
@@ -1067,7 +1097,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.8"
-content-hash = "2829f3cbff14ff1b15932fc25bbe35a2ad088e277c5cfb50d104abb72f5bd946"
+content-hash = "f6e996a5db8c127e953721512921a5d69735b43e370e1b15666d066abecac217"
 
 [metadata.files]
 absl-py = [
@@ -1791,6 +1821,15 @@ setuptools-scm = [
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
+]
+skorch = [
+    {file = "skorch-0.12.0-py3-none-any.whl", hash = "sha256:fd41a93eaffe8f26695a74eb404af86e179aaf15cdeea1af2ee3eb0bc2f7a98d"},
+    {file = "skorch-0.12.0-py3.9.egg", hash = "sha256:152560a0a9eecde87cb0f21b4547a091e381c2a71f34dec22a9fa19ceeb186a5"},
+    {file = "skorch-0.12.0.tar.gz", hash = "sha256:2d132ceca9a2345ddfde3a8bb17ebc39ab3c7da8c1244fd7928f47828876e2f5"},
+]
+tabulate = [
+    {file = "tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f"},
+    {file = "tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c"},
 ]
 tensorboard = [
     {file = "tensorboard-2.10.0-py3-none-any.whl", hash = "sha256:76c91a5e8959cd2208cc32cb17a0cb002badabb66a06ac2af02a7810f49a59e3"},

@@ -4,7 +4,6 @@ Evaluation of non-DL algorithms on perturbed inputs
 import sklearn
 import torch
 from constrained_attacks import datasets
-import scikit-learn as sklearn
 
 my_datasets = ["lcld_v2_time", "ctu_13_neris", "url", "malware"]
 data_indicator = 2

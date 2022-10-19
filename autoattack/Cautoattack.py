@@ -7,12 +7,13 @@ import torch
 from autoattack.other_utils import Logger
 from autoattack import checks
 from constrained_attacks.classifier.classifier import Classifier
+from skorch.net import NeuralNet
 
 
 class AutoAttack():
     def __init__(self, model, constraints=None, norm='Linf', eps=.3, seed=None, verbose=True,
                  attacks_to_run=[], version='standard', is_tf_model=False,
-                 device='cpu', log_path=None):
+                 device='cpu', log_path=None, fun_distance_preprocess=None):
         self.model = model
         self.constraints = constraints
         self.norm = norm
@@ -25,6 +26,7 @@ class AutoAttack():
         self.is_tf_model = is_tf_model
         self.device = device
         self.logger = Logger(log_path)
+        self.fun_distance_preprocess = fun_distance_preprocess
 
         if version in ['standard', 'plus', 'rand'] and attacks_to_run != []:
             raise ValueError("attacks_to_run will be overridden unless you use version='custom'")
@@ -49,7 +51,7 @@ class AutoAttack():
                 logger=self.logger)
 
             from constrained_attacks.attacks.moeva.moeva import Moeva2
-            #self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints)
+            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess)
 
         else:
             from .autopgd_base import APGDAttack
@@ -70,7 +72,6 @@ class AutoAttack():
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed, device=self.device,
                 is_tf_model=True, logger=self.logger)
 
-            # TODO: add moeva here
             from constrained_attacks.attacks.moeva.moeva import Moeva2
             self.moeva2 = Moeva2(classifier_class=Classifier(self.model), constraints=self.constraints)
 
@@ -86,7 +87,7 @@ class AutoAttack():
     def get_seed(self):
         return time.time() if self.seed is None else self.seed
 
-    def run_standard_evaluation(self, x_orig, y_orig, bs=250, return_labels=False):
+    def run_standard_evaluation(self, x_orig, y_orig, bs=250, return_labels=False, x_unscaled=None):
         if self.verbose:
             print('using {} version including {}'.format(self.version,
                 ', '.join(self.attacks_to_run)))
@@ -147,6 +148,8 @@ class AutoAttack():
                     if len(batch_datapoint_idcs.shape) > 1:
                         batch_datapoint_idcs.squeeze_(-1)
                     x = x_orig[batch_datapoint_idcs, :].clone().to(self.device)
+                    if x_unscaled is not None:
+                        x_unscaled_usable = x_unscaled[batch_datapoint_idcs, :].clone().to(self.device)
                     y = y_orig[batch_datapoint_idcs].clone().to(self.device)
 
                     # make sure that x is a 4d tensor even if there is only a single datapoint left
@@ -231,12 +234,16 @@ class AutoAttack():
                         adv_curr = self.fab.perturb(x, y)
 
                     elif attack == 'moeva2':
-                        self.moeva2.targeted = False
-                        az =1
+                        self.moeva2.is_targeted = False
+                        adv_curr = self.moeva2.generate(np.array(x_unscaled_usable.numpy()),np.array(y.numpy()),x.shape[0])
+                        # adv_curr = self.moeva2.generate(np.array(x.numpy()),np.array(y.numpy()),x.shape[0])
+                        adv_curr = torch.tensor(adv_curr[:,0,:])
 
                     elif attack == 'moeva2-t':
-                        self.moeva2.targeted = True
-                        aze = 1
+                        self.moeva2.is_targeted = True # useless for now
+                        adv_curr = self.moeva2.generate(np.array(x_unscaled.numpy()),np.array(y.numpy()),x.shape[0])
+                        adv_curr = torch.tensor(adv_curr[:,0,:])
+
 
                     else:
                         raise ValueError('Attack not supported')

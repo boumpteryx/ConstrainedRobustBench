@@ -45,13 +45,14 @@ if __name__ == '__main__':
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
     splits = dataset.get_splits()
     preprocessor.fit(x.iloc[splits["train"]])
+    x_unpreprocessed = torch.FloatTensor(np.array(x)[splits["test"]])
     x = preprocessor.transform(x).astype(np.float32)
     x_test = x[splits["test"]]
     y_test = y[splits["test"]]
     mean, std = preprocessor.mean_, preprocessor.scale_
     mean = mean.reshape(1,-1).astype(np.float32)
     std = std.reshape(1,-1).astype(np.float32)
-    args.epsilon = 2*np.mean(std)
+    args.epsilon = 2*np.mean(std) # budget to be adapted
 
     x_test = torch.Tensor(x_test)
     y_test = torch.Tensor(y_test)
@@ -65,6 +66,8 @@ if __name__ == '__main__':
             self.register_buffer('stdl', torch.Tensor(stdl))
 
         def forward(self, input):
+            if not torch.is_tensor(input):
+                input = torch.tensor(input)
             return (input - self.meanl) / self.stdl
 
     # load model
@@ -101,7 +104,7 @@ if __name__ == '__main__':
 
     constraints = dataset.get_constraints()
     adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon, log_path=args.log_path,
-        version=args.version)
+        version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x))
 
 
 
@@ -112,7 +115,7 @@ if __name__ == '__main__':
     
     # example of custom version
     if args.version == 'custom':
-        adversary.attacks_to_run = ['fab-constrained', 'fab']  # 'apgd-t-ce-constrained', 'moeva2'
+        adversary.attacks_to_run = ['moeva2']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
         adversary.apgd.n_restarts = 2
         # adversary.fab.n_restarts = 2
 
@@ -120,7 +123,7 @@ if __name__ == '__main__':
     with torch.no_grad():
         if not args.individual:
             adv_complete = adversary.run_standard_evaluation(x_test[:args.n_ex], y_test[:args.n_ex],
-                bs=args.batch_size)
+                bs=args.batch_size, x_unscaled=x_unpreprocessed[:args.n_ex])
             
             torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}.pth'.format(
                 args.save_dir, 'aa', args.version, my_datasets[data_indicator], args.norm, adv_complete.shape[0], args.epsilon))
