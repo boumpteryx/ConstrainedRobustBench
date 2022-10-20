@@ -115,7 +115,7 @@ if __name__ == '__main__':
     
     # example of custom version
     if args.version == 'custom':
-        adversary.attacks_to_run = ['moeva2']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
+        adversary.attacks_to_run = ['apgd-t-ce-constrained','moeva2']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
         adversary.apgd.n_restarts = 2
         # adversary.fab.n_restarts = 2
 
