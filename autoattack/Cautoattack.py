@@ -7,7 +7,7 @@ import torch
 from autoattack.other_utils import Logger
 from autoattack import checks
 from constrained_attacks.classifier.classifier import Classifier
-from skorch.net import NeuralNet
+from constraints.constraints_checker import ConstraintChecker
 
 
 class AutoAttack():
@@ -188,7 +188,7 @@ class AutoAttack():
                         self.fab.seed = self.get_seed()
                         adv_curr = self.fab.perturb(x, y)
 
-                    elif attack == 'fab-constrained':
+                    elif attack == 'fab-constrained': # constraints checked within the perturb function
                         # fab
                         self.fab.targeted = False
                         self.fab.is_constrained = True
@@ -225,7 +225,7 @@ class AutoAttack():
                         self.fab.seed = self.get_seed()
                         adv_curr = self.fab.perturb(x, y)
 
-                    elif attack == 'fab-t-constrained':
+                    elif attack == 'fab-t-constrained': # constraints checked within the perturb function
                         # fab targeted
                         self.fab.targeted = True
                         self.fab.is_constrained = True
@@ -238,15 +238,35 @@ class AutoAttack():
                         adv_curr = self.moeva2.generate(np.array(x_unscaled_usable.numpy()),np.array(y.numpy()),x.shape[0])
                         # adv_curr = self.moeva2.generate(np.array(x.numpy()),np.array(y.numpy()),x.shape[0])
                         adv_curr = torch.tensor(adv_curr[:,0,:])
+                        # remove outputs that do not respect constraints
+                        checker = ConstraintChecker(self.constraints, tolerance=0.01)
+                        check = checker.check_constraints(x, adv_curr, pt=True)
+                        for i in range(len(check)):
+                            counter = 0
+                            if not check[i]:
+                                counter += 1
+                                adv_curr[i] = x[i]
+                        print("number of outputs not respecting constraints = ", counter)
+
 
                     elif attack == 'moeva2-t':
                         self.moeva2.is_targeted = True # useless for now
                         adv_curr = self.moeva2.generate(np.array(x_unscaled.numpy()),np.array(y.numpy()),x.shape[0])
                         adv_curr = torch.tensor(adv_curr[:,0,:])
 
-
                     else:
                         raise ValueError('Attack not supported')
+
+                    if attack in ['moeva2', 'moeva2-t', 'apgd-t-ce-constrained', 'apgd-t-constrained', 'apgd-ce-constrained', 'apgd-dlr-constrained']:
+                        # remove outputs that do not respect constraints
+                        checker = ConstraintChecker(self.constraints, tolerance=0.01)
+                        check = checker.check_constraints(x, adv_curr, pt=True)
+                        for i in range(len(check)):
+                            counter = 0
+                            if not check[i]:
+                                counter += 1
+                                adv_curr[i] = x[i]
+                        print("number of outputs not respecting constraints = ", counter)
 
                     output = self.get_logits(adv_curr).max(dim=1)[1]
                     false_batch = ~y.eq(output).to(robust_flags.device)

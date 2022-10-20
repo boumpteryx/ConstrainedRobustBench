@@ -24,6 +24,8 @@ resnet = "^0.1"
 serval-config-utils = "^0.1.4"
 keras = "^2.10.0"
 skorch = "^0.12.0"
+copulas = "^0.7.0"
+sdv = "^0.17.1"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 
