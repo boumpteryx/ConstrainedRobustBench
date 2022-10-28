@@ -68,6 +68,8 @@ class FABAttack_PT(FABAttack):
                          n_target_classes)
 
     def _predict_fn(self, x):
+        if not callable(self):
+            return self.predict.predict_proba(x)
         return self.predict(x)
 
     def _get_predicted_label(self, x):

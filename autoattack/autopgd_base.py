@@ -520,8 +520,10 @@ class APGDAttack:
         self.init_hyperparam(x)
 
         x = x.detach().clone().float().to(self.device)
-        if not self.is_tf_model:
+        if not self.is_tf_model and callable(self.model):
             y_pred = self.model(x).max(1)[1]
+        elif not self.is_tf_model and not callable(self.model):
+            y_pred = self.model.predict_proba(x).max(1)[1]
         else:
             y_pred = self.model.predict(x).max(1)[1]
         if y is None:
@@ -711,8 +713,10 @@ class APGDAttack_targeted(APGDAttack):
         self.init_hyperparam(x)
 
         x = x.detach().clone().float().to(self.device)
-        if not self.is_tf_model:
+        if not self.is_tf_model and callable(self.model):
             y_pred = self.model(x).max(1)[1]
+        elif not self.is_tf_model and not callable(self.model):
+            y_pred = self.model.predict_proba(x).max(1)[1]
         else:
             y_pred = self.model.predict(x).max(1)[1]
         if y is None:

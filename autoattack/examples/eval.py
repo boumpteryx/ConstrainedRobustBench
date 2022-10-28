@@ -9,7 +9,6 @@ from sklearn.preprocessing import StandardScaler
 
 from autoattack.other_utils import add_normalization_layer
 from pipeline.pytorch import Net
-from tests.attacks.moeva.url_constraints import get_url_constraints
 
 sys.path.insert(0,'..')
 
@@ -27,6 +26,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=500)
     parser.add_argument('--log_path', type=str, default='./log_file.txt')
     parser.add_argument('--version', type=str, default='custom')
+    parser.add_argument('--model_name', type=str, default='Net')
     
     args = parser.parse_args()
 
@@ -34,8 +34,11 @@ if __name__ == '__main__':
     # feature_number = [28,756,63,24222]
     my_models = ['./tests/resources/pytorch_models/lcld_v2_time_torch.pth',
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
-                 './tests/resources/pytorch_models/url_test_torch.pth',
+                 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/LinearModel/url/models/m_2.pth',#'./tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
+    all_models = ["LinearModel",
+                   "TabNet", "VIME", "TabTransformer", "NODE", "DeepGBM", "RLN", "DNFNet", "STG", "NAM", "DeepFM",
+                  "SAINT", "DANet"] # , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree", "MLP",
     data_indicator = 2
     args.model = my_models[data_indicator]
 
@@ -52,7 +55,7 @@ if __name__ == '__main__':
     mean, std = preprocessor.mean_, preprocessor.scale_
     mean = mean.reshape(1,-1).astype(np.float32)
     std = std.reshape(1,-1).astype(np.float32)
-    args.epsilon = 2*np.mean(std) # budget to be adapted
+    args.epsilon = np.mean(std) # budget to be adapted
 
     x_test = torch.Tensor(x_test)
     y_test = torch.Tensor(y_test)
@@ -71,29 +74,87 @@ if __name__ == '__main__':
             return (input - self.meanl) / self.stdl
 
     # load model
-    model = Net(preprocessor, x.shape[1])
-    ckpt = torch.load(args.model, map_location=torch.device('cpu'))
-    model.load_state_dict(ckpt)
-    #model.cuda()
-    if torch.cuda.is_available():
-        device = torch.device("cuda")
+    if args.model_name == "Net":
+        model = Net(preprocessor, x.shape[1])
+        ckpt = torch.load(args.model, map_location=torch.device('cpu'))
+        model.load_state_dict(ckpt)
+        #model.cuda()
+        if torch.cuda.is_available():
+            device = torch.device("cuda")
+        else:
+            device = torch.device("cpu")
+        model = torch.nn.Sequential(
+            Normalize(meanl=mean, stdl=std),
+            model
+        )
+        # model = add_normalization_layer(model=model, mean=mean, std=std)
+        model.to(device)
+        model.eval()
     else:
-        device = torch.device("cpu")
-    model = torch.nn.Sequential(
-        Normalize(meanl=mean, stdl=std),
-        model
-    )
-    # model = add_normalization_layer(model=model, mean=mean, std=std)
-    model.to(device)
-    model.eval()
+        # from models import str2model
+        # adapt to type of model being run
+        # model_name = str2model(args.model_name)
+        model = torch.load(args.model)
+
+    for one_model in all_models:
+        if one_model == "MLP":
+            args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + \
+                         my_datasets[data_indicator] + '/models/m_2.pt'
+        else:
+            args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + my_datasets[data_indicator] + '/models/m_2.pth'
+        model = torch.load(args.model)
+        print("model = ", one_model, " ; dataset = ", my_datasets[data_indicator])
+        # create save dir
+        if not os.path.exists(args.save_dir):
+            os.makedirs(args.save_dir)
+
+        # load attack
+        from autoattack import AutoAttack
+
+        constraints = dataset.get_constraints()
+        adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
+                               log_path=args.log_path,
+                               version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x))
+
+        # l = [x for (x, y) in test_loader]
+        # x_test = torch.cat(l, 0)
+        # l = [y for (x, y) in test_loader]
+        # y_test = torch.cat(l, 0)
+
+        # example of custom version
+        if args.version == 'custom':
+            if one_model in ["KNN", "DecisionTree", "RandomForest", "ModelTree"]:
+                adversary.attacks_to_run = ['moeva2'] # 'moeva2'
+            else:
+                adversary.attacks_to_run = ['apgd-ce', 'fab']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
+            adversary.apgd.n_restarts = 2
+            # adversary.fab.n_restarts = 2
+
+        # run attack and save images
+        with torch.no_grad():
+            if not args.individual:
+                adv_complete = adversary.run_standard_evaluation(x_test[:args.n_ex], y_test[:args.n_ex],
+                                                                 bs=args.batch_size,
+                                                                 x_unscaled=x_unpreprocessed[:args.n_ex])
+
+                torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}.pth'.format(
+                    args.save_dir, 'aa', args.version, my_datasets[data_indicator], args.norm, adv_complete.shape[0],
+                    args.epsilon))
+
+            else:
+                # individual version, each attack is run on all test points
+                adv_complete = adversary.run_standard_evaluation_individual(x_test[:args.n_ex],
+                                                                            y_test[:args.n_ex], bs=args.batch_size)
+
+                torch.save(adv_complete, '{}/{}_{}_individual_1_{}_eps_{:.5f}_plus_{}_cheap_{}.pth'.format(
+                    args.save_dir, 'aa', args.version, args.n_ex, args.epsilon))
+
 
     # load data
     # transform_list = [transforms.ToTensor()]
     # transform_chain = transforms.Compose(transform_list)
     # item = datasets.CIFAR10(root=args.data_dir, train=False, transform=transform_chain, download=True)
     # test_loader = data.DataLoader(item, batch_size=1000, shuffle=False, num_workers=0)
-
-
 
     # create save dir
     if not os.path.exists(args.save_dir):
@@ -106,8 +167,6 @@ if __name__ == '__main__':
     adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon, log_path=args.log_path,
         version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x))
 
-
-
     #l = [x for (x, y) in test_loader]
     #x_test = torch.cat(l, 0)
     #l = [y for (x, y) in test_loader]
@@ -115,7 +174,7 @@ if __name__ == '__main__':
     
     # example of custom version
     if args.version == 'custom':
-        adversary.attacks_to_run = ['apgd-t-ce-constrained','moeva2']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
+        adversary.attacks_to_run = ['apgd-t-ce-constrained', 'fab-constrained','moeva2']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
         adversary.apgd.n_restarts = 2
         # adversary.fab.n_restarts = 2
 

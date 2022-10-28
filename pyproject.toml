@@ -26,6 +26,12 @@ keras = "^2.10.0"
 skorch = "^0.12.0"
 copulas = "^0.7.0"
 sdv = "^0.17.1"
+optuna = "^3.0.3"
+xgboost = "^1.6.2"
+catboost = "^1.1"
+lightgbm = "^3.3.3"
+modeltrees = {git = "https://github.com/schufa-innovationlab/model-trees"}
+pytorch-tabnet = "^4.0"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 

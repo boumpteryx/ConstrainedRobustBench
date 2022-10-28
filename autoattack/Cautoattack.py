@@ -79,8 +79,12 @@ class AutoAttack():
             self.set_version(version)
 
     def get_logits(self, x):
-        if not self.is_tf_model:
+        if callable(self.model) and not self.is_tf_model:
             return self.model(x)
+        elif not callable(self.model) and not self.is_tf_model and hasattr(self.model, "predict_proba"):
+            return torch.tensor(self.model.predict_proba(x))
+        elif not self.is_tf_model:
+            return self.model.predict(x.numpy()) # for Booster, but still a bug, need DMatrix
         else:
             return self.model.predict(x)
 
@@ -93,7 +97,7 @@ class AutoAttack():
                 ', '.join(self.attacks_to_run)))
 
         # checks on type of defense
-        if self.version != 'rand':
+        """if self.version != 'rand':
             checks.check_randomized(self.get_logits, x_orig[:bs].to(self.device),
                 y_orig[:bs].to(self.device), bs=bs, logger=self.logger)
         n_cls = checks.check_range_output(self.get_logits, x_orig[:bs].to(self.device),
@@ -101,7 +105,7 @@ class AutoAttack():
         checks.check_dynamic(self.model, x_orig[:bs].to(self.device), self.is_tf_model,
             logger=self.logger)
         checks.check_n_classes(n_cls, self.attacks_to_run, self.apgd_targeted.n_target_classes,
-            self.fab.n_target_classes, logger=self.logger)
+            self.fab.n_target_classes, logger=self.logger)"""
 
         with torch.no_grad():
             # calculate accuracy
