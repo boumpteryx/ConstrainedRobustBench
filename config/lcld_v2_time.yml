@@ -1,0 +1,30 @@
+# General parameters
+dataset: lcld_v2_time
+objective: binary # Don't change
+
+# Optuna parameters - https://optuna.org/
+n_trials: 2
+direction: maximize
+
+# Training parameters
+early_stopping_rounds: 20
+
+# GPU parameters
+use_gpu: False
+gpu_ids: [0, 1]
+data_parallel: True
+
+# Cross validation parameters
+num_splits: 3
+shuffle: True
+seed: 221 # Don't change
+
+# Preprocessing parameters
+scale: True
+target_encode: False
+one_hot_encode: False
+
+
+# About the data
+num_classes: 1  # for classification
+num_features: 28

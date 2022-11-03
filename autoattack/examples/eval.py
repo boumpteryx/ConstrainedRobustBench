@@ -14,8 +14,13 @@ sys.path.insert(0,'..')
 
 from resnet import *
 
+import configargparse
+import yaml
+
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
+    # parser = argparse.ArgumentParser()
+    parser = configargparse.ArgumentParser(config_file_parser_class=configargparse.YAMLConfigFileParser,
+                                           formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--data_dir', type=str, default='./data')
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=8./255.)
@@ -27,18 +32,54 @@ if __name__ == '__main__':
     parser.add_argument('--log_path', type=str, default='./log_file.txt')
     parser.add_argument('--version', type=str, default='custom')
     parser.add_argument('--model_name', type=str, default='Net')
-    
+
+    parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
+    # parser.add('--model_name', required=True, help="Name of the model that should be trained")
+    parser.add('--dataset', required=True, help="Name of the dataset that will be used")
+    parser.add('--objective', required=True, type=str, default="regression", choices=["regression", "classification",
+                                                                                      "binary"],
+               help="Set the type of the task")
+
+    parser.add('--use_gpu', action="store_true", help="Set to true if GPU is available")
+    parser.add('--gpu_ids', type=int, action="append", help="IDs of the GPUs used when data_parallel is true")
+    parser.add('--data_parallel', action="store_true", help="Distribute the training over multiple GPUs")
+
+    parser.add('--optimize_hyperparameters', action="store_true",
+               help="Search for the best hyperparameters")
+    parser.add('--n_trials', type=int, default=100, help="Number of trials for the hyperparameter optimization")
+    parser.add('--direction', type=str, default="minimize", choices=['minimize', 'maximize'],
+               help="Direction of optimization.")
+
+    parser.add('--num_splits', type=int, default=5, help="Number of splits done for cross validation")
+    parser.add('--shuffle', action="store_true", help="Shuffle data during cross-validation")
+    parser.add('--seed', type=int, default=123, help="Seed for KFold initialization.")
+
+    parser.add('--scale', action="store_true", help="Normalize input data.")
+    parser.add('--target_encode', action="store_true", help="Encode the targets that they start at 0. (0, 1, 2,...)")
+    parser.add('--one_hot_encode', action="store_true", help="OneHotEncode the categorical features")
+
+    # parser.add('--batch_size', type=int, default=128, help="Batch size used for training")
+    parser.add('--val_batch_size', type=int, default=128, help="Batch size used for training and testing")
+    parser.add('--early_stopping_rounds', type=int, default=20, help="Number of rounds before early stopping applies.")
+    parser.add('--epochs', type=int, default=1000, help="Max number of epochs to train.")
+    parser.add('--logging_period', type=int, default=100, help="Number of iteration after which validation is printed.")
+
+    parser.add('--num_features', type=int, required=True, help="Set the total number of features.")
+    parser.add('--num_classes', type=int, default=1, help="Set the number of classes in a classification task.")
+    parser.add('--cat_idx', type=int, action="append", help="Indices of the categorical features")
+    parser.add('--cat_dims', type=int, action="append", help="Cardinality of the categorical features (is set "
+                                                             "automatically, when the load_data function is used.")
+
     args = parser.parse_args()
 
     my_datasets = ["lcld_v2_time", "ctu_13_neris", "url", "malware"]
     # feature_number = [28,756,63,24222]
     my_models = ['./tests/resources/pytorch_models/lcld_v2_time_torch.pth',
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
-                 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/LinearModel/url/models/m_2.pth',#'./tests/resources/pytorch_models/url_test_torch.pth',
+                 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/TabTransformer/url/models/m_2.pt',#'./tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["LinearModel",
-                   "TabNet", "VIME", "TabTransformer", "NODE", "DeepGBM", "RLN", "DNFNet", "STG", "NAM", "DeepFM",
-                  "SAINT", "DANet"] # , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree", "MLP",
+    all_models = ["TabTransformer", "TabNet",  "VIME",  "MLP",  "NODE", "DeepGBM", "RLN", "STG", "NAM", "DeepFM",
+                  "SAINT", "DANet"] #"LinearModel",  , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",
     data_indicator = 2
     args.model = my_models[data_indicator]
 
@@ -91,15 +132,23 @@ if __name__ == '__main__':
         model.to(device)
         model.eval()
     else:
-        # from models import str2model
+        from models import str2model
         # adapt to type of model being run
-        # model_name = str2model(args.model_name)
-        model = torch.load(args.model)
+        parameters = {'depth': 2, 'dim': 64, 'dropout': 0.3, 'heads': 2, 'learning_rate': -4, 'weight_decay': -5}#{'cat_emb_dim': 1, 'gamma': 1.4028260742016845, 'mask_type': 'entmax', 'momentum': 0.004875583278352418, 'n_d': 31, 'n_independent': 3, 'n_shared': 1, 'n_steps': 8, 'n_a': 31, 'cat_idxs': [], 'cat_dims': [], 'device_name': torch.device(type='cpu')}
+        model = str2model(args.model_name)(parameters, args)
+        state_dict = torch.load(args.model, map_location=torch.device('cpu'))
+        model.model.load_state_dict(state_dict)
 
     for one_model in all_models:
-        if one_model == "MLP":
+        if one_model in ["MLP", "TabTransformer", "DeepGBM", "STG"]:
             args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + \
                          my_datasets[data_indicator] + '/models/m_2.pt'
+        elif one_model in ["VIME"]:
+            args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + \
+                         my_datasets[data_indicator] + '/models/m_semi_2.pt'
+        elif one_model in ["RLN"]:
+            args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + \
+                         my_datasets[data_indicator] + '/models/m_2.h5'
         else:
             args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + my_datasets[data_indicator] + '/models/m_2.pth'
         model = torch.load(args.model)
@@ -124,7 +173,7 @@ if __name__ == '__main__':
         # example of custom version
         if args.version == 'custom':
             if one_model in ["KNN", "DecisionTree", "RandomForest", "ModelTree"]:
-                adversary.attacks_to_run = ['moeva2'] # 'moeva2'
+                adversary.attacks_to_run = [] # 'moeva2'
             else:
                 adversary.attacks_to_run = ['apgd-ce', 'fab']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
             adversary.apgd.n_restarts = 2

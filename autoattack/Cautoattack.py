@@ -84,7 +84,8 @@ class AutoAttack():
         elif not callable(self.model) and not self.is_tf_model and hasattr(self.model, "predict_proba"):
             return torch.tensor(self.model.predict_proba(x))
         elif not self.is_tf_model:
-            return self.model.predict(x.numpy()) # for Booster, but still a bug, need DMatrix
+            import xgboost
+            return torch.tensor(self.model.predict_proba(xgboost.DMatrix(x))) # for Booster
         else:
             return self.model.predict(x)
 

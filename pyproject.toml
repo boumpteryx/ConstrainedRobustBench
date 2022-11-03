@@ -32,6 +32,10 @@ catboost = "^1.1"
 lightgbm = "^3.3.3"
 modeltrees = {git = "https://github.com/schufa-innovationlab/model-trees"}
 pytorch-tabnet = "^4.0"
+lifelines = "^0.27.3"
+einops = "^0.5.0"
+ConfigArgParse = "^1.5.3"
+scipy = "1.7.3"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 
