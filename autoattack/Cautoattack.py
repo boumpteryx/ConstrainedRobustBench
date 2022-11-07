@@ -51,7 +51,7 @@ class AutoAttack():
                 logger=self.logger)
 
             from constrained_attacks.attacks.moeva.moeva import Moeva2
-            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1)
+            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1, verbose=2)
 
         else:
             from .autopgd_base import APGDAttack
