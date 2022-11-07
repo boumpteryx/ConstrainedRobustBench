@@ -77,7 +77,7 @@ if __name__ == '__main__':
     # feature_number = [28,756,63,24222]
     my_models = ['./tests/resources/pytorch_models/lcld_v2_time_torch.pth',
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
-                 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/TabTransformer/url/models/m_2.pt',#'./tests/resources/pytorch_models/url_test_torch.pth',
+                 'trained_models/TabTransformer/url/m_best.pt',#'./tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     all_models = ["TabTransformer", "TabNet",  "VIME",  "MLP",  "NODE", "DeepGBM", "RLN", "STG", "NAM", "DeepFM",
                   "SAINT", "DANet"] #"LinearModel",  , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",
