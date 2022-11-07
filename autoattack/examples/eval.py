@@ -137,7 +137,15 @@ if __name__ == '__main__':
         parameters = {'depth': 2, 'dim': 64, 'dropout': 0.3, 'heads': 2, 'learning_rate': -4, 'weight_decay': -5}#{'cat_emb_dim': 1, 'gamma': 1.4028260742016845, 'mask_type': 'entmax', 'momentum': 0.004875583278352418, 'n_d': 31, 'n_independent': 3, 'n_shared': 1, 'n_steps': 8, 'n_a': 31, 'cat_idxs': [], 'cat_dims': [], 'device_name': torch.device(type='cpu')}
         model = str2model(args.model_name)(parameters, args)
         state_dict = torch.load(args.model, map_location=torch.device('cpu'))
-        model.model.load_state_dict(state_dict)
+        from collections import OrderedDict
+        new_state_dict = OrderedDict()
+        for k, v in state_dict.items():
+            name = 'module.' + k[:]  # add `module.`
+            new_state_dict[name] = v
+        model.model.load_state_dict(new_state_dict)
+        device = torch.device("cpu")
+        model.model.to(device)
+        model.model.eval()
 
     for one_model in all_models:
         if one_model in ["MLP", "TabTransformer", "DeepGBM", "STG"]:
@@ -151,8 +159,9 @@ if __name__ == '__main__':
                          my_datasets[data_indicator] + '/models/m_2.h5'
         else:
             args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + my_datasets[data_indicator] + '/models/m_2.pth'
-        model = torch.load(args.model)
         print("model = ", one_model, " ; dataset = ", my_datasets[data_indicator])
+
+
         # create save dir
         if not os.path.exists(args.save_dir):
             os.makedirs(args.save_dir)
@@ -175,7 +184,8 @@ if __name__ == '__main__':
             if one_model in ["KNN", "DecisionTree", "RandomForest", "ModelTree"]:
                 adversary.attacks_to_run = [] # 'moeva2'
             else:
-                adversary.attacks_to_run = ['apgd-ce', 'fab']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
+                # adversary.attacks_to_run = ['apgd-ce', 'fab']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
+                adversary.attacks_to_run = ['moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             adversary.apgd.n_restarts = 2
             # adversary.fab.n_restarts = 2
 

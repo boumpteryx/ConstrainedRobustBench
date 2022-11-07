@@ -51,7 +51,7 @@ class AutoAttack():
                 logger=self.logger)
 
             from constrained_attacks.attacks.moeva.moeva import Moeva2
-            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess)
+            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1)
 
         else:
             from .autopgd_base import APGDAttack
@@ -83,7 +83,7 @@ class AutoAttack():
             return self.model(x)
         elif not callable(self.model) and not self.is_tf_model and hasattr(self.model, "predict_proba"):
             return torch.tensor(self.model.predict_proba(x))
-        elif not self.is_tf_model:
+        elif not self.is_tf_model and hasattr(self.model, "predict_proba"):
             import xgboost
             return torch.tensor(self.model.predict_proba(xgboost.DMatrix(x))) # for Booster
         else:
