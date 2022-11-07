@@ -7,7 +7,7 @@ import torch
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 
-from autoattack.other_utils import add_normalization_layer
+# from autoattack.other_utils import add_normalization_layer
 from pipeline.pytorch import Net
 
 sys.path.insert(0,'..')
@@ -185,7 +185,7 @@ if __name__ == '__main__':
                 adversary.attacks_to_run = [] # 'moeva2'
             else:
                 # adversary.attacks_to_run = ['apgd-ce', 'fab']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
-                adversary.attacks_to_run = ['moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
+                adversary.attacks_to_run = ['apgd-t-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             adversary.apgd.n_restarts = 2
             # adversary.fab.n_restarts = 2
 
