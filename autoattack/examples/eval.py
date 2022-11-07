@@ -8,6 +8,7 @@ from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 
 # from autoattack.other_utils import add_normalization_layer
+sys.path.insert(0,'.')
 from pipeline.pytorch import Net
 
 sys.path.insert(0,'..')
