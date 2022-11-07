@@ -144,7 +144,7 @@ if __name__ == '__main__':
             name = 'module.' + k[:]  # add `module.`
             new_state_dict[name] = v
         model.model.load_state_dict(new_state_dict)
-        device = torch.device("cpu")
+        device = torch.device(torch.device_ids[0])
         model.model.to(device)
         model.model.eval()
 
