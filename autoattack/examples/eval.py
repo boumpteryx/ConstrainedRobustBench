@@ -143,7 +143,7 @@ if __name__ == '__main__':
             param_path = 'trained_models/' + one_model + '/' + args.dataset + '/parameters.json'
             parameters = ast.literal_eval(open(param_path).read())
             print("parameters : ", parameters)
-            model = str2model(args.model_name)(parameters, args)
+            model = str2model(one_model)(parameters, args)
             state_dict = torch.load(args.model, map_location=torch.device('cpu'))
             from collections import OrderedDict
 
