@@ -1,0 +1,1 @@
+{'depth': 2, 'dim': 64, 'dropout': 0.3, 'heads': 2, 'learning_rate': -4, 'weight_decay': -5}

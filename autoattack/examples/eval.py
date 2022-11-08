@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     # parser.add('--model_name', required=True, help="Name of the model that should be trained")
-    parser.add('--dataset', required=True, help="Name of the dataset that will be used")
+    parser.add('--dataset', required=True, help="Name of the dataset that will be used", default='url')
     parser.add('--objective', required=True, type=str, default="regression", choices=["regression", "classification",
                                                                                       "binary"],
                help="Set the type of the task")
@@ -77,15 +77,13 @@ if __name__ == '__main__':
     # feature_number = [28,756,63,24222]
     my_models = ['./tests/resources/pytorch_models/lcld_v2_time_torch.pth',
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
-                 'trained_models/TabTransformer/url/m_best.pt',#'./tests/resources/pytorch_models/url_test_torch.pth',
+                 './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["TabTransformer", "TabNet",  "VIME",  "MLP",  "NODE", "DeepGBM", "RLN", "STG", "NAM", "DeepFM",
-                  "SAINT", "DANet"] #"LinearModel",  , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",
-    data_indicator = 2
-    args.model = my_models[data_indicator]
+    all_models = ["LinearModel", "Net", "TabTransformer","RLN", "DeepFM", "VIME"]
+    # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
-    dataset = datasets.load_dataset(my_datasets[data_indicator])
+    dataset = datasets.load_dataset(args.dataset)
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
     splits = dataset.get_splits()
@@ -115,53 +113,49 @@ if __name__ == '__main__':
                 input = torch.tensor(input)
             return (input - self.meanl) / self.stdl
 
-    # load model
-    if args.model_name == "Net":
-        model = Net(preprocessor, x.shape[1])
-        ckpt = torch.load(args.model, map_location=torch.device('cpu'))
-        model.load_state_dict(ckpt)
-        #model.cuda()
-        if torch.cuda.is_available():
-            device = torch.device("cuda")
-        else:
-            device = torch.device("cpu")
-        model = torch.nn.Sequential(
-            Normalize(meanl=mean, stdl=std),
-            model
-        )
-        # model = add_normalization_layer(model=model, mean=mean, std=std)
-        model.to(device)
-        model.eval()
-    else:
-        from models import str2model
-        # adapt to type of model being run
-        parameters = {'depth': 2, 'dim': 64, 'dropout': 0.3, 'heads': 2, 'learning_rate': -4, 'weight_decay': -5}#{'cat_emb_dim': 1, 'gamma': 1.4028260742016845, 'mask_type': 'entmax', 'momentum': 0.004875583278352418, 'n_d': 31, 'n_independent': 3, 'n_shared': 1, 'n_steps': 8, 'n_a': 31, 'cat_idxs': [], 'cat_dims': [], 'device_name': torch.device(type='cpu')}
-        model = str2model(args.model_name)(parameters, args)
-        state_dict = torch.load(args.model, map_location=torch.device('cpu'))
-        from collections import OrderedDict
-        new_state_dict = OrderedDict()
-        for k, v in state_dict.items():
-            name = 'module.' + k[:]  # add `module.`
-            new_state_dict[name] = v
-        model.model.load_state_dict(new_state_dict)
-        device = torch.device(0)
-        model.model.to(device)
-        model.model.eval()
+
 
     for one_model in all_models:
-        if one_model in ["MLP", "TabTransformer", "DeepGBM", "STG"]:
-            args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + \
-                         my_datasets[data_indicator] + '/models/m_2.pt'
-        elif one_model in ["VIME"]:
-            args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + \
-                         my_datasets[data_indicator] + '/models/m_semi_2.pt'
-        elif one_model in ["RLN"]:
-            args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + \
-                         my_datasets[data_indicator] + '/models/m_2.h5'
-        else:
-            args.model = 'C:/Users/antoine.desjardins/Documents/GitHub/TabSurvey/output/' + one_model + '/' + my_datasets[data_indicator] + '/models/m_2.pth'
-        print("model = ", one_model, " ; dataset = ", my_datasets[data_indicator])
+        args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best.pt'
+        print("model = ", one_model, " ; dataset = ", args.dataset)
 
+        # load model
+        if args.model_name == "Net":
+            model = Net(preprocessor, x.shape[1])
+            ckpt = torch.load(args.model, map_location=torch.device('cpu'))
+            model.load_state_dict(ckpt)
+            # model.cuda()
+            if torch.cuda.is_available():
+                device = torch.device("cuda")
+            else:
+                device = torch.device(0)
+            model = torch.nn.Sequential(
+                Normalize(meanl=mean, stdl=std),
+                model
+            )
+            # model = add_normalization_layer(model=model, mean=mean, std=std)
+            model.to(device)
+            model.eval()
+        else:
+            from models import str2model
+            # adapt to type of model being run
+            import ast
+
+            parameters = ast.literal_eval(open(
+                'trained_models/TabTransformer/url/parameters.json').read())  # {'depth': 2, 'dim': 64, 'dropout': 0.3, 'heads': 2, 'learning_rate': -4, 'weight_decay': -5}#{'cat_emb_dim': 1, 'gamma': 1.4028260742016845, 'mask_type': 'entmax', 'momentum': 0.004875583278352418, 'n_d': 31, 'n_independent': 3, 'n_shared': 1, 'n_steps': 8, 'n_a': 31, 'cat_idxs': [], 'cat_dims': [], 'device_name': torch.device(type='cpu')}
+            print(parameters)
+            model = str2model(args.model_name)(parameters, args)
+            state_dict = torch.load(args.model, map_location=torch.device('cpu'))
+            from collections import OrderedDict
+
+            new_state_dict = OrderedDict()
+            for k, v in state_dict.items():
+                name = 'module.' + k[:]  # add `module.`
+                new_state_dict[name] = v
+            model.model.load_state_dict(new_state_dict)
+            device = torch.device(0)  # "cpu"
+            model.model.to(device)
+            model.model.eval()
 
         # create save dir
         if not os.path.exists(args.save_dir):
@@ -182,13 +176,9 @@ if __name__ == '__main__':
 
         # example of custom version
         if args.version == 'custom':
-            if one_model in ["KNN", "DecisionTree", "RandomForest", "ModelTree"]:
-                adversary.attacks_to_run = [] # 'moeva2'
-            else:
-                # adversary.attacks_to_run = ['apgd-ce', 'fab']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
-                adversary.attacks_to_run = ['apgd-t-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
+            adversary.attacks_to_run = ['apgd-t-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             adversary.apgd.n_restarts = 2
-            # adversary.fab.n_restarts = 2
+            adversary.fab.n_restarts = 2
 
         # run attack and save images
         with torch.no_grad():
@@ -198,7 +188,7 @@ if __name__ == '__main__':
                                                                  x_unscaled=x_unpreprocessed[:args.n_ex])
 
                 torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}.pth'.format(
-                    args.save_dir, 'aa', args.version, my_datasets[data_indicator], args.norm, adv_complete.shape[0],
+                    args.save_dir, 'aa', args.version, args.dataset, args.norm, adv_complete.shape[0],
                     args.epsilon))
 
             else:
@@ -216,42 +206,3 @@ if __name__ == '__main__':
     # item = datasets.CIFAR10(root=args.data_dir, train=False, transform=transform_chain, download=True)
     # test_loader = data.DataLoader(item, batch_size=1000, shuffle=False, num_workers=0)
 
-    # create save dir
-    if not os.path.exists(args.save_dir):
-        os.makedirs(args.save_dir)
-    
-    # load attack    
-    from autoattack import AutoAttack
-
-    constraints = dataset.get_constraints()
-    adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon, log_path=args.log_path,
-        version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x))
-
-    #l = [x for (x, y) in test_loader]
-    #x_test = torch.cat(l, 0)
-    #l = [y for (x, y) in test_loader]
-    #y_test = torch.cat(l, 0)
-    
-    # example of custom version
-    if args.version == 'custom':
-        adversary.attacks_to_run = ['apgd-t-ce-constrained', 'fab-constrained','moeva2']  # 'apgd-t-ce-constrained', 'moeva2', 'fab-constrained', 'fab'
-        adversary.apgd.n_restarts = 2
-        # adversary.fab.n_restarts = 2
-
-    # run attack and save images
-    with torch.no_grad():
-        if not args.individual:
-            adv_complete = adversary.run_standard_evaluation(x_test[:args.n_ex], y_test[:args.n_ex],
-                bs=args.batch_size, x_unscaled=x_unpreprocessed[:args.n_ex])
-            
-            torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}.pth'.format(
-                args.save_dir, 'aa', args.version, my_datasets[data_indicator], args.norm, adv_complete.shape[0], args.epsilon))
-
-        else:
-            # individual version, each attack is run on all test points
-            adv_complete = adversary.run_standard_evaluation_individual(x_test[:args.n_ex],
-                y_test[:args.n_ex], bs=args.batch_size)
-            
-            torch.save(adv_complete, '{}/{}_{}_individual_1_{}_eps_{:.5f}_plus_{}_cheap_{}.pth'.format(
-                args.save_dir, 'aa', args.version, args.n_ex, args.epsilon))
-                
