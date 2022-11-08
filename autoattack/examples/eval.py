@@ -120,7 +120,7 @@ if __name__ == '__main__':
         print("model = ", one_model, " ; dataset = ", args.dataset)
 
         # load model
-        if args.model_name == "Net":
+        if one_model == "Net":
             model = Net(preprocessor, x.shape[1])
             ckpt = torch.load(args.model, map_location=torch.device('cpu'))
             model.load_state_dict(ckpt)
@@ -140,10 +140,9 @@ if __name__ == '__main__':
             from models import str2model
             # adapt to type of model being run
             import ast
-
-            parameters = ast.literal_eval(open(
-                'trained_models/TabTransformer/url/parameters.json').read())  # {'depth': 2, 'dim': 64, 'dropout': 0.3, 'heads': 2, 'learning_rate': -4, 'weight_decay': -5}#{'cat_emb_dim': 1, 'gamma': 1.4028260742016845, 'mask_type': 'entmax', 'momentum': 0.004875583278352418, 'n_d': 31, 'n_independent': 3, 'n_shared': 1, 'n_steps': 8, 'n_a': 31, 'cat_idxs': [], 'cat_dims': [], 'device_name': torch.device(type='cpu')}
-            print(parameters)
+            param_path = 'trained_models/' + one_model + '/' + args.dataset + '/parameters.json'
+            parameters = ast.literal_eval(open(param_path).read())
+            print("parameters : ", parameters)
             model = str2model(args.model_name)(parameters, args)
             state_dict = torch.load(args.model, map_location=torch.device('cpu'))
             from collections import OrderedDict
