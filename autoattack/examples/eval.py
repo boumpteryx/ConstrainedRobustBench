@@ -122,7 +122,7 @@ if __name__ == '__main__':
         # load model
         if one_model == "Net":
             model = Net(preprocessor, x.shape[1])
-            ckpt = torch.load(args.model, map_location=torch.device('cpu'))
+            ckpt = torch.load(args.model, map_location=torch.device(0)) # "cpu"
             model.load_state_dict(ckpt)
             # model.cuda()
             if torch.cuda.is_available():
