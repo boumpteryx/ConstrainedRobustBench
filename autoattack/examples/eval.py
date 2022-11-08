@@ -155,7 +155,7 @@ if __name__ == '__main__':
             else:
                 new_state_dict = state_dict
             model.model.load_state_dict(new_state_dict)
-            device = torch.device(0)  # "cpu"
+            device = torch.device('cpu')  # "cpu"
             model.model.to(device)
             model.model.eval()
 
