@@ -79,7 +79,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["Net", "RLN", "TabTransformer", "DeepFM", "VIME", "LinearModel"]
+    all_models = ["RLN", "TabTransformer", "Net",  "DeepFM", "VIME", "LinearModel"]
     # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
