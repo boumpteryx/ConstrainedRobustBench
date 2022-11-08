@@ -126,7 +126,7 @@ if __name__ == '__main__':
             model.load_state_dict(ckpt)
             # model.cuda()
             if torch.cuda.is_available():
-                device = torch.device("cuda")
+                device = torch.device(0) # "cuda"
             else:
                 device = torch.device(0)
             model = torch.nn.Sequential(
