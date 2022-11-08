@@ -118,9 +118,6 @@ if __name__ == '__main__':
     for one_model in all_models:
         args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best.pt'
 
-        if one_model == "RLN":
-            args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best.h5'
-
         print("model = ", one_model, " ; dataset = ", args.dataset)
 
         # load model
