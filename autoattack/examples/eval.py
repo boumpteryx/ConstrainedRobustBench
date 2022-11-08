@@ -37,7 +37,7 @@ if __name__ == '__main__':
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     # parser.add('--model_name', required=True, help="Name of the model that should be trained")
     parser.add('--dataset', required=True, help="Name of the dataset that will be used", default='url')
-    parser.add('--objective', required=True, type=str, default="regression", choices=["regression", "classification",
+    parser.add('--objective', required=True, type=str, default="binary", choices=["regression", "classification",
                                                                                       "binary"],
                help="Set the type of the task")
 
