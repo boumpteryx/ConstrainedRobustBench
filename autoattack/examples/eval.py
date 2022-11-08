@@ -79,7 +79,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["RLN", "TabTransformer", "DeepFM", "VIME", "LinearModel", "Net"]
+    all_models = ["Net", "RLN", "TabTransformer", "DeepFM", "VIME", "LinearModel"]
     # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
@@ -123,13 +123,13 @@ if __name__ == '__main__':
         # load model
         if one_model == "Net":
             model = Net(preprocessor, x.shape[1])
-            ckpt = torch.load(args.model, map_location=torch.device(0)) # "cpu"
+            ckpt = torch.load(args.model, map_location=torch.device("cpu")) # "cpu"
             model.load_state_dict(ckpt)
             # model.cuda()
             if torch.cuda.is_available():
                 device = torch.device(0) # "cuda"
             else:
-                device = torch.device(0)
+                device = torch.device("cpu")
             model = torch.nn.Sequential(
                 Normalize(meanl=mean, stdl=std),
                 model

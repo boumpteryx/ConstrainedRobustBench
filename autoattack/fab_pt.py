@@ -68,7 +68,7 @@ class FABAttack_PT(FABAttack):
                          n_target_classes)
 
     def _predict_fn(self, x):
-        if not callable(self):
+        if not callable(self) and hasattr(self.predict, "predict_proba"):
             return self.predict.predict_proba(x)
         return self.predict(x)
 
