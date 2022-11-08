@@ -117,6 +117,7 @@ if __name__ == '__main__':
 
     for one_model in all_models:
         args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best.pt'
+
         print("model = ", one_model, " ; dataset = ", args.dataset)
 
         # load model
@@ -154,8 +155,11 @@ if __name__ == '__main__':
                     new_state_dict[name] = v
             else:
                 new_state_dict = state_dict
-            model.model.load_state_dict(new_state_dict)
-            device = torch.device('cpu')  # "cpu"
+            if one_model == "RLN":
+                model.model = state_dict
+            else:
+                model.model.load_state_dict(new_state_dict)
+            device = torch.device(0)  # "cpu"
             model.model.to(device)
             model.model.eval()
 
