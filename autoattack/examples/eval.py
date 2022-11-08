@@ -147,10 +147,13 @@ if __name__ == '__main__':
             state_dict = torch.load(args.model, map_location=torch.device('cpu'))
             from collections import OrderedDict
 
-            new_state_dict = OrderedDict()
-            for k, v in state_dict.items():
-                name = 'module.' + k[:]  # add `module.`
-                new_state_dict[name] = v
+            if one_model != "RLN":
+                new_state_dict = OrderedDict()
+                for k, v in state_dict.items():
+                    name = 'module.' + k[:]  # add `module.`
+                    new_state_dict[name] = v
+            else:
+                new_state_dict = state_dict
             model.model.load_state_dict(new_state_dict)
             device = torch.device(0)  # "cpu"
             model.model.to(device)
