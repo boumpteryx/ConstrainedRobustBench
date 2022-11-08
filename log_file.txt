@@ -1635,3 +1635,5 @@ apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
 apgd-t-ce-constrained - 2/2 - 0 out of 382 successfully perturbed
 robust accuracy after APGD-T-CE-CONSTRAINED: 88.20% (total time 14.9 s)
 fab-constrained - 1/2 - 1 out of 500 successfully perturbed
+fab-constrained - 2/2 - 3 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 87.80% (total time 76.1 s)
