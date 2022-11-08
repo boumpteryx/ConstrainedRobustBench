@@ -1,6 +1,7 @@
 import logging
 import os
 
+sys.path.insert(0,'.')
 import configutils
 import numpy as np
 import torch
