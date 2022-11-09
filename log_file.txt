@@ -1695,3 +1695,11 @@ robust accuracy after APGD-T-CE-CONSTRAINED: 98.60% (total time 29.4 s)
 fab-constrained - 1/2 - 0 out of 500 successfully perturbed
 fab-constrained - 2/2 - 0 out of 486 successfully perturbed
 robust accuracy after FAB-CONSTRAINED: 98.60% (total time 29.8 s)
+initial accuracy: 81.40%
+initial accuracy: 95.10%
+apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-t-ce-constrained - 2/2 - 0 out of 451 successfully perturbed
+robust accuracy after APGD-T-CE-CONSTRAINED: 95.10% (total time 0.4 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 451 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 95.10% (total time 0.8 s)

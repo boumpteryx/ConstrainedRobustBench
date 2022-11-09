@@ -79,7 +79,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["TabTransformer", "VIME","Net",  "RLN"] # "DeepFM", "TabTransformer", "LinearModel",
+    all_models = ["RLN", "TabTransformer"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net",
     # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
@@ -92,6 +92,8 @@ if __name__ == '__main__':
     x = preprocessor.transform(x).astype(np.float32)
     x_test = x[splits["test"]]
     y_test = y[splits["test"]]
+    x_train = x[splits["train"]]
+    y_train = y[splits["train"]]
     mean, std = preprocessor.mean_, preprocessor.scale_
     mean = mean.reshape(1,-1).astype(np.float32)
     std = std.reshape(1,-1).astype(np.float32)
@@ -146,22 +148,27 @@ if __name__ == '__main__':
             parameters = ast.literal_eval(open(param_path).read())
             print("parameters : ", parameters)
             model = str2model(one_model)(parameters, args)
-            state_dict = torch.load(args.model, map_location=torch.device('cpu'))
-            if one_model == "LinearModel":
-                model = state_dict
+            if one_model == "RLN":
+                X_test, Y_test = np.array(x_test), np.array(y_test)
+                X_train, Y_train  = np.array(x_train), np.array(y_train)
+                model.fit(X_train, Y_train, X_test, Y_test)
             else:
-                from collections import OrderedDict
-                if one_model not in ["DeepFM", "LinearModel"]:
-                    new_state_dict = OrderedDict()
-                    for k, v in state_dict.items():
-                        name = 'module.' + k[:]  # add `module.`
-                        new_state_dict[name] = v
+                state_dict = torch.load(args.model, map_location=torch.device('cpu'))
+                if one_model == "LinearModel":
+                    model = state_dict
                 else:
-                    new_state_dict = state_dict
-                model.model.load_state_dict(new_state_dict)
-                device = torch.device(0)  # "cpu"
-                model.model.to(device)
-                model.model.eval()
+                    from collections import OrderedDict
+                    if one_model not in ["DeepFM", "LinearModel"]:
+                        new_state_dict = OrderedDict()
+                        for k, v in state_dict.items():
+                            name = 'module.' + k[:]  # add `module.`
+                            new_state_dict[name] = v
+                    else:
+                        new_state_dict = state_dict
+                    model.model.load_state_dict(new_state_dict)
+                    device = torch.device(0)  # "cpu"
+                    model.model.to(device)
+                    model.model.eval()
 
         # create save dir
         if not os.path.exists(args.save_dir):

@@ -115,7 +115,7 @@ def run(config: dict):
 
     net = Net(preprocessor, x.shape[1])  # adapt this number for each dataset
     train(net, x[splits["train"]], y[splits["train"]], 10, 32)
-    path = "./tests/resources/pytorch_models/malware_test_torch.pth"
+    path = "./tests/resources/pytorch_models/lcld_v2_time_test_torch.pth"
     torch.save(net.state_dict(), path)
     y_scores = predict(net, x[splits["test"]], y[splits["test"]])
     print(compute_binary_metrics(y[splits["test"]], y_scores))
