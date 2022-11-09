@@ -79,7 +79,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["Net",  "RLN", "VIME", "LinearModel"] # "DeepFM", "TabTransformer",
+    all_models = ["TabTransformer", "VIME","Net",  "RLN"] # "DeepFM", "TabTransformer", "LinearModel",
     # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
@@ -147,19 +147,21 @@ if __name__ == '__main__':
             print("parameters : ", parameters)
             model = str2model(one_model)(parameters, args)
             state_dict = torch.load(args.model, map_location=torch.device('cpu'))
-            from collections import OrderedDict
-
-            if one_model != "DeepFM":
-                new_state_dict = OrderedDict()
-                for k, v in state_dict.items():
-                    name = 'module.' + k[:]  # add `module.`
-                    new_state_dict[name] = v
+            if one_model == "LinearModel":
+                model = state_dict
             else:
-                new_state_dict = state_dict
-            model.model.load_state_dict(new_state_dict)
-            device = torch.device(0)  # "cpu"
-            model.model.to(device)
-            model.model.eval()
+                from collections import OrderedDict
+                if one_model not in ["DeepFM", "LinearModel"]:
+                    new_state_dict = OrderedDict()
+                    for k, v in state_dict.items():
+                        name = 'module.' + k[:]  # add `module.`
+                        new_state_dict[name] = v
+                else:
+                    new_state_dict = state_dict
+                model.model.load_state_dict(new_state_dict)
+                device = torch.device(0)  # "cpu"
+                model.model.to(device)
+                model.model.eval()
 
         # create save dir
         if not os.path.exists(args.save_dir):
@@ -169,6 +171,7 @@ if __name__ == '__main__':
         from autoattack import AutoAttack
 
         constraints = dataset.get_constraints()
+        # constraints = None
         adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
                                version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x))

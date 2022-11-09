@@ -1,0 +1,34 @@
+.csv
+model =  DeepFM  ; dataset =  lcld_v2_time
+parameters :  {'dnn_dropout': 0.23405133654131458}
+using custom version including apgd-t-ce-constrained, fab-constrained, moeva2
+initial accuracy: 84.30%
+ce-targeted-constrained
+number of outputs not respecting constraints =  1
+apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+ce-targeted-constrained
+number of outputs not respecting constraints =  1
+apgd-t-ce-constrained - 2/2 - 0 out of 343 successfully perturbed
+robust accuracy after APGD-T-CE-CONSTRAINED: 84.30% (total time 0.0 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 343 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 84.30% (total time 0.0 s)
+Sequential run.
+Starting batch #0 with 500 inputs.
+number of outputs not respecting constraints =  0
+number of outputs not respecting constraints =  0
+moeva2 - 1/2 - 26 out of 500 successfully perturbed
+Sequential run.
+Starting batch #0 with 343 inputs.
+number of outputs not respecting constraints =  0
+number of outputs not respecting constraints =  0
+moeva2 - 2/2 - 18 out of 343 successfully perturbed
+robust accuracy after MOEVA2: 79.90% (total time 2872.1 s)
+max L2 perturbation: 157984.20312, nan in tensor: 0, max: 140000.00000, min: -2.41085
+robust accuracy: 79.90%
+model =  TabTransformer  ; dataset =  lcld_v2_time
+parameters :  {'depth': 3, 'dim': 32, 'dropout': 0.3, 'heads': 2, 'learning_rate': -3, 'weight_decay': -6}
+()
+On Device: cuda
+Using dim 32 and batch size 500
+On Device: cuda

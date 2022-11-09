@@ -1637,3 +1637,61 @@ robust accuracy after APGD-T-CE-CONSTRAINED: 88.20% (total time 14.9 s)
 fab-constrained - 1/2 - 1 out of 500 successfully perturbed
 fab-constrained - 2/2 - 3 out of 382 successfully perturbed
 robust accuracy after FAB-CONSTRAINED: 87.80% (total time 76.1 s)
+initial accuracy: 88.20%
+apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-t-ce-constrained - 2/2 - 0 out of 382 successfully perturbed
+robust accuracy after APGD-T-CE-CONSTRAINED: 88.20% (total time 6.5 s)
+fab-constrained - 1/2 - 1 out of 500 successfully perturbed
+fab-constrained - 2/2 - 3 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 87.80% (total time 67.2 s)
+initial accuracy: 93.90%
+apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-t-ce-constrained - 2/2 - 0 out of 439 successfully perturbed
+robust accuracy after APGD-T-CE-CONSTRAINED: 93.90% (total time 0.1 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 439 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 93.90% (total time 0.1 s)
+moeva2 - 1/2 - 100 out of 500 successfully perturbed
+moeva2 - 2/2 - 70 out of 378 successfully perturbed
+robust accuracy after MOEVA2: 70.80% (total time 6598.2 s)
+max L2 perturbation: 9336829.00000, nan in tensor: 0, max: 9336831.00000, min: -10.00000
+robust accuracy: 70.80%
+moeva2 - 1/2 - 258 out of 500 successfully perturbed
+initial accuracy: 83.80%
+apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-t-ce-constrained - 2/2 - 0 out of 338 successfully perturbed
+robust accuracy after APGD-T-CE-CONSTRAINED: 83.80% (total time 0.0 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 338 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 83.80% (total time 0.1 s)
+moeva2 - 2/2 - 214 out of 439 successfully perturbed
+robust accuracy after MOEVA2: 46.70% (total time 6674.1 s)
+max L2 perturbation: 10480276.00000, nan in tensor: 0, max: 10480281.00000, min: -8.00000
+robust accuracy: 46.70%
+initial accuracy: 88.20%
+apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-t-ce-constrained - 2/2 - 0 out of 382 successfully perturbed
+robust accuracy after APGD-T-CE-CONSTRAINED: 88.20% (total time 2.2 s)
+fab-constrained - 1/2 - 1 out of 500 successfully perturbed
+fab-constrained - 2/2 - 3 out of 382 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 87.80% (total time 10.1 s)
+moeva2 - 1/2 - 18 out of 500 successfully perturbed
+moeva2 - 2/2 - 14 out of 338 successfully perturbed
+robust accuracy after MOEVA2: 80.60% (total time 3907.1 s)
+max L2 perturbation: 130386.62500, nan in tensor: 0, max: 126500.00000, min: -2.41085
+robust accuracy: 80.60%
+initial accuracy: 81.60%
+initial accuracy: 100.00%
+apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-t-ce-constrained - 2/2 - 0 out of 500 successfully perturbed
+robust accuracy after APGD-T-CE-CONSTRAINED: 100.00% (total time 0.1 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 500 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 100.00% (total time 0.1 s)
+initial accuracy: 98.60%
+apgd-t-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-t-ce-constrained - 2/2 - 0 out of 486 successfully perturbed
+robust accuracy after APGD-T-CE-CONSTRAINED: 98.60% (total time 29.4 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 486 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 98.60% (total time 29.8 s)
