@@ -35,7 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('--log_path', type=str, default='./log_file.txt')
     parser.add_argument('--version', type=str, default='custom')
     parser.add_argument('--model_name', type=str, default='Net')
-    parser.add_argument('--use_constraints', type=bool, default=True)
+    parser.add_argument('--use_constraints', type=int, default=1)
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     # parser.add('--model_name', required=True, help="Name of the model that should be trained")
@@ -169,7 +169,7 @@ if __name__ == '__main__':
                     else:
                         new_state_dict = state_dict
                     model.model.load_state_dict(new_state_dict)
-                    device = torch.device(0)  # "cpu"
+                    device = torch.device("cpu")  # "cpu"
                     model.model.to(device)
                     model.model.eval()
 
@@ -193,10 +193,11 @@ if __name__ == '__main__':
 
         # example of custom version
         if args.version == 'custom':
+            print(args.use_constraints)
             if args.use_constraints:
                 adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             elif not args.use_constraints:
-                adversary.attacks_to_run = ['apgd-ce', 'fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
+                adversary.attacks_to_run = ['apgd-ce', 'fab']  # 'apgd-t-ce-constrained', 'fab-constrained',
                 constraints = [Constant(0) <= Constant(1)]
             adversary.apgd.n_restarts = 2
             adversary.fab.n_restarts = 2
