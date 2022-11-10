@@ -7,6 +7,8 @@ import torch
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 
+from constraints.relation_constraint import Constant
+
 # from autoattack.other_utils import add_normalization_layer
 sys.path.insert(0,'.')
 from pipeline.pytorch import Net
@@ -33,6 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('--log_path', type=str, default='./log_file.txt')
     parser.add_argument('--version', type=str, default='custom')
     parser.add_argument('--model_name', type=str, default='Net')
+    parser.add_argument('--use_constraints', type=bool, default=True)
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     # parser.add('--model_name', required=True, help="Name of the model that should be trained")
@@ -79,7 +82,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["TabTransformer"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+    all_models = ["LinearModel", "Net", "DeepFM", "RLN", "TabTransformer"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
     # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
@@ -190,7 +193,11 @@ if __name__ == '__main__':
 
         # example of custom version
         if args.version == 'custom':
-            adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
+            if args.use_constraints:
+                adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
+            elif not args.use_constraints:
+                adversary.attacks_to_run = ['apgd-ce', 'fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
+                constraints = [Constant(0) <= Constant(1)]
             adversary.apgd.n_restarts = 2
             adversary.fab.n_restarts = 2
 
