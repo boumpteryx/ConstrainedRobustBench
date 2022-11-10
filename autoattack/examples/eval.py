@@ -38,6 +38,7 @@ if __name__ == '__main__':
     parser.add_argument('--version', type=str, default='custom')
     parser.add_argument('--model_name', type=str, default='Net')
     parser.add_argument('--use_constraints', type=int, default=1)
+    parser.add_argument('--all_models', type=int, default=1)
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     # parser.add('--model_name', required=True, help="Name of the model that should be trained")
@@ -84,9 +85,11 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["Net", "LinearModel", "DeepFM", "TabTransformer", "RLN"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
-    # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
-
+    if args.all_models:
+        all_models = ["Net", "LinearModel", "DeepFM", "TabTransformer", "RLN"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
+    elif not args.all_models:
+        all_models = [args.model_name]
     # load_data
     dataset = datasets.load_dataset(args.dataset)
     x, y = dataset.get_x_y()
