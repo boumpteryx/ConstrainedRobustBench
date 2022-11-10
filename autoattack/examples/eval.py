@@ -194,7 +194,7 @@ if __name__ == '__main__':
         # constraints = None
         adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
-                               version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x))
+                               version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x), dataset=args.dataset)
 
         # l = [x for (x, y) in test_loader]
         # x_test = torch.cat(l, 0)
