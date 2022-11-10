@@ -7,11 +7,11 @@ import torch
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 
-from constraints.relation_constraint import Constant
 
 # from autoattack.other_utils import add_normalization_layer
 sys.path.insert(0,'.')
 from pipeline.pytorch import Net
+from constraints.relation_constraint import Constant
 
 sys.path.insert(0,'..')
 
