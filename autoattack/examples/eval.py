@@ -82,7 +82,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["LinearModel", "Net", "DeepFM", "RLN", "TabTransformer"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+    all_models = ["TabTransformer", "LinearModel", "Net", "DeepFM", "RLN"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
     # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
@@ -135,7 +135,7 @@ if __name__ == '__main__':
             if torch.cuda.is_available():
                 device = torch.device(0) # "cuda"
             else:
-                device = torch.device("cpu")
+                device = torch.device(0)
             model = torch.nn.Sequential(
                 Normalize(meanl=mean, stdl=std),
                 model
@@ -161,7 +161,7 @@ if __name__ == '__main__':
                     model = state_dict
                 else:
                     from collections import OrderedDict
-                    if one_model not in ["DeepFM", "LinearModel", "TabTransformer"]:
+                    if one_model not in ["DeepFM", "LinearModel", "TabTransformer"] or (one_model == "TabTransformer" and args.dataset == "url"):
                         new_state_dict = OrderedDict()
                         for k, v in state_dict.items():
                             name = 'module.' + k[:]  # add `module.`
@@ -169,7 +169,7 @@ if __name__ == '__main__':
                     else:
                         new_state_dict = state_dict
                     model.model.load_state_dict(new_state_dict)
-                    device = torch.device("cpu")  # "cpu"
+                    device = torch.device(0)  # "cpu"
                     model.model.to(device)
                     model.model.eval()
 
