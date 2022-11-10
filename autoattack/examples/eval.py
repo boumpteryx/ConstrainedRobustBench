@@ -82,7 +82,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["Net", "LinearModel", "DeepFM", "TabTransformer", "RLN"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+    all_models = ["LinearModel", "DeepFM", "TabTransformer", "RLN"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
     # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
@@ -129,13 +129,13 @@ if __name__ == '__main__':
         if one_model == "Net":
             args.use_gpus = False
             model = Net(preprocessor, x.shape[1])
-            ckpt = torch.load(args.model, map_location=torch.device("cpu")) # "cpu"
+            ckpt = torch.load(args.model, map_location=torch.device(0)) # "cpu"
             model.load_state_dict(ckpt)
             # model.cuda()
             if torch.cuda.is_available():
-                device = torch.device("cpu") # "cuda"
+                device = torch.device(0) # "cuda"
             else:
-                device = torch.device("cpu")
+                device = torch.device(0)
             model = torch.nn.Sequential(
                 Normalize(meanl=mean, stdl=std),
                 model
@@ -156,7 +156,7 @@ if __name__ == '__main__':
                 X_train, Y_train  = np.array(x_train), np.array(y_train)
                 model.fit(X_train, Y_train, X_test, Y_test)
             else:
-                state_dict = torch.load(args.model, map_location=torch.device("cpu"))
+                state_dict = torch.load(args.model, map_location=torch.device(0))
                 if one_model == "LinearModel":
                     model = state_dict
                 else:
@@ -169,7 +169,7 @@ if __name__ == '__main__':
                     else:
                         new_state_dict = state_dict
                     model.model.load_state_dict(new_state_dict)
-                    device = torch.device("cpu")  # "cpu"
+                    device = torch.device(0)  # "cpu"
                     model.model.to(device)
                     model.model.eval()
 
