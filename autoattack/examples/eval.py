@@ -79,7 +79,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
-    all_models = ["RLN", "TabTransformer"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net",
+    all_models = ["TabTransformer"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
     # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
 
     # load_data
@@ -158,7 +158,7 @@ if __name__ == '__main__':
                     model = state_dict
                 else:
                     from collections import OrderedDict
-                    if one_model not in ["DeepFM", "LinearModel"]:
+                    if one_model not in ["DeepFM", "LinearModel", "TabTransformer"]:
                         new_state_dict = OrderedDict()
                         for k, v in state_dict.items():
                             name = 'module.' + k[:]  # add `module.`
@@ -190,7 +190,7 @@ if __name__ == '__main__':
 
         # example of custom version
         if args.version == 'custom':
-            adversary.attacks_to_run = ['apgd-t-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
+            adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             adversary.apgd.n_restarts = 2
             adversary.fab.n_restarts = 2
 
