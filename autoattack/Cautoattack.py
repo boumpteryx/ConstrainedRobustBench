@@ -125,13 +125,15 @@ class AutoAttack():
                 robust_flags[start_idx:end_idx] = correct_batch.detach().to(robust_flags.device)
 
             robust_accuracy = torch.sum(robust_flags).item() / x_orig.shape[0]
-            from sklearn.metrics import roc_auc_score
+            from sklearn.metrics import roc_auc_score, matthews_corrcoef
             robust_AUC = roc_auc_score(y, y_adv[start_idx: end_idx])
+            robust_MCC = matthews_corrcoef(y, y_adv[start_idx: end_idx])
             robust_accuracy_dict = {'clean': robust_accuracy}
 
             if self.verbose:
                 self.logger.log('initial accuracy: {:.2%}'.format(robust_accuracy))
                 self.logger.log('initial AUC: {:.2%}'.format(robust_AUC))
+                self.logger.log('initial MCC: {:.2%}'.format(robust_MCC))
 
             x_adv = x_orig.clone().detach()
             startt = time.time()
@@ -297,6 +299,8 @@ class AutoAttack():
                         attack.upper(), robust_accuracy, time.time() - startt))
                     self.logger.log('robust AUC after {}: {:.2%} (total time {:.1f} s)'.format(
                         attack.upper(), robust_AUC, time.time() - startt))
+                    self.logger.log('robust MCC after {}: {:.2%} (total time {:.1f} s)'.format(
+                        attack.upper(), robust_MCC, time.time() - startt))
 
             # check about square
             checks.check_square_sr(robust_accuracy_dict, logger=self.logger)
@@ -312,6 +316,8 @@ class AutoAttack():
                 self.logger.log('max {} perturbation: {:.5f}, nan in tensor: {}, max: {:.5f}, min: {:.5f}'.format(
                     self.norm, res.max(), (x_adv != x_adv).sum(), x_adv.max(), x_adv.min()))
                 self.logger.log('robust accuracy: {:.2%}'.format(robust_accuracy))
+                self.logger.log('robust AUC: {:.2%}'.format(robust_AUC))
+                self.logger.log('robust MCC: {:.2%}'.format(robust_MCC))
         if return_labels:
             return x_adv, y_adv
         else:
