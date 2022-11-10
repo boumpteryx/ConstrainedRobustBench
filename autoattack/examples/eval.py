@@ -156,7 +156,7 @@ if __name__ == '__main__':
                 X_train, Y_train  = np.array(x_train), np.array(y_train)
                 model.fit(X_train, Y_train, X_test, Y_test)
             else:
-                state_dict = torch.load(args.model, map_location=torch.device('cpu'))
+                state_dict = torch.load(args.model, map_location=torch.device(0))
                 if one_model == "LinearModel":
                     model = state_dict
                 else:
