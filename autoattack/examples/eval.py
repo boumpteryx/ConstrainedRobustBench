@@ -181,6 +181,8 @@ if __name__ == '__main__':
         from autoattack import AutoAttack
 
         constraints = dataset.get_constraints()
+        if not args.use_constraints:
+            constraints = [Constant(0) <= Constant(1)]
         # constraints = None
         adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
