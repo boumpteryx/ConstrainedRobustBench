@@ -193,6 +193,8 @@ class APGDAttack:
         return x / (t.view(-1, *([1] * self.ndims)) + 1e-12)
 
     def constraints_loss(self, x):
+        if self.constraints is None:
+            return 0
         executor = PytorchConstraintsExecutor(
             AndConstraint(self.constraints.relation_constraints),
             feature_names=self.constraints.feature_names,

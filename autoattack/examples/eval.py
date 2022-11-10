@@ -10,8 +10,10 @@ from sklearn.preprocessing import StandardScaler
 
 # from autoattack.other_utils import add_normalization_layer
 sys.path.insert(0,'.')
+from constrained_attacks.constraints.constraints import Constraints
 from pipeline.pytorch import Net
-from constraints.relation_constraint import Constant
+from constrained_attacks.constraints.relation_constraint import Constant
+from constrained_attacks.constraints.relation_constraint import LessEqualConstraint, Feature
 
 sys.path.insert(0,'..')
 
@@ -182,7 +184,10 @@ if __name__ == '__main__':
 
         constraints = dataset.get_constraints()
         if not args.use_constraints:
-            constraints = [Constant(0) <= Constant(1)]
+            a = LessEqualConstraint(Constant(float(constraints.lower_bounds[0])-1),Feature(0))
+            b = LessEqualConstraint(Constant(float(constraints.lower_bounds[0])-1),Feature(0))
+            constraints.relation_constraints = [(a), (b)]
+            #constraints = AndConstraint(operands =[(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))]) #Constraints([],[],[],[], [(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))], []) # AndConstraint(operands =[(Constant(0) <= Constant(1))]) #
         # constraints = None
         adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
