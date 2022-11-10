@@ -129,7 +129,7 @@ if __name__ == '__main__':
         if one_model == "Net":
             args.use_gpus = False
             model = Net(preprocessor, x.shape[1])
-            ckpt = torch.load(args.model, map_location=torch.device("cpu")) # "cpu"
+            ckpt = torch.load(args.model, map_location=torch.device(0)) # "cpu"
             model.load_state_dict(ckpt)
             # model.cuda()
             if torch.cuda.is_available():
