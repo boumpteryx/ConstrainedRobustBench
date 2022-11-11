@@ -1,0 +1,34 @@
+.csv
+model =  TabTransformer  ; dataset =  ctu_13_neris
+parameters :  {'depth': 3, 'dim': 64, 'dropout': 0.5, 'heads': 8, 'learning_rate': -6, 'weight_decay': -6}
+()
+On Device: cuda
+Using dim 8 and batch size 64
+On Device: cuda
+0
+using custom version including apgd-ce, fab
+initial accuracy: 100.00%
+apgd-ce - 1/2 - 0 out of 500 successfully perturbed
+apgd-ce - 2/2 - 0 out of 500 successfully perturbed
+robust accuracy after APGD-CE: 100.00% (total time 0.8 s)
+fab - 1/2 - 0 out of 500 successfully perturbed
+fab - 2/2 - 0 out of 500 successfully perturbed
+robust accuracy after FAB: 100.00% (total time 1.7 s)
+max L2 perturbation: 0.00000, nan in tensor: 0, max: 2151.33691, min: -0.58657
+robust accuracy: 100.00%
+model =  LinearModel  ; dataset =  ctu_13_neris
+parameters :  {}
+0
+using custom version including apgd-ce, fab
+initial accuracy: 100.00%
+apgd-ce - 1/2 - 0 out of 500 successfully perturbed
+apgd-ce - 2/2 - 0 out of 500 successfully perturbed
+robust accuracy after APGD-CE: 100.00% (total time 0.2 s)
+fab - 1/2 - 0 out of 500 successfully perturbed
+fab - 2/2 - 0 out of 500 successfully perturbed
+robust accuracy after FAB: 100.00% (total time 0.4 s)
+max L2 perturbation: 0.00000, nan in tensor: 0, max: 2151.33691, min: -0.58657
+robust accuracy: 100.00%
+model =  Net  ; dataset =  ctu_13_neris
+0
+using custom version including apgd-ce, fab

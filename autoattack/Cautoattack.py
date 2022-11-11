@@ -128,9 +128,15 @@ class AutoAttack():
             robust_accuracy = torch.sum(robust_flags).item() / x_orig.shape[0]
             from sklearn.metrics import roc_auc_score, matthews_corrcoef
             if self.dataset == "ctu_13_neris":
-                y = np.concatenate([1 - y, y], axis=1)
-            robust_AUC = roc_auc_score(y, y_adv[start_idx: end_idx])
-            robust_MCC = matthews_corrcoef(y, y_adv[start_idx: end_idx])
+                y = y.numpy()
+                y = np.column_stack((np.ones(len(y)) - y, y))
+                y = y[start_idx: end_idx]
+            if len(y) == 0:
+                robust_AUC = 999999999
+                robust_MCC = 999999999
+            else:
+                robust_AUC = roc_auc_score(y, y_adv[start_idx: end_idx])
+                robust_MCC = matthews_corrcoef(y, y_adv[start_idx: end_idx])
             robust_accuracy_dict = {'clean': robust_accuracy}
 
             if self.verbose:

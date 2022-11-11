@@ -1,0 +1,24 @@
+Hello from the batch queue on node aion-0267 for neural architecture generation
+.csv
+float32
+model =  Net  ; dataset =  url
+use_constraint =  0
+0
+using custom version including apgd-ce, fab, moeva2
+initial accuracy: 88.60%
+initial AUC: 88.76%
+initial MCC: 77.39%
+torch.Size([443, 63])
+torch.Size([208, 63])
+apgd-ce - 1/1 - 254 out of 443 successfully perturbed
+robust accuracy after APGD-CE: 37.80% (total time 0.3 s)
+robust AUC after APGD-CE: 35.80% (total time 0.3 s)
+robust MCC after APGD-CE: -39.72% (total time 0.3 s)
+fab - 1/1 - 189 out of 189 successfully perturbed
+robust accuracy after FAB: 0.00% (total time 0.9 s)
+robust AUC after FAB: 0.00% (total time 0.9 s)
+robust MCC after FAB: -100.00% (total time 0.9 s)
+max L2 perturbation: 44.50342, nan in tensor: 0, max: 7.93554, min: -1.94214
+robust accuracy: 0.00%
+robust AUC: 0.00%
+robust MCC: -100.00%
