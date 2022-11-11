@@ -126,8 +126,8 @@ class AutoAttack():
 
             robust_accuracy = torch.sum(robust_flags).item() / x_orig.shape[0]
             from sklearn.metrics import roc_auc_score, matthews_corrcoef
-            robust_AUC = roc_auc_score(y, y_adv[start_idx: end_idx])
-            robust_MCC = matthews_corrcoef(y, y_adv[start_idx: end_idx])
+            robust_AUC = roc_auc_score(y_orig, y_adv)
+            robust_MCC = matthews_corrcoef(y_orig, y_adv)
             robust_accuracy_dict = {'clean': robust_accuracy}
 
             if self.verbose:
@@ -293,6 +293,8 @@ class AutoAttack():
                             attack, batch_idx + 1, n_batches, num_non_robust_batch, x.shape[0]))
 
                 robust_accuracy = torch.sum(robust_flags).item() / x_orig.shape[0]
+                robust_AUC = roc_auc_score(y_orig, y_adv)
+                robust_MCC = matthews_corrcoef(y_orig, y_adv)
                 robust_accuracy_dict[attack] = robust_accuracy
                 if self.verbose:
                     self.logger.log('robust accuracy after {}: {:.2%} (total time {:.1f} s)'.format(
