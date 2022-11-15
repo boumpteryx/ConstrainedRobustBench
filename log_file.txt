@@ -2100,3 +2100,16 @@ initial AUC: 99999999900.00%
 initial MCC: 99999999900.00%
 apgd-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
 apgd-ce-constrained - 2/2 - 0 out of 500 successfully perturbed
+initial accuracy: 69.70%
+initial AUC: 67.59%
+initial MCC: 29.10%
+apgd-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-ce-constrained - 2/2 - 0 out of 197 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 69.70% (total time 0.1 s)
+robust AUC after APGD-CE-CONSTRAINED: 67.59% (total time 0.1 s)
+robust MCC after APGD-CE-CONSTRAINED: 29.10% (total time 0.1 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 197 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 69.70% (total time 0.1 s)
+robust AUC after FAB-CONSTRAINED: 67.59% (total time 0.1 s)
+robust MCC after FAB-CONSTRAINED: 29.10% (total time 0.1 s)

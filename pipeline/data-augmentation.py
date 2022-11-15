@@ -1,41 +1,61 @@
 # This file is meant to generate datasets for data augmentation defenses evaluation
-
+import pandas as pd
 from constrained_attacks import datasets
 import numpy as np
-import pandas as pd
+import configargparse
 
-my_datasets = ["lcld_v2_time", "ctu_13_neris", "url", "malware"]
-data_indicator = 2
-
-# load_data
-dataset = datasets.load_dataset(my_datasets[data_indicator])
-x, y = dataset.get_x_y()
-x = np.array(x)
-data = np.c_[x,y]
-
-## augmentations methods
-# Cut in half
-cut_data = data[:len(data)//2]
-
-# GAN-based augmentation
 from sdv.tabular import CTGAN
-
-model = CTGAN()
-model.fit(data)
-
-GAN_data = model.sample(num_rows=len(data))
-
-print("done")
-
-# Statistical augmentation
 from copulas.multivariate import GaussianMultivariate
 
-copula = GaussianMultivariate()
-copula.fit(data)
-synthetic_data = copula.sample(num_rows=len(data))
+import sys
+sys.path.insert(0,'.')
 
-print("donea")
+def cut_in_half(data):
+    return data[:len(data)//2]
+
+def CTGAN_augmentation(data):
+    data = pd.DataFrame(data)
+    model = CTGAN()
+    model.fit(data)
+    return model.sample(num_rows=len(data))
+
+def statistical_augmentation(data):
+    copula = GaussianMultivariate()
+    copula.fit(data)
+    return copula.sample(num_rows=len(data))
 
 
-# saving new dataset
+if __name__ == "__main__":
+    parser = configargparse.ArgumentParser()
+    parser.add('--dataset', type=str, required=True, choices=["lcld_v2_time", "url", "ctu_13_neris", "malware"], default='url')
+    parser.add('--method', type=str, required=True, choices=["cut_in_half", "CTGAN_augmentation", "statistical_augmentation"], default='cut_in_half')
+
+    args = parser.parse_args()
+
+
+    # load_data
+    dataset = datasets.load_dataset(args.dataset)
+    x, y = dataset.get_x_y()
+    x = np.array(x)
+    data = np.c_[x, y]
+
+    # generate new data
+    if args.method == "cut_in_half":
+        new_data = cut_in_half(data)
+    elif args.method == "CTGAN_augmentation":
+        new_data = CTGAN_augmentation(data)
+    elif args.method == "statistical_augmentation":
+        new_data = statistical_augmentation(data)
+    print("Shape of dataset: ", data.shape, "; shape of new dataset: ", new_data.shape)
+
+    # save new data
+    new_path = "augmented_datasets/" + args.dataset + "/" + args.dataset + "_" + args.method + ".csv"
+    file = open(new_path, "w+")
+    np.savetxt(file, new_data, delimiter=",")
+
+    # data evaluation & visualization
+
+
+
+
 

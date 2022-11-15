@@ -86,7 +86,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["TabTransformer", "Net", "LinearModel", "DeepFM", "RLN"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["LinearModel", "TabTransformer", "Net",  "DeepFM", "RLN"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
@@ -126,7 +126,7 @@ if __name__ == '__main__':
 
 
     for one_model in all_models:
-        args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best.pt'
+        args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best2.pt'
 
         print("model = ", one_model, " ; dataset = ", args.dataset)
 
