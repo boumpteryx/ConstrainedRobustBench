@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.model_selection import train_test_split
 
 # from autoattack.other_utils import add_normalization_layer
 sys.path.insert(0,'.')
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=8./255.)
     parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
-    parser.add_argument('--n_ex', type=int, default=1000)
+    parser.add_argument('--n_ex', type=int, default=500)
     parser.add_argument('--individual', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./autoattack/examples/results')
     parser.add_argument('--batch_size', type=int, default=500)
@@ -102,6 +102,13 @@ if __name__ == '__main__':
     y_test = y[splits["test"]]
     x_train = x[splits["train"]]
     y_train = y[splits["train"]]
+    print(x_test.dtype)
+    if args.dataset == "ctu_13_neris":
+        _, x_test, _, y_test = train_test_split(
+            x_test, y_test, test_size=args.n_ex, random_state=42, shuffle=True, stratify=y_test
+        )
+
+
     mean, std = preprocessor.mean_, preprocessor.scale_
     mean = mean.reshape(1,-1).astype(np.float32)
     std = std.reshape(1,-1).astype(np.float32)
@@ -129,6 +136,7 @@ if __name__ == '__main__':
         args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best2.pt'
 
         print("model = ", one_model, " ; dataset = ", args.dataset)
+        print("use_constraint = ", args.use_constraints)
 
         # load model
         if one_model == "Net":
@@ -213,23 +221,32 @@ if __name__ == '__main__':
             adversary.fab.n_restarts = 2
 
         # run attack and save images
+
         with torch.no_grad():
+            
+            x_test_l = x_test[:args.n_ex]
+            y_test_l = y_test[:args.n_ex]
+
             if not args.individual:
-                adv_complete = adversary.run_standard_evaluation(x_test[:args.n_ex], y_test[:args.n_ex],
+                adv_complete, y_adv_complete = adversary.run_standard_evaluation(x_test_l, y_test_l,
                                                                  bs=args.batch_size,
+                                                                 return_labels=True,
                                                                  x_unscaled=x_unpreprocessed[:args.n_ex])
 
-                torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}.pth'.format(
+                torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_{}.pth'.format(
                     args.save_dir, 'aa', args.version, args.dataset, args.norm, adv_complete.shape[0],
-                    args.epsilon))
+                    args.epsilon, args.model_name, args.use_constraints))
+                torch.save({'y_adv_complete': y_adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_{}_y.pth'.format(
+                    args.save_dir, 'aa', args.version, args.dataset, args.norm, y_adv_complete.shape[0],
+                    args.epsilon, args.model_name, args.use_constraints))
 
             else:
                 # individual version, each attack is run on all test points
-                adv_complete = adversary.run_standard_evaluation_individual(x_test[:args.n_ex],
-                                                                            y_test[:args.n_ex], bs=args.batch_size)
+                adv_complete = adversary.run_standard_evaluation_individual(x_test_l,
+                                                                            y_test_l, bs=args.batch_size)
 
-                torch.save(adv_complete, '{}/{}_{}_individual_1_{}_eps_{:.5f}_plus_{}_cheap_{}.pth'.format(
-                    args.save_dir, 'aa', args.version, args.n_ex, args.epsilon))
+                torch.save(adv_complete, '{}/{}_{}_individual_1_{}_eps_{:.5f}_plus_{}_cheap_{}_{}_{}.pth'.format(
+                    args.save_dir, 'aa', args.version, args.n_ex, args.epsilon, args.model_name, args.use_constraints))
 
 
     # load data
