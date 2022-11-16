@@ -14,7 +14,8 @@ def cut_in_half(data):
     return data[:len(data)//2]
 
 def CTGAN_augmentation(data):
-    data = pd.DataFrame(data)
+    # data = np.array(data, dtype=object)
+    data = pd.DataFrame(data, columns=["a"]*data.shape[1])
     model = CTGAN()
     model.fit(data)
     return model.sample(num_rows=len(data))
@@ -36,14 +37,17 @@ if __name__ == "__main__":
     # load_data
     dataset = datasets.load_dataset(args.dataset)
     x, y = dataset.get_x_y()
+    metadata = dataset.get_metadata()
     x = np.array(x)
     data = np.c_[x, y]
+    data = np.array(data, dtype=metadata["type"])
+    data_df = pd.DataFrame(data, columns=metadata["feature"])
 
     # generate new data
     if args.method == "cut_in_half":
         new_data = cut_in_half(data)
     elif args.method == "CTGAN_augmentation":
-        new_data = CTGAN_augmentation(data)
+        new_data = CTGAN_augmentation(data_df)
     elif args.method == "statistical_augmentation":
         new_data = statistical_augmentation(data)
     print("Shape of dataset: ", data.shape, "; shape of new dataset: ", new_data.shape)

@@ -86,7 +86,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["LinearModel", "TabTransformer", "Net",  "DeepFM", "RLN"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
@@ -102,7 +102,6 @@ if __name__ == '__main__':
     y_test = y[splits["test"]]
     x_train = x[splits["train"]]
     y_train = y[splits["train"]]
-    print(x_test.dtype)
     if args.dataset == "ctu_13_neris":
         _, x_test, _, y_test = train_test_split(
             x_test, y_test, test_size=args.n_ex, random_state=42, shuffle=True, stratify=y_test
@@ -133,7 +132,7 @@ if __name__ == '__main__':
 
 
     for one_model in all_models:
-        args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best2.pt'
+        args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best.pt'
 
         print("model = ", one_model, " ; dataset = ", args.dataset)
         print("use_constraint = ", args.use_constraints)
@@ -202,7 +201,7 @@ if __name__ == '__main__':
         # constraints = None
         adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
-                               version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x), dataset=args.dataset)
+                               version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x))
 
         # l = [x for (x, y) in test_loader]
         # x_test = torch.cat(l, 0)
