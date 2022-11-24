@@ -453,7 +453,6 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
                     left_operand, right_operand
                 )
             else:
-                print(constraint_node)
                 raise NotImplementedError
 
         elif isinstance(constraint_node, SafeDivision):
@@ -531,7 +530,6 @@ class PytorchConstraintsVisitor(ConstraintsVisitor):
             return torch.sum(operands, dim=0)
 
         else:
-            print(constraint_node)
             raise NotImplementedError
 
     def execute(self) -> "torch.Tensor":

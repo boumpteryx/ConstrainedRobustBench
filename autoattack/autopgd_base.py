@@ -707,7 +707,7 @@ class APGDAttack_targeted(APGDAttack):
         :param x:           clean images
         :param y:           clean labels, if None we use the predicted labels
         """
-        print(self.loss)
+        print("loss: ", self.loss)
         assert self.loss in ["ce-targeted-constrained", "ce-targeted", "dlr-targeted"]
         if not y is None and len(y.shape) == 0:
             x.unsqueeze_(0)

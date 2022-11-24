@@ -30,7 +30,7 @@ if __name__ == '__main__':
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=8./255.)
     parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
-    parser.add_argument('--n_ex', type=int, default=500)
+    parser.add_argument('--n_ex', type=int, default=10)
     parser.add_argument('--individual', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./autoattack/examples/results')
     parser.add_argument('--batch_size', type=int, default=500)
@@ -86,7 +86,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["LinearModel","RLN","DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
@@ -165,7 +165,7 @@ if __name__ == '__main__':
             model = str2model(one_model)(parameters, args)
             if one_model == "RLN":
                 X_test, Y_test = np.array(x_test), np.array(y_test)
-                X_train, Y_train  = np.array(x_train), np.array(y_train)
+                X_train, Y_train = np.array(x_train), np.array(y_train)
                 model.fit(X_train, Y_train, X_test, Y_test)
             else:
                 state_dict = torch.load(args.model, map_location=torch.device('cpu'))

@@ -2,11 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="64d23c61-d57d-47e4-a0c8-6eee742820ec" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_L2_1_500_eps_3102.48315_Net_1.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_L2_1_500_eps_3102.48315_Net_1_y.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_10_eps_31935.03906_Net_1.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_10_eps_31935.03906_Net_1_y.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pipeline/augmented_datasets/url/url_cut_in_tenth.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/Cautoattack.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/Cautoattack.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/autopgd_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/autopgd_base.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/autoattack/examples/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/lcld_v2_time.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/lcld_v2_time.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/constraints/constraints_executor.py" beforeDir="false" afterPath="$PROJECT_DIR$/constraints/constraints_executor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pipeline/augmented_datasets/url/url_cut_in_half.csv" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline/augmented_datasets/url/url_cut_in_half.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pipeline/augmented_datasets/url/url_statistical_augmentation.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pipeline/data-augmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline/data-augmentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,15 +45,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\LinearModel\lcld_v2_time" />
@@ -113,7 +124,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline/data-augmentation.py" />
-      <option name="PARAMETERS" value="--dataset url --method CTGAN_augmentation" />
+      <option name="PARAMETERS" value="--dataset lcld_v2_time --method all --use_constraints 0" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -134,7 +145,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/autoattack/examples/eval.py" />
-      <option name="PARAMETERS" value="--config config/lcld_v2_time.yml --norm L2 --use_constraints 1" />
+      <option name="PARAMETERS" value="--config config/url.yml --norm L2 --use_constraints 1" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -252,9 +263,14 @@
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/autoattack/Cautoattack.py</url>
-          <line>298</line>
-          <option name="timeStamp" value="40" />
+          <url>file://$USER_HOME$/AppData/Local/pypoetry/Cache/virtualenvs/constrainedrobustbench-Q4COfbgp-py3.8/Lib/site-packages/sdv/constraints/base.py</url>
+          <line>141</line>
+          <option name="timeStamp" value="43" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/AppData/Local/pypoetry/Cache/virtualenvs/constrainedrobustbench-Q4COfbgp-py3.8/Lib/site-packages/sdv/metadata/table.py</url>
+          <line>436</line>
+          <option name="timeStamp" value="45" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

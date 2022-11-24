@@ -1,3 +1,4 @@
 *m_best.pt
 *.json
 *.gz
+pipeline/augmented_datasets/*

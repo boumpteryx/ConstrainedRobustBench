@@ -3,6 +3,7 @@ import time
 
 import numpy as np
 import torch
+from constrained_attacks.objective_calculator.cache_objective_calculator import ObjectiveCalculator
 
 from autoattack.other_utils import Logger
 from autoattack import checks
@@ -51,7 +52,7 @@ class AutoAttack():
                 logger=self.logger)
 
             from constrained_attacks.attacks.moeva.moeva import Moeva2
-            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1, verbose=2)
+            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1, verbose=0)
 
         else:
             from .autopgd_base import APGDAttack
@@ -247,7 +248,20 @@ class AutoAttack():
                         self.moeva2.is_targeted = False
                         adv_curr = self.moeva2.generate(np.array(x_unscaled_usable.numpy()),np.array(y.numpy()),x.shape[0])
                         # adv_curr = self.moeva2.generate(np.array(x.numpy()),np.array(y.numpy()),x.shape[0])
-                        adv_curr = torch.tensor(adv_curr[:,0,:])
+                        threshold = {"misclassification":np.array([np.inf, np.inf]),"distance":self.epsilon, "constraints": 0.01}
+                        calcul = ObjectiveCalculator(self.model,constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_distance_preprocess)
+                        adv_curr = calcul.get_successful_attacks(
+                            np.array(x_unscaled_usable.numpy()),
+                            np.array(y.numpy()),
+                            adv_curr,
+                            preferred_metrics="misclassification",
+                            order="asc",
+                            max_inputs=1,
+                            return_index_success=False,
+                            recompute=True,
+                        )
+                        # adv_curr = torch.tensor(adv_curr[:,0,:])
+                        adv_curr = torch.tensor(adv_curr)
                         # remove outputs that do not respect constraints
                         checker = ConstraintChecker(self.constraints, tolerance=0.01)
                         check = checker.check_constraints(x, adv_curr, pt=True)
@@ -262,7 +276,30 @@ class AutoAttack():
                     elif attack == 'moeva2-t':
                         self.moeva2.is_targeted = True # useless for now
                         adv_curr = self.moeva2.generate(np.array(x_unscaled.numpy()),np.array(y.numpy()),x.shape[0])
-                        adv_curr = torch.tensor(adv_curr[:,0,:])
+                        threshold = {"misclassification": np.array([np.inf, np.inf]), "distance": self.epsilon,
+                                     "constraints": 0.01}
+                        calcul = ObjectiveCalculator(self.model, constraints=self.constraints, thresholds=threshold,
+                                                     norm=2, fun_distance_preprocess=self.fun_distance_preprocess)
+                        adv_curr = calcul.get_successful_attacks(
+                            np.array(x_unscaled_usable.numpy()),
+                            np.array(y.numpy()),
+                            adv_curr,
+                            preferred_metrics="misclassification",
+                            order="asc",
+                            max_inputs=1,
+                            return_index_success=False,
+                            recompute=True,
+                        )
+                        adv_curr = torch.tensor(adv_curr)
+                        # remove outputs that do not respect constraints
+                        checker = ConstraintChecker(self.constraints, tolerance=0.01)
+                        check = checker.check_constraints(x, adv_curr, pt=True)
+                        for i in range(len(check)):
+                            counter = 0
+                            if not check[i]:
+                                counter += 1
+                                adv_curr[i] = x[i]
+                        print("number of outputs not respecting constraints = ", counter)
 
                     else:
                         raise ValueError('Attack not supported')
