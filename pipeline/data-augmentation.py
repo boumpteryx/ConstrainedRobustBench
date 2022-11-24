@@ -1,13 +1,10 @@
 # This file is meant to generate datasets for data augmentation defenses evaluation
 import pandas as pd
-from constrained_attacks import datasets
 import numpy as np
 import configargparse
-import torch
 
 from sdv.tabular import CTGAN, GaussianCopula
-from sdv.constraints import Inequality, create_custom_constraint
-from copulas.multivariate import GaussianMultivariate
+from sdv.constraints import create_custom_constraint
 from imblearn.over_sampling import SMOTE
 
 import sys
@@ -16,43 +13,12 @@ sys.path.insert(0,'.')
 from constrained_attacks import datasets
 from constraints.constraints_checker import ConstraintChecker
 
-def url_constr_check(column_names, data):
-    dataset = datasets.load_dataset("url")
+def constr_check(column_names, data, data_name):
+    dataset = datasets.load_dataset(data_name)
     constraints2 = dataset.get_constraints()
     checker = ConstraintChecker(constraints2, tolerance=0.001)
-    check = checker.check_constraints(data, data, pt=True)
-    print(check)
+    check = checker.check_constraints(data.to_numpy(), data.to_numpy())
     return pd.Series(check)
-
-def url_constraints(column_names, data, metadata):
-    def apply_if_a_supp_zero_than_b_supp_zero(a,b):
-        a = metadata["feature"][a]
-        b = metadata["feature"][b]
-        return (0 <= data[a]) or (0 <= data[b])
-    def g_2():
-        int_sum = 0
-        for i in range(3, 18):
-            int_sum += data[i]
-        return  int_sum + 3 * data[19] <= 0
-    g1 = Inequality(low_column_name=metadata["feature"][1],high_column_name=metadata["feature"][0], strict_boundaries=False)
-    g2 = g_2()
-    g3 = apply_if_a_supp_zero_than_b_supp_zero(21,3)
-    g4 = apply_if_a_supp_zero_than_b_supp_zero(23,13)
-    def g_5():
-        return 3 * data[20] + 4 * data[21] + 2 * data[23] <= 0
-    g5 = g_5()
-    g6 = apply_if_a_supp_zero_than_b_supp_zero(19,25)
-    g8 = apply_if_a_supp_zero_than_b_supp_zero(2,25)
-    g10 = apply_if_a_supp_zero_than_b_supp_zero(28,25)
-    g11 = apply_if_a_supp_zero_than_b_supp_zero(31,26)
-    g12 = Inequality(low_column_name=metadata["feature"][38],high_column_name=metadata["feature"][37], strict_boundaries=False)
-    def product_then_sum(a,b,c,d):
-        return (a * data[b]) <= (data[c] + d)
-    g13 = product_then_sum(3,20,0,1)
-    g14 = product_then_sum(4,21,0,1)
-    g15 = product_then_sum(4,2,0,1)
-    g16 = product_then_sum(2,23,0,1)
-    return [g1,g2,g3,g4,g5,g6,g8,g10,g11,g12,g13,g14,g15,g16]
 
 def cut_in_half(data):
     return data[:len(data)//2]
@@ -70,7 +36,7 @@ def CTGAN_augmentation(data, constraints=None):
 
 def copulas_augmentation(data, constraints=None):
     if constraints is not None:
-        model = GaussianCopula(constraints=constraints) # GaussianMultivariate()
+        model = GaussianCopula(constraints=constraints)
     else:
         model = GaussianCopula()
     model.fit(data)
@@ -83,10 +49,18 @@ def SMOTE_augmentation(X,y):
 def save(data, args, old_data = None):
     if old_data is not None:
         data = np.concatenate((old_data,data))
-    new_path = "augmented_datasets/" + args.dataset + "/" + args.dataset + "_" + args.method + ".csv"
+    new_path = "augmented_datasets/" + args.dataset + "/" + args.dataset + "_" + args.method + "_use_constraints_" + str(bool(args.use_constraints)) + ".csv"
     file = open(new_path, "w+")
     np.savetxt(file, data, delimiter=",")
     file.close()
+
+def checker_end(data, data_name):
+    dataset = datasets.load_dataset(data_name)
+    constraints2 = dataset.get_constraints()
+    checker = ConstraintChecker(constraints2, tolerance=0.001)
+    check = checker.check_constraints(data, data)
+    print(check)
+
 
 if __name__ == "__main__":
     parser = configargparse.ArgumentParser()
@@ -106,14 +80,14 @@ if __name__ == "__main__":
     y = np.array(y[splits["train"]])
     data = np.c_[x, y]
     data = np.array(data, dtype=metadata["type"])
-    data_df = pd.DataFrame(data, columns=metadata["feature"])
+    #metadata["feature"] = [i for i in range(len(data[0]))]
+    data_df = pd.DataFrame(data, columns=[str(i) for i in range(len(data[0]))])
     data_df.astype('object')
 
     constraints = None
     if args.use_constraints == 1:
-        # UrlConstraints = create_custom_constraint(is_valid_fn=url_constraints)
-        UrlConstraints = create_custom_constraint(is_valid_fn=url_constr_check)
-        constraints = [UrlConstraints(column_names=[])]
+        custom_Constraints = create_custom_constraint(is_valid_fn=constr_check)
+        constraints = [custom_Constraints(column_names=[], data_name=args.dataset)]
 
     # generate new data
     if args.method == "cut_in_half":
@@ -140,15 +114,13 @@ if __name__ == "__main__":
         args.method = "copulas_augmentation"
         print(" using = ", args.method, "...")
         save(copulas_augmentation(data_df, constraints=constraints), args, old_data=data)
+        checker_end(copulas_augmentation(data_df, constraints=constraints), args.dataset) # does it really work? Let's test it out!
         args.method = "SMOTE_augmentation"
         print(" using = ", args.method, "...")
         save(SMOTE_augmentation(x,y), args, old_data=data)
         args.method = "CTGAN_augmentation"
         print(" using = ", args.method, "...")
         save(CTGAN_augmentation(data_df, constraints=constraints), args, old_data=data)
-
-
-    # data evaluation & visualization
 
 
 
