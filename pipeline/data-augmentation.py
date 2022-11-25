@@ -52,8 +52,6 @@ def save(data, args, old_data = None):
     if old_data is not None:
         data = np.concatenate((old_data,data))
     new_path = "./pipeline/augmented_datasets/" + args.dataset + "/" + args.dataset + "_" + args.method + "_use_constraints_" + str(bool(args.use_constraints)) + ".csv"
-    if not os.path.exists(new_path):
-        os.makedirs(new_path)
     with open(new_path, "w+") as file:
         np.savetxt(file, data, delimiter=",")
     file.close()
