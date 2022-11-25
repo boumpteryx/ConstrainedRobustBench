@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 import configargparse
+import torch
 
 from sdv.tabular import CTGAN, GaussianCopula
 from sdv.constraints import create_custom_constraint
@@ -50,6 +51,7 @@ def save(data, args, old_data = None):
     if old_data is not None:
         data = np.concatenate((old_data,data))
     new_path = "augmented_datasets/" + args.dataset + "/" + args.dataset + "_" + args.method + "_use_constraints_" + str(bool(args.use_constraints)) + ".csv"
+    torch.save(data,new_path)
     with open(new_path, "w+") as file:
         np.savetxt(file, data, delimiter=",")
     file.close()
