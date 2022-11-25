@@ -1,0 +1,96 @@
+2022-11-04 20:50:42.000859
+Parameters: {'dnn_dropout': 0.23405133654131458}
+
+Log Loss - mean: 0.44700
+Log Loss - std: 0.00059
+AUC - mean: 0.71909
+AUC - std: 0.00106
+Accuracy - mean: 0.80571
+Accuracy - std: 0.00015
+F1 score - mean: 0.80571
+F1 score - std: 0.00015
+
+Train time: 30995.295849
+Test time: 150.762379
+
+---------------------------------------
+2022-11-04 23:22:42.809702
+Parameters: {'dnn_dropout': 0.22586618763375813}
+
+Log Loss - mean: 0.44725
+Log Loss - std: 0.00040
+AUC - mean: 0.71900
+AUC - std: 0.00098
+Accuracy - mean: 0.80573
+Accuracy - std: 0.00007
+F1 score - mean: 0.80573
+F1 score - std: 0.00007
+
+Train time: 34107.453212
+Test time: 155.626547
+
+---------------------------------------
+2022-11-16 06:25:59.396816
+Parameters: {'dnn_dropout': 0.5930048363853833}
+
+Log Loss - mean: 0.44776
+Log Loss - std: 0.00050
+AUC - mean: 0.71856
+AUC - std: 0.00049
+Accuracy - mean: 0.80556
+Accuracy - std: 0.00051
+F1 score - mean: 0.80556
+F1 score - std: 0.00051
+
+Train time: 15392.974871
+Test time: 25.661304
+
+---------------------------------------
+2022-11-16 17:14:50.169704
+Parameters: {'dnn_dropout': 0.4947272798918678}
+
+Log Loss - mean: 0.44715
+Log Loss - std: 0.00067
+AUC - mean: 0.71866
+AUC - std: 0.00132
+Accuracy - mean: 0.80594
+Accuracy - std: 0.00025
+F1 score - mean: 0.80594
+F1 score - std: 0.00025
+
+Train time: 11971.955764
+Test time: 25.234881
+
+---------------------------------------
+2022-11-23 22:36:42.665364
+Parameters: {'dnn_dropout': 0.23251353435465819}
+
+Log Loss - mean: 27.72540
+Log Loss - std: 0.00028
+AUC - mean: 0.50001
+AUC - std: 0.00001
+Accuracy - mean: 0.19726
+Accuracy - std: 0.00000
+F1 score - mean: 0.19726
+F1 score - std: 0.00000
+
+Train time: 13581.613412
+Test time: 26.476504
+
+---------------------------------------
+2022-11-24 07:23:27.967813
+Parameters: {'dnn_dropout': 0.2837265278064553}
+
+Log Loss - mean: 27.72490
+Log Loss - std: 0.00047
+AUC - mean: 0.50002
+AUC - std: 0.00002
+Accuracy - mean: 0.19726
+Accuracy - std: 0.00000
+F1 score - mean: 0.19726
+F1 score - std: 0.00000
+
+Train time: 10398.022466
+Test time: 25.032893
+
+---------------------------------------
