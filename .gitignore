@@ -1,4 +1,8 @@
 *m_best.pt
 *.json
 *.gz
-pipeline/augmented_datasets/*
+pipeline/augmented_datasets/url/*
+pipeline/augmented_datasets/malware/*
+pipeline/augmented_datasets/lcld_v2_time/*
+pipeline/augmented_datasets/ctu_13_neris/*
+
