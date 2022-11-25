@@ -7,8 +7,6 @@ from sdv.tabular import CTGAN, GaussianCopula
 from sdv.constraints import create_custom_constraint
 from imblearn.over_sampling import SMOTE
 
-import sys
-sys.path.insert(0,'.')
 
 from constrained_attacks import datasets
 from constraints.constraints_checker import ConstraintChecker
