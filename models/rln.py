@@ -13,17 +13,25 @@ from keras.models import Sequential
 from keras.layers import Dense
 
 from utils.io_utils import get_output_path
+from utils.losses import BalancedBCELossKeras
+from tensorflow.python.ops.numpy_ops import np_config
+np_config.enable_numpy_behavior()
 
 '''
     Regularization Learning Networks: Deep Learning for Tabular Datasets (https://arxiv.org/abs/1805.06440)
 
     Code adapted from: https://github.com/irashavitt/regularization_learning_networks
 '''
+
+
+
+
+
 class RLN(BaseModel):
 
     def __init__(self, params, args):
         super().__init__(params, args)
-
+        self.dataset = args.dataset
         lr = np.power(10, self.params["log_lr"])
         build_fn = self.RLN_Model(layers=self.params["layers"], norm=self.params["norm"],
                                   avg_reg=self.params["theta"], learning_rate=lr)
@@ -125,7 +133,8 @@ class RLN(BaseModel):
             loss_fn = "categorical_crossentropy"
             act_fn = "softmax"
         elif self.args.objective == "binary":
-            loss_fn = "binary_crossentropy"
+            #loss_fn = "binary_crossentropy"
+            loss_fn = BalancedBCELossKeras(self.dataset)
             act_fn = "sigmoid"
 
         def build_fn():

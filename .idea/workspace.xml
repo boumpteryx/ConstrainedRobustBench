@@ -2,10 +2,62 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="64d23c61-d57d-47e4-a0c8-6eee742820ec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/pipeline/wids.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/hp_log.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/logging/loss_0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/logging/loss_1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/logging/loss_2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/logging/val_loss_0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/logging/val_loss_1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/logging/val_loss_2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/models/m_0.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/models/m_1.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/models/m_2.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/predictions/p_0.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/predictions/p_1.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/predictions/p_2.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/ctu_13_neris/results.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/logging/loss_0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/logging/loss_1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/logging/loss_2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/logging/val_loss_0.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/logging/val_loss_1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/logging/val_loss_2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/model_lcld_v2_time_DeepFM_final.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/models/m_0.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/models/m_1.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/models/m_2.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/predictions/p_0.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/predictions/p_1.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lcld_v2_time/predictions/p_2.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pipeline/wids_raw/WiDS Datathon 2020 Dictionary.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pipeline/wids_raw/samplesubmission.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pipeline/wids_raw/solution_template.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pipeline/wids_raw/training_v2.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pipeline/wids_raw/unlabeled.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/utils/losses.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/poetry.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poetry.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/eval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/lcld_v2_time.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/lcld_v2_time.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/rln.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/rln.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pipeline/pytorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline/pytorch.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pipeline/wids.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline/wids.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/hp_log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lcld_v2_time/hp_log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/logging/loss_0.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/logging/loss_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/logging/loss_2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/logging/val_loss_0.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/logging/val_loss_1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/logging/val_loss_2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/models/m_0.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/models/m_1.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/models/m_2.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/predictions/p_0.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/predictions/p_1.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/predictions/p_2.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/lcld_v2_time/results.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lcld_v2_time/results.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/m_best1.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trained_models/DeepFM/lcld_v2_time/m_best_final.pt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,51 +85,31 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/models",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/trained_models/DeepFM/lcld_v2_time&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\DeepFM\lcld_v2_time" />
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\utils" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\models" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\LinearModel\lcld_v2_time" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\TabTransformer\ctu_13_neris" />
-      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\TabTransformer\lcld_v2_time" />
-      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\RLN\lcld_v2_time" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\pipeline\wids_raw" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\pipeline\augmented_datasets\url" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\pipeline" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\autoattack" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.data-augmentation">
-    <configuration name="Cautoattack" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="ConstrainedRobustBench" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/autoattack" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\autoattack\Cautoattack.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Python.pytorch">
     <configuration name="Cautoattack" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ConstrainedRobustBench" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -133,7 +165,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/autoattack/examples/eval.py" />
-      <option name="PARAMETERS" value="--config config/lcld_v2_time.yml --norm L2 --use_constraints 1" />
+      <option name="PARAMETERS" value="--config config/url.yml --norm L2 --use_constraints 1" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -154,7 +186,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline/pytorch.py" />
-      <option name="PARAMETERS" value="-p dataset=malware" />
+      <option name="PARAMETERS" value="-p dataset=ctu_13_neris" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="wids" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ConstrainedRobustBench" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pipeline" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/pipeline/wids.py" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -177,19 +230,20 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Python.Cautoattack" />
+      <item itemvalue="Python.wids" />
       <item itemvalue="Python.data-augmentation" />
       <item itemvalue="Python.pytorch" />
-      <item itemvalue="Python.Cautoattack" />
       <item itemvalue="Python.eval" />
       <item itemvalue="Python tests.Python tests for tests.constraints.test_url_constraints_torch.test_torch_constraints" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.data-augmentation" />
-        <item itemvalue="Python.eval" />
         <item itemvalue="Python.pytorch" />
+        <item itemvalue="Python.wids" />
+        <item itemvalue="Python.eval" />
+        <item itemvalue="Python.data-augmentation" />
         <item itemvalue="Python tests.Python tests for tests.constraints.test_url_constraints_torch.test_torch_constraints" />
-        <item itemvalue="Python.Cautoattack" />
       </list>
     </recent_temporary>
   </component>

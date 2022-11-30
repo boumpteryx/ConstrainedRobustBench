@@ -4,18 +4,22 @@
 import pandas as pd
 import numpy as np
 import missingno as msno
+from sklearn.preprocessing import LabelEncoder
 
-train = pd.read_csv("/kaggle/input/widsdatathon2020/training_v2.csv")
-samplesubmission = pd.read_csv("/kaggle/input/widsdatathon2020/samplesubmission.csv")
-test = pd.read_csv("/kaggle/input/widsdatathon2020/unlabeled.csv")
-dictionary = pd.read_csv("/kaggle/input/widsdatathon2020/WiDS Datathon 2020 Dictionary.csv")
-solution_template = pd.read_csv("/kaggle/input/widsdatathon2020/solution_template.csv")
+import sys
+sys.path.insert(0,'.')
 
-print('train ' , train.shape)
-print('test ' , test.shape)
-print('samplesubmission ' , samplesubmission.shape)
-print('solution_template ' , solution_template.shape)
-print('dictionary ' , dictionary.shape)
+train = pd.read_csv("wids_raw/training_v2.csv")
+samplesubmission = pd.read_csv("wids_raw/samplesubmission.csv")
+test = pd.read_csv("wids_raw/unlabeled.csv")
+dictionary = pd.read_csv("wids_raw/WiDS Datathon 2020 Dictionary.csv")
+solution_template = pd.read_csv("wids_raw/solution_template.csv")
+
+print('train ', train.shape)
+print('test ', test.shape)
+print('samplesubmission ', samplesubmission.shape)
+print('solution_template ', solution_template.shape)
+print('dictionary ', dictionary.shape)
 
 dico = pd.DataFrame(dictionary.T.head(6))
 dico.columns=list(dico.loc[dico.index == 'Variable Name'].unstack())
@@ -24,6 +28,9 @@ dico = dico.loc[dico.index != 'Variable Name']
 train_stat = pd.DataFrame(train.describe())
 train_stat2 = pd.concat([dico,train_stat],axis=0)
 # train_stat2.head(20)
+
+train['apache_3j_diagnosis_split0'] = np.where(train['apache_3j_diagnosis'].isna() , np.nan , train['apache_3j_diagnosis'].astype('str').str.split('.',n=1,expand=True)[0]  )
+test['apache_3j_diagnosis_split0']   = np.where(test['apache_3j_diagnosis'].isna() , np.nan , test['apache_3j_diagnosis'].astype('str').str.split('.',n=1,expand=True)[0]  )
 
 # we also remove the target and the ids
 to_drop = ['encounter_id', 'patient_id', 'hospital_death']
@@ -57,8 +64,19 @@ for usecol in categoricals_features:
     train[usecol] = train[usecol].replace(np.nan, 0).astype('int').astype('category')
     test[usecol] = test[usecol].replace(np.nan, 0).astype('int').astype('category')
 
+# drop columns that are too empty
+drop_empty = []
+for col in features:
+    if len(train[col].dropna()) < 0.5*len(train[col]):
+        print("dropping ", col)
+        drop_empty.append(col)
+features = [col for col in features if col not in drop_empty]
+
 # drop all lines that have missing values
 train = train[features].dropna()
 test = test[features].dropna()
+
+print("train shape: ", train.shape)
+print("test shape: ", test.shape)
 
 # save new dataset

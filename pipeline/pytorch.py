@@ -59,6 +59,16 @@ class Net(nn.Module):
         return x
 
 
+class Linear(nn.Module):
+    def __init__(self, preprocessor, feature_number):
+        super().__init__()
+        self.preprocessor = preprocessor
+        self.fc0 = nn.Linear(feature_number, 2)  # last input is # of classes
+
+    def forward(self, x):
+        x = F.relu(self.fc0(x))
+        return x
+
 def train(net, x, y, epoch, batch_size):
     criterion = nn.CrossEntropyLoss(weight=torch.Tensor([1.0, 1.0]))
     optimizer = optim.Adam(net.parameters(), lr=0.001)
@@ -113,9 +123,10 @@ def run(config: dict):
     preprocessor.fit(x.iloc[splits["train"]])
     x = preprocessor.transform(x)
 
-    net = Net(preprocessor, x.shape[1])  # adapt this number for each dataset
+    # net = Net(preprocessor, x.shape[1])
+    net = Linear(preprocessor, x.shape[1])
     train(net, x[splits["train"]], y[splits["train"]], 10, 32)
-    path = "./tests/resources/pytorch_models/lcld_v2_time_test_torch.pth"
+    path = "./tests/resources/pytorch_models/" + config["dataset"] + "Linear_torch.pth"
     torch.save(net.state_dict(), path)
     y_scores = predict(net, x[splits["test"]], y[splits["test"]])
     print(compute_binary_metrics(y[splits["test"]], y_scores))

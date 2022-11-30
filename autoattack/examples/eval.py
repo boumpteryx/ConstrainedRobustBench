@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 # from autoattack.other_utils import add_normalization_layer
 sys.path.insert(0,'.')
 from constrained_attacks.constraints.constraints import Constraints
-from pipeline.pytorch import Net
+from pipeline.pytorch import Net, Linear
 from constrained_attacks.constraints.relation_constraint import Constant
 from constrained_attacks.constraints.relation_constraint import LessEqualConstraint, Feature
 
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=8./255.)
     parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
-    parser.add_argument('--n_ex', type=int, default=10)
+    parser.add_argument('--n_ex', type=int, default=1000)
     parser.add_argument('--individual', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./autoattack/examples/results')
     parser.add_argument('--batch_size', type=int, default=500)
@@ -86,7 +86,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["DeepFM","RLN","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
@@ -155,6 +155,23 @@ if __name__ == '__main__':
             # model = add_normalization_layer(model=model, mean=mean, std=std)
             model.to(device)
             model.eval()
+        elif one_model == "Linear":
+            args.use_gpus = False
+            model = Linear(preprocessor, x.shape[1])
+            ckpt = torch.load(args.model, map_location=torch.device("cpu")) # "cpu"
+            model.load_state_dict(ckpt)
+            # model.cuda()
+            if torch.cuda.is_available():
+                device = torch.device("cpu") # "cuda"
+            else:
+                device = torch.device("cpu")
+            model = torch.nn.Sequential(
+                Normalize(meanl=mean, stdl=std),
+                model
+            )
+            # model = add_normalization_layer(model=model, mean=mean, std=std)
+            model.to(device)
+            model.eval()
         else:
             from models import str2model
             # adapt to type of model being run
@@ -169,7 +186,7 @@ if __name__ == '__main__':
                 model.fit(X_train, Y_train, X_test, Y_test)
             else:
                 state_dict = torch.load(args.model, map_location=torch.device('cpu'))
-                if one_model == "LinearModel":
+                if one_model == "LinearModelSklearn":
                     model = state_dict
                 else:
                     from collections import OrderedDict
