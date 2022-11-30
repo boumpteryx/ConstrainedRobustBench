@@ -2805,3 +2805,40 @@ initial accuracy: 100.00%
 initial AUC: 100.00%
 initial MCC: 100.00%
 apgd-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+initial accuracy: 97.50%
+initial AUC: 97.47%
+initial MCC: 94.99%
+apgd-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-ce-constrained - 2/2 - 0 out of 475 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 97.50% (total time 0.0 s)
+robust AUC after APGD-CE-CONSTRAINED: 97.47% (total time 0.0 s)
+robust MCC after APGD-CE-CONSTRAINED: 94.99% (total time 0.0 s)
+fab-constrained - 1/2 - 0 out of 500 successfully perturbed
+fab-constrained - 2/2 - 0 out of 475 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 97.50% (total time 0.1 s)
+robust AUC after FAB-CONSTRAINED: 97.47% (total time 0.1 s)
+robust MCC after FAB-CONSTRAINED: 94.99% (total time 0.1 s)
+initial accuracy: 81.90%
+initial AUC: 82.42%
+initial MCC: 66.05%
+apgd-ce-constrained - 1/2 - 0 out of 500 successfully perturbed
+apgd-ce-constrained - 2/2 - 0 out of 319 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 81.90% (total time 0.8 s)
+robust AUC after APGD-CE-CONSTRAINED: 82.42% (total time 0.8 s)
+robust MCC after APGD-CE-CONSTRAINED: 66.05% (total time 0.8 s)
+fab-constrained - 1/2 - 14 out of 500 successfully perturbed
+fab-constrained - 2/2 - 11 out of 319 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 79.40% (total time 4.4 s)
+robust AUC after FAB-CONSTRAINED: 80.03% (total time 4.4 s)
+robust MCC after FAB-CONSTRAINED: 61.90% (total time 4.4 s)
+initial accuracy: 25.40%
+initial AUC: 47.34%
+initial MCC: -6.00%
+apgd-ce-constrained - 1/1 - 0 out of 254 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 25.40% (total time 0.5 s)
+robust AUC after APGD-CE-CONSTRAINED: 47.34% (total time 0.5 s)
+robust MCC after APGD-CE-CONSTRAINED: -6.00% (total time 0.5 s)
+fab-constrained - 1/1 - 0 out of 254 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 25.40% (total time 2.6 s)
+robust AUC after FAB-CONSTRAINED: 47.34% (total time 2.6 s)
+robust MCC after FAB-CONSTRAINED: -6.00% (total time 2.6 s)
