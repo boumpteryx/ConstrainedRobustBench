@@ -527,7 +527,7 @@ class APGDAttack:
         elif not self.is_tf_model and not callable(self.model):
             y_pred = self.model.predict_proba(x).max(1)[1]
         else:
-            y_pred = self.model.predict(x).max(1)[1]
+            y_pred = torch.tensor(self.model.predict(x))#.max(1)[1]
         if y is None:
             # y_pred = self.predict(x).max(1)[1]
             y = y_pred.detach().clone().long().to(self.device)

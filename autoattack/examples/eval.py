@@ -4,6 +4,7 @@ import sys
 
 import numpy as np
 import torch
+from autoattack.utils_tf2 import ModelAdapter
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
@@ -86,7 +87,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["Linear"]#"DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["RLN"]#"DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
@@ -184,6 +185,7 @@ if __name__ == '__main__':
                 X_test, Y_test = np.array(x_test), np.array(y_test)
                 X_train, Y_train = np.array(x_train), np.array(y_train)
                 model.fit(X_train, Y_train, X_test, Y_test)
+                model = ModelAdapter(model.model.model, num_classes=2)
             else:
                 state_dict = torch.load(args.model, map_location=torch.device('cpu'))
                 if one_model == "LinearModelSklearn":
@@ -218,7 +220,8 @@ if __name__ == '__main__':
         # constraints = None
         adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
-                               version=args.version, fun_distance_preprocess=lambda x: preprocessor.transform(x))
+                               version=args.version, is_tf_model=True,
+                               fun_distance_preprocess=lambda x: preprocessor.transform(x))
 
         # l = [x for (x, y) in test_loader]
         # x_test = torch.cat(l, 0)

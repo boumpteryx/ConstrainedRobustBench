@@ -69,7 +69,7 @@ class AutoAttack():
                 n_restarts=1, seed=self.seed, verbose=False, device=self.device, resc_schedule=False)
 
             from .autopgd_base import APGDAttack_targeted
-            self.apgd_targeted = APGDAttack_targeted(self.model, n_restarts=1, n_iter=100, verbose=False,
+            self.apgd_targeted = APGDAttack_targeted(self.model, constraints=self.constraints, n_restarts=1, n_iter=100, verbose=False,
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed, device=self.device,
                 is_tf_model=True, logger=self.logger)
 
@@ -89,6 +89,7 @@ class AutoAttack():
             return torch.tensor(self.model.predict_proba(xgboost.DMatrix(x))) # for Booster
         else:
             return self.model.predict(x)
+
 
     def get_seed(self):
         return time.time() if self.seed is None else self.seed
@@ -120,7 +121,10 @@ class AutoAttack():
 
                 x = x_orig[start_idx:end_idx, :].clone().to(self.device)
                 y = y_orig[start_idx:end_idx].clone().to(self.device)
-                output = self.get_logits(x).max(dim=1)[1]
+                if self.is_tf_model:
+                    output = torch.tensor(self.get_logits(x))
+                else:
+                    output = self.get_logits(x).max(dim=1)[1]
                 y_adv[start_idx: end_idx] = output
                 correct_batch = y.eq(output)
                 robust_flags[start_idx:end_idx] = correct_batch.detach().to(robust_flags.device)
