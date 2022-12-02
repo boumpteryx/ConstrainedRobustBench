@@ -79,4 +79,7 @@ test = test[features].dropna()
 print("train shape: ", train.shape)
 print("test shape: ", test.shape)
 
+print("features :", features)
+print("categorical_features:", categoricals_features)
+
 # save new dataset
