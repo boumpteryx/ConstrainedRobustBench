@@ -83,3 +83,9 @@ print("features :", features)
 print("categorical_features:", categoricals_features)
 
 # save new dataset
+data = np.concatenate(train, test)
+metadata =
+new_path = ("./pipeline/wids/.csv")
+with open(new_path, "w+") as file:
+    np.savetxt(file, data, delimiter=",")
+file.close()

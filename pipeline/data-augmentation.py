@@ -33,9 +33,9 @@ def cut_in_tenth(data):
 
 def CTGAN_augmentation(data, constraints=None):
     if constraints is not None:
-        model = CTGAN(verbose=True, constraints=constraints)
+        model = CTGAN(verbose=True, constraints=constraints,cuda=True)
     else:
-        model = CTGAN(verbose=True)
+        model = CTGAN(verbose=True,cuda=True)
     model.fit(data)
     return model.sample(num_rows=len(data)).to_numpy()
 
@@ -108,6 +108,7 @@ if __name__ == "__main__":
     )
     parser.add("--use_constraints", type=int, required=False, default=0)
 
+
     args = parser.parse_args()
     print(
         "dataset = ",
@@ -143,14 +144,19 @@ if __name__ == "__main__":
 
     # generate new data
     if args.method == "cut_in_half":
+        print(" using = ", args.method, "...")
         new_data = cut_in_half(data)
     if args.method == "cut_in_tenth":
+        print(" using = ", args.method, "...")
         new_data = cut_in_tenth(data)
     elif args.method == "CTGAN_augmentation":
+        print(" using = ", args.method, "...")
         new_data = CTGAN_augmentation(data_df, constraints=constraints)
     elif args.method == "copulas_augmentation":
+        print(" using = ", args.method, "...")
         new_data = copulas_augmentation(data_df, constraints=constraints)
     elif args.method == "SMOTE_augmentation":
+        print(" using = ", args.method, "...")
         new_data = SMOTE_augmentation(x, y)
     if args.method != "all":
         print(
