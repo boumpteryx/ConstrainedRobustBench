@@ -23,7 +23,7 @@ class ModelAdapter():
         """
 
         cpu_tensor = tf_tensor.numpy()
-        pt_tensor = torch.from_numpy(cpu_tensor).cuda()
+        pt_tensor = torch.from_numpy(cpu_tensor)#.cuda()
 
         return pt_tensor
 
@@ -65,8 +65,11 @@ class ModelAdapter():
             print("[WARNING] Can not find Conv2D layer")
             input_shape = self.tf_model.input_shape
 
+            if len(input_shape) < 3:
+                data_format = "channels_first"
+
             # Assume that input is *colorful image* whose dimensions should be [batch_size, img_w, img_h, 3]
-            if input_shape[3] == 3:
+            elif input_shape[3] == 3:
                 print("[INFO] Because detecting input_shape[3] == 3, set data_format = 'channels_last'")
                 data_format = 'channels_last'
 

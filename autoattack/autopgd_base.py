@@ -530,7 +530,7 @@ class APGDAttack:
             #y_pred = self.model.predict_torch(x)
             y_pred = self.model.predict(x, return_torch=True)
         else:
-            y_pred = self.model.predict(x).max(1)[1]
+            y_pred = torch.tensor(self.model.predict(x))#.max(1)[1]
         if y is None:
             # y_pred = self.predict(x).max(1)[1]
             y = y_pred.detach().clone().long().to(self.device)
