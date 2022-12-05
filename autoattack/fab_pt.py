@@ -68,20 +68,27 @@ class FABAttack_PT(FABAttack):
                          n_target_classes)
 
     def _predict_fn(self, x):
-        if not callable(self) and hasattr(self.predict, "predict_proba"):
-            return self.predict.predict_proba(x)
-        return self.predict(x)
+        if not callable(self) and hasattr(self.predict, "predict_torch"):
+            out =  self.predict.predict_torch(x)
+        else:
+            out =  self.predict(x)
+        if out.shape[1] == 1:
+            out = torch.concat((1 - out, out), 1)
+        return out
 
     def _get_predicted_label(self, x):
         with torch.no_grad():
             outputs = self._predict_fn(x)
+
         _, y = torch.max(outputs, dim=1)
         return y
 
     def get_diff_logits_grads_batch(self, imgs, la):
         im = imgs.clone().requires_grad_()
         with torch.enable_grad():
-            y = self.predict(im)
+            y = self.predict(im) if callable(self.predict) else self.predict.predict_torch(im)
+            if y.shape[1]==1:
+                y = torch.concat((1 - y, y), 1)
 
         g2 = torch.zeros([y.shape[-1], *imgs.size()]).to(self.device)
         grad_mask = torch.zeros_like(y)
@@ -105,7 +112,7 @@ class FABAttack_PT(FABAttack):
         u = torch.arange(imgs.shape[0])
         im = imgs.clone().requires_grad_()
         with torch.enable_grad():
-            y = self.predict(im)
+            y = self.predict(im) if callable(self.predict) else self.predict.predict_torch(im)
             diffy = -(y[u, la] - y[u, la_target])
             sumdiffy = diffy.sum()
 
