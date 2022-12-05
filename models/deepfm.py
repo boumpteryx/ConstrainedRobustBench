@@ -101,14 +101,22 @@ class DeepFM(BaseModelTorch):
                                                         patience=self.args.early_stopping_rounds)
         return loss_history, val_loss_history
 
-    def predict_helper(self, X):
-        X = np.array(X, dtype=np.float)
-        X_dict = {str(name): X[:, name] for name in range(self.args.num_features)}
+    def predict_helper(self, X, keep_grad=False):
+        if keep_grad:
+            if not self.args.cat_idx:
+                X_formatted = torch.cat((torch.zeros(X.shape[0],1),X),1)
+            else:
+                X_formatted = X
+            out = self.model(X_formatted)
+            return out
+        else:
+            X = np.array(X, dtype=np.float)
+            X_dict = {str(name): X[:, name] for name in range(self.args.num_features)}
 
-        # Adding dummy spare feature
-        if not self.args.cat_idx:
-            X_dict["dummy"] = np.zeros(X.shape[0])
-        return self.model.predict(X_dict, batch_size=self.args.batch_size)
+            # Adding dummy spare feature
+            if not self.args.cat_idx:
+                X_dict["dummy"] = np.zeros(X.shape[0])
+            return self.model.predict(X_dict, batch_size=self.args.batch_size)
 
     @classmethod
     def define_trial_parameters(cls, trial, args):
