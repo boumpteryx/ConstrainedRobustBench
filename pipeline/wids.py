@@ -3,7 +3,6 @@
 
 import pandas as pd
 import numpy as np
-import missingno as msno
 from sklearn.preprocessing import LabelEncoder
 
 import sys
@@ -83,9 +82,9 @@ print("features :", features)
 print("categorical_features:", categoricals_features)
 
 # save new dataset
-data = np.concatenate(train, test)
-metadata =
-new_path = ("./pipeline/wids/.csv")
+data = np.concatenate((train.to_numpy(), test.to_numpy()))
+# metadata =
+new_path = ("C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/pipeline/wids.csv")
 with open(new_path, "w+") as file:
     np.savetxt(file, data, delimiter=",")
 file.close()
