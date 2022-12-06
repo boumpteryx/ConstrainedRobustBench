@@ -116,6 +116,7 @@ def run(config: dict):
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     print(config)
     dataset = load_dataset(config["dataset"])
+    my_net = config["model"]
     dataset.drop_date = True
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
@@ -123,8 +124,10 @@ def run(config: dict):
     preprocessor.fit(x.iloc[splits["train"]])
     x = preprocessor.transform(x)
 
-    # net = Net(preprocessor, x.shape[1])
-    net = Linear(preprocessor, x.shape[1])
+    if my_net == "Net":
+        net = Net(preprocessor, x.shape[1])
+    elif my_net == "Linear":
+        net = Linear(preprocessor, x.shape[1])
     train(net, x[splits["train"]], y[splits["train"]], 10, 32)
     path = "./tests/resources/pytorch_models/" + config["dataset"] + "Linear_torch.pth"
     torch.save(net.state_dict(), path)

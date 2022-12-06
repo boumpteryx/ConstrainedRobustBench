@@ -88,10 +88,12 @@ for i in range(len(features)):
     if features[i] in categoricals_features:
         metadata.append([features[i], str(np.min(data[:][i])), str(np.max(data[:][i])),"true", "str"])
     else:
-        metadata.append([features[i], np.min(data[:][i]), np.max(data[:][i]), "true", "float"])
+        metadata.append([features[i], str(np.min(data[:][i])), str(np.max(data[:][i])), "true", "float"])
+metadata.append(["charged_off","0","1","false","str"])
 new_path = ("C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/pipeline/wids.csv")
 metadata_path = ("C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/pipeline/wids_metadata.csv")
 with open(new_path, "w+") as file:
+    np.savetxt(file, [features], fmt="%s", delimiter=",")
     np.savetxt(file, data, delimiter=",")
 file.close()
 with open(metadata_path, "w+") as file:
