@@ -58,17 +58,12 @@ class BalancedBCELossPytorch(torch.nn.BCEWithLogitsLoss):
         super(BalancedBCELossPytorch, self).__init__(**args)
 
     def forward(self, input: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
-
+        loss = super(BalancedBCELossPytorch, self).forward(input, target.float())
         if self.weights is None:
-            return super(BalancedBCELossPytorch, self).forward(input, target)
+            return loss
 
-        negative_inputs_mask = (target == 0)
-        positive_inputs_mask = (target == 1)
+        positive_loss = target * loss
+        negative_loss = (1 - target) * loss
 
-        positive_inputs, positive_targets = input[positive_inputs_mask], input[positive_inputs_mask]
-        positive_loss = super(BalancedBCELossPytorch, self).forward(positive_inputs, positive_targets)
-        negative_inputs, negative_targets = input[negative_inputs_mask], input[negative_inputs_mask]
-        negative_loss = super(BalancedBCELossPytorch, self).forward(negative_inputs, negative_targets)
-
-        return positive_loss * self.weights.get(1) + negative_loss * self.weights.get(0)
+        return positive_loss.sum() * self.weights.get(1) + negative_loss.sum() * self.weights.get(0)
 

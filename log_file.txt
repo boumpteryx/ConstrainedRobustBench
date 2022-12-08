@@ -2877,3 +2877,124 @@ initial MCC: 90.78%
 initial accuracy: 94.80%
 initial AUC: 94.76%
 initial MCC: 89.58%
+initial accuracy: 97.50%
+initial AUC: 97.47%
+initial MCC: 94.99%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 88.10%
+initial AUC: 88.26%
+initial MCC: 76.50%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+apgd-ce-constrained - 1/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 2/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 3/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 4/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 5/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 6/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 7/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 8/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 9/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 10/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 11/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 12/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 13/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 14/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 15/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 16/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 17/17 - 0 out of 29 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 82.90% (total time 5.8 s)
+robust AUC after APGD-CE-CONSTRAINED: 83.39% (total time 5.8 s)
+robust MCC after APGD-CE-CONSTRAINED: 67.88% (total time 5.8 s)
+fab-constrained - 1/17 - 0 out of 50 successfully perturbed
+fab-constrained - 2/17 - 0 out of 50 successfully perturbed
+fab-constrained - 3/17 - 0 out of 50 successfully perturbed
+fab-constrained - 4/17 - 0 out of 50 successfully perturbed
+fab-constrained - 5/17 - 0 out of 50 successfully perturbed
+fab-constrained - 6/17 - 1 out of 50 successfully perturbed
+fab-constrained - 7/17 - 1 out of 50 successfully perturbed
+fab-constrained - 8/17 - 0 out of 50 successfully perturbed
+fab-constrained - 9/17 - 0 out of 50 successfully perturbed
+fab-constrained - 10/17 - 0 out of 50 successfully perturbed
+fab-constrained - 11/17 - 0 out of 50 successfully perturbed
+fab-constrained - 12/17 - 0 out of 50 successfully perturbed
+fab-constrained - 13/17 - 0 out of 50 successfully perturbed
+fab-constrained - 14/17 - 0 out of 50 successfully perturbed
+fab-constrained - 15/17 - 0 out of 50 successfully perturbed
+fab-constrained - 16/17 - 0 out of 50 successfully perturbed
+fab-constrained - 17/17 - 0 out of 29 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 82.70% (total time 19.3 s)
+robust AUC after FAB-CONSTRAINED: 83.18% (total time 19.3 s)
+robust MCC after FAB-CONSTRAINED: 67.40% (total time 19.3 s)

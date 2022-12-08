@@ -87,7 +87,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["DeepFM"]#"DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["Net"]#"DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
@@ -220,7 +220,7 @@ if __name__ == '__main__':
         # constraints = None
         adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
-                               version=args.version, is_tf_model=True,
+                               version=args.version,
                                fun_distance_preprocess=lambda x: preprocessor.transform(x))
 
         # l = [x for (x, y) in test_loader]
