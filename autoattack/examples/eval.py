@@ -4,6 +4,8 @@ import sys
 
 import numpy as np
 import torch
+from constrained_attacks.classifier.classifier import Classifier
+
 from autoattack.utils_tf2 import ModelAdapter
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
@@ -139,9 +141,12 @@ if __name__ == '__main__':
         print("use_constraint = ", args.use_constraints)
 
         # load model
-        if one_model == "Net":
+        if one_model == "Net" or one_model == "Linear":
             args.use_gpus = False
-            model = Net(preprocessor, x.shape[1])
+            if one_model == "Net":
+                model = Net(preprocessor, x.shape[1])
+            elif one_model == "Linear":
+                model = Linear(preprocessor, x.shape[1])
             ckpt = torch.load(args.model, map_location=torch.device("cpu")) # "cpu"
             model.load_state_dict(ckpt)
             # model.cuda()
@@ -153,24 +158,6 @@ if __name__ == '__main__':
                 Normalize(meanl=mean, stdl=std),
                 model
             )
-            # model = add_normalization_layer(model=model, mean=mean, std=std)
-            model.to(device)
-            model.eval()
-        elif one_model == "Linear":
-            args.use_gpus = False
-            model = Linear(preprocessor, x.shape[1])
-            ckpt = torch.load(args.model, map_location=torch.device("cpu")) # "cpu"
-            model.load_state_dict(ckpt)
-            # model.cuda()
-            if torch.cuda.is_available():
-                device = torch.device("cpu") # "cuda"
-            else:
-                device = torch.device("cpu")
-            model = torch.nn.Sequential(
-                Normalize(meanl=mean, stdl=std),
-                model
-            )
-            # model = add_normalization_layer(model=model, mean=mean, std=std)
             model.to(device)
             model.eval()
         else:
@@ -181,28 +168,22 @@ if __name__ == '__main__':
             parameters = ast.literal_eval(open(param_path).read())
             print("parameters : ", parameters)
             model = str2model(one_model)(parameters, args)
-            if one_model == "RLN":
-                X_test, Y_test = np.array(x_test), np.array(y_test)
-                X_train, Y_train = np.array(x_train), np.array(y_train)
-                model.fit(X_train, Y_train, X_test, Y_test)
-                model = ModelAdapter(model.model.model, num_classes=2)
+            state_dict = torch.load(args.model, map_location=torch.device('cpu'))
+            if one_model == "LinearModelSklearn":
+                model = state_dict
             else:
-                state_dict = torch.load(args.model, map_location=torch.device('cpu'))
-                if one_model == "LinearModelSklearn":
-                    model = state_dict
+                from collections import OrderedDict
+                if one_model not in ["DeepFM", "LinearModel", "TabTransformer"] or (one_model == "TabTransformer" and args.dataset == "url"):
+                    new_state_dict = OrderedDict()
+                    for k, v in state_dict.items():
+                        name = 'module.' + k[:]  # add `module.`
+                        new_state_dict[name] = v
                 else:
-                    from collections import OrderedDict
-                    if one_model not in ["DeepFM", "LinearModel", "TabTransformer"] or (one_model == "TabTransformer" and args.dataset == "url"):
-                        new_state_dict = OrderedDict()
-                        for k, v in state_dict.items():
-                            name = 'module.' + k[:]  # add `module.`
-                            new_state_dict[name] = v
-                    else:
-                        new_state_dict = state_dict
-                    model.model.load_state_dict(new_state_dict)
-                    device = torch.device('cpu')  # "cpu"
-                    model.model.to(device)
-                    model.model.eval()
+                    new_state_dict = state_dict
+                model.model.load_state_dict(new_state_dict)
+                device = torch.device('cpu')  # "cpu"
+                model.model.to(device)
+                model.model.eval()
 
         # create save dir
         if not os.path.exists(args.save_dir):

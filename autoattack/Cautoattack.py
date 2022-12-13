@@ -34,13 +34,13 @@ class AutoAttack():
 
         if not self.is_tf_model:
             from .autopgd_base import APGDAttack
-            self.apgd = APGDAttack(self.model, constraints=self.constraints, n_restarts=5, n_iter=100, verbose=self.verbose,
+            self.apgd = APGDAttack(self.model, constraints=self.constraints, n_restarts=5, n_iter=100, verbose=False,#self.verbose,
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed,
                 device=self.device, logger=self.logger)
 
             from .fab_pt import FABAttack_PT
             self.fab = FABAttack_PT(self.model, self.constraints, n_restarts=5, n_iter=100, eps=self.epsilon, seed=self.seed,
-                norm=self.norm, verbose=self.verbose, device=self.device)
+                norm=self.norm, verbose=False, device=self.device)
 
             from .square import SquareAttack
             self.square = SquareAttack(self.model, p_init=.8, n_queries=5000, eps=self.epsilon, norm=self.norm,
@@ -250,9 +250,8 @@ class AutoAttack():
                     elif attack == 'moeva2':
                         self.moeva2.is_targeted = False
                         adv_curr = self.moeva2.generate(np.array(x_unscaled_usable.numpy()),np.array(y.numpy()),x.shape[0])
-                        # adv_curr = self.moeva2.generate(np.array(x.numpy()),np.array(y.numpy()),x.shape[0])
                         threshold = {"misclassification":np.array([np.inf, np.inf]),"distance":self.epsilon, "constraints": 0.01}
-                        calcul = ObjectiveCalculator(self.model,constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_distance_preprocess)
+                        calcul = ObjectiveCalculator(Classifier(self.model),constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_distance_preprocess)
                         adv_curr = calcul.get_successful_attacks(
                             np.array(x_unscaled_usable.numpy()),
                             np.array(y.numpy()),
@@ -281,7 +280,7 @@ class AutoAttack():
                         adv_curr = self.moeva2.generate(np.array(x_unscaled.numpy()),np.array(y.numpy()),x.shape[0])
                         threshold = {"misclassification": np.array([np.inf, np.inf]), "distance": self.epsilon,
                                      "constraints": 0.01}
-                        calcul = ObjectiveCalculator(self.model, constraints=self.constraints, thresholds=threshold,
+                        calcul = ObjectiveCalculator(Classifier(self.model), constraints=self.constraints, thresholds=threshold,
                                                      norm=2, fun_distance_preprocess=self.fun_distance_preprocess)
                         adv_curr = calcul.get_successful_attacks(
                             np.array(x_unscaled_usable.numpy()),
@@ -327,10 +326,10 @@ class AutoAttack():
                     x_adv[non_robust_lin_idcs] = adv_curr[false_batch].detach().to(x_adv.device)
                     y_adv[non_robust_lin_idcs] = output[false_batch].detach().to(x_adv.device)
 
-                    if self.verbose:
-                        num_non_robust_batch = torch.sum(false_batch)
-                        self.logger.log('{} - {}/{} - {} out of {} successfully perturbed'.format(
-                            attack, batch_idx + 1, n_batches, num_non_robust_batch, x.shape[0]))
+                if self.verbose:
+                    num_non_robust_batch = torch.sum(false_batch)
+                    self.logger.log('{} - {}/{} - {} out of {} successfully perturbed'.format(
+                        attack, batch_idx + 1, n_batches, num_non_robust_batch, x.shape[0]))
 
                 robust_accuracy = torch.sum(robust_flags).item() / x_orig.shape[0]
                 robust_AUC = roc_auc_score(y_orig, y_adv)

@@ -2,30 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="64d23c61-d57d-47e4-a0c8-6eee742820ec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/config/wids.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/ctu_13_neris_Linear_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/ctu_13_neris_Net_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/lcld_v2_time_Linear_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/lcld_v2_time_Net_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/malwareLinear_torch.pth" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/malware_Linear_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/malware_Net_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/url_Linear_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/url_Net_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/wids_Linear_torch.pt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/wids_Net_torch.pt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Linear_0.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Linear_0_y.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Net_0.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Net_0_y.pth" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/autopgd_base.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/autopgd_base.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/Cautoattack.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/Cautoattack.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/autoattack/examples/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/eval.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_1_1000_eps_0.03137.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_1_1000_eps_223586.01562.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_ctu_13_neris_norm_L2_1_1000_eps_910069.50000.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_ctu_13_neris_norm_Linf_1_1000_eps_1820139.00000.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_L2_1_1000_eps_3102.48315.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_L2_1_500_eps_3102.48315_Net_1.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_L2_1_500_eps_3102.48315_Net_1_y.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_Linf_1_1000_eps_3102.48315.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_malware_norm_Linf_1_1000_eps_223586.01562.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L1_1_1000_eps_31935.03906.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_10_eps_31935.03906_Net_1.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_10_eps_31935.03906_Net_1_y.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_Linf_1_1000_eps_31935.03906.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_Linf_1_1000_eps_63870.07812.pth" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/wids.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/wids.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/deepfm.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/deepfm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pipeline/pytorch.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline/pytorch.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/resources/pytorch_models/ctu_13_nerisLinear_torch.pth" beforeDir="false" afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/ctu_13_nerisLinear_torch.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/resources/pytorch_models/lcld_v2_timeLinear_torch.pth" beforeDir="false" afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/lcld_v2_timeLinear_torch.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/resources/pytorch_models/urlLinear_torch.pth" beforeDir="false" afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/urlLinear_torch.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/resources/pytorch_models/widsLinear_torch.pth" beforeDir="false" afterPath="$PROJECT_DIR$/tests/resources/pytorch_models/widsLinear_torch.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trained_models/Net/url/m_best.pt" beforeDir="false" afterPath="$PROJECT_DIR$/trained_models/Net/url/m_best.pt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/losses.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/losses.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,17 +58,17 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/trained_models/Linear/ctu_13_neris",
+    "last_opened_file_path": "C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/trained_models/XGBoost",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\Linear\ctu_13_neris" />
-      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\Linear\lcld_v2_time" />
-      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\Linear\url" />
-      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\Net\malware" />
-      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\Net\url" />
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\XGBoost" />
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\RandomForest" />
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\ModelTree" />
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\LightGBM" />
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\KNN" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\pipeline\wids_raw" />
@@ -77,7 +77,7 @@
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\autoattack" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.pytorch">
+  <component name="RunManager" selected="Python.eval">
     <configuration name="Cautoattack" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ConstrainedRobustBench" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -133,7 +133,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/autoattack/examples/eval.py" />
-      <option name="PARAMETERS" value="--config config/url.yml --norm L2 --use_constraints 1 --model_name Net" />
+      <option name="PARAMETERS" value="--config config/ctu_13_neris.yml --norm L2 --use_constraints 0" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -207,8 +207,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.pytorch" />
         <item itemvalue="Python.eval" />
+        <item itemvalue="Python.pytorch" />
         <item itemvalue="Python.wids" />
         <item itemvalue="Python.data-augmentation" />
         <item itemvalue="Python tests.Python tests for tests.constraints.test_url_constraints_torch.test_torch_constraints" />
@@ -303,9 +303,9 @@
           <option name="timeStamp" value="53" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/autoattack/autopgd_base.py</url>
-          <line>286</line>
-          <option name="timeStamp" value="76" />
+          <url>file://$PROJECT_DIR$/../constrained-attacks/constrained_attacks/objective_calculator/cache_objective_calculator.py</url>
+          <line>91</line>
+          <option name="timeStamp" value="77" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
