@@ -2,30 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="64d23c61-d57d-47e4-a0c8-6eee742820ec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Linear_0.pth" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Linear_0_y.pth" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Net_0.pth" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Net_0_y.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/Cautoattack.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/Cautoattack.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_1_1000_eps_0.03137.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_1_1000_eps_223586.01562.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_ctu_13_neris_norm_L2_1_1000_eps_910069.50000.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_ctu_13_neris_norm_Linf_1_1000_eps_1820139.00000.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_L2_1_1000_eps_3102.48315.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_L2_1_500_eps_3102.48315_Net_1.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_L2_1_500_eps_3102.48315_Net_1_y.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_lcld_v2_time_norm_Linf_1_1000_eps_3102.48315.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_malware_norm_Linf_1_1000_eps_223586.01562.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L1_1_1000_eps_31935.03906.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_10_eps_31935.03906_Net_1.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_10_eps_31935.03906_Net_1_y.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_Linf_1_1000_eps_31935.03906.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_Linf_1_1000_eps_63870.07812.pth" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/wids.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/wids.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/log_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
