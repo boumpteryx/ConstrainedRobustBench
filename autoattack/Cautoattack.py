@@ -12,12 +12,17 @@ from constraints.constraints_checker import ConstraintChecker
 
 
 class AutoAttack():
-    def __init__(self, model, constraints=None, norm='Linf', eps=.3, seed=None, verbose=True,
+    def __init__(self, model, arguments, constraints=None, norm='Linf', eps=.3, seed=None, verbose=True,
                  attacks_to_run=[], version='standard', is_tf_model=False,
                  device='cpu', log_path=None, fun_distance_preprocess=None):
         self.model = model
+        self.n_ex = arguments.n_ex
+        self.use_constraints = arguments.use_constraints
+        self.dataset = arguments.dataset
         self.constraints = constraints
         self.norm = norm
+        self.save_dir = arguments.save_dir
+        self.transfer_from = arguments.transfer_from
         assert norm in ['Linf', 'L2', 'L1']
         self.epsilon = eps
         self.seed = seed
@@ -302,6 +307,15 @@ class AutoAttack():
                                 counter += 1
                                 adv_curr[i] = x[i]
                         print("number of outputs not respecting constraints = ", counter)
+
+                    elif attack == "transfer":
+                        if self.transfer_from is not None:
+                            adv_curr = torch.load('{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_constraints_{}.pth'.format(
+                                self.save_dir, 'aa', "custom", self.dataset, self.norm, self.n_ex,
+                                self.epsilon, self.transfer_from, self.use_constraints))["adv_complete"][start_idx:end_idx]
+                            print(adv_curr.shape)
+                        else:
+                            print("missing specification of model to transfer from")
 
                     else:
                         raise ValueError('Attack not supported')

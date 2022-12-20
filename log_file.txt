@@ -3281,3 +3281,63 @@ max L2 perturbation: 601629568.00000, nan in tensor: 0, max: 584757248.00000, mi
 robust accuracy: 7.60%
 robust AUC: 3.83%
 robust MCC: -27.91%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce - 16/16 - 25 out of 28 successfully perturbed
+robust accuracy after APGD-CE: 4.40% (total time 9.0 s)
+robust AUC after APGD-CE: 4.21% (total time 9.0 s)
+robust MCC after APGD-CE: -91.57% (total time 9.0 s)
+fab - 1/1 - 31 out of 44 successfully perturbed
+robust accuracy after FAB: 1.30% (total time 10.0 s)
+robust AUC after FAB: 1.24% (total time 10.0 s)
+robust MCC after FAB: -97.43% (total time 10.0 s)
+moeva2 - 1/1 - 5 out of 13 successfully perturbed
+robust accuracy after MOEVA2: 0.80% (total time 78.9 s)
+robust AUC after MOEVA2: 0.76% (total time 78.9 s)
+robust MCC after MOEVA2: -98.41% (total time 78.9 s)
+max L2 perturbation: 22252.10547, nan in tensor: 0, max: 22211.00000, min: -1.94214
+robust accuracy: 0.80%
+robust AUC: 0.76%
+robust MCC: -98.41%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+transfer - 16/16 - 13 out of 28 successfully perturbed
+robust accuracy after TRANSFER: 37.20% (total time 0.0 s)
+robust AUC after TRANSFER: 37.70% (total time 0.0 s)
+robust MCC after TRANSFER: -25.24% (total time 0.0 s)
+max L2 perturbation: 22252.12891, nan in tensor: 0, max: 22211.00000, min: -1.94214
+robust accuracy: 37.20%
+robust AUC: 37.70%
+robust MCC: -25.24%

@@ -57,7 +57,9 @@ def SMOTE_augmentation(X, y):
 
 def save(data, args, old_data=None):
     if old_data is not None:
+        import random
         data = np.concatenate((old_data, data))
+        data = random.shuffle(data)
     new_path = (
         "./pipeline/augmented_datasets/"
         + args.dataset

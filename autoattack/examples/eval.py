@@ -41,7 +41,8 @@ if __name__ == '__main__':
     parser.add_argument('--version', type=str, default='custom')
     parser.add_argument('--model_name', type=str, default='Net')
     parser.add_argument('--use_constraints', type=int, default=1)
-    parser.add_argument('--all_models', type=int, default=1)
+    parser.add_argument('--all_models', type=int, default=0)
+    parser.add_argument('--transfer_from', type=str, default=None)
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     # parser.add('--model_name', required=True, help="Name of the model that should be trained")
@@ -199,7 +200,7 @@ if __name__ == '__main__':
             constraints.relation_constraints = [(a), (b)]
             #constraints = AndConstraint(operands =[(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))]) #Constraints([],[],[],[], [(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))], []) # AndConstraint(operands =[(Constant(0) <= Constant(1))]) #
         # constraints = None
-        adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
+        adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
                                version=args.version,
                                fun_distance_preprocess=lambda x: preprocessor.transform(x))
@@ -208,6 +209,8 @@ if __name__ == '__main__':
         # x_test = torch.cat(l, 0)
         # l = [y for (x, y) in test_loader]
         # y_test = torch.cat(l, 0)
+        if args.version == 'transfer':
+            adversary.attacks_to_run = ['transfer']
 
         # example of custom version
         if args.version == 'custom':
@@ -233,7 +236,7 @@ if __name__ == '__main__':
                                                                  return_labels=True,
                                                                  x_unscaled=x_unpreprocessed[:args.n_ex])
 
-                torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_{}.pth'.format(
+                torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_constraints_{}.pth'.format(
                     args.save_dir, 'aa', args.version, args.dataset, args.norm, adv_complete.shape[0],
                     args.epsilon, args.model_name, args.use_constraints))
                 torch.save({'y_adv_complete': y_adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_{}_y.pth'.format(
