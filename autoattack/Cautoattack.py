@@ -4,6 +4,7 @@ import time
 import numpy as np
 import torch
 from constrained_attacks.objective_calculator.cache_objective_calculator import ObjectiveCalculator
+from tqdm import tqdm
 
 from autoattack.other_utils import Logger
 from autoattack import checks
@@ -119,7 +120,7 @@ class AutoAttack():
             n_batches = int(np.ceil(x_orig.shape[0] / bs))
             robust_flags = torch.zeros(x_orig.shape[0], dtype=torch.bool, device=x_orig.device)
             y_adv = torch.empty_like(y_orig)
-            for batch_idx in range(n_batches):
+            for batch_idx in tqdm(range(n_batches)):
                 start_idx = batch_idx * bs
                 end_idx = min( (batch_idx + 1) * bs, x_orig.shape[0])
 

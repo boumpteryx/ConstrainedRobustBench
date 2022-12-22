@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from constrained_attacks.classifier.classifier import Classifier
 
-from autoattack.utils_tf2 import ModelAdapter
+# from autoattack.utils_tf2 import ModelAdapter
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=8./255.)
     parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
-    parser.add_argument('--n_ex', type=int, default=1000)
+    parser.add_argument('--n_ex', type=int, default=10)
     parser.add_argument('--individual', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./autoattack/examples/results')
     parser.add_argument('--batch_size', type=int, default=50)
@@ -174,7 +174,7 @@ if __name__ == '__main__':
                 model = state_dict
             else:
                 from collections import OrderedDict
-                if one_model not in ["DeepFM", "LinearModel", "TabTransformer"] or (one_model == "TabTransformer" and args.dataset == "url"):
+                if one_model not in ["DeepFM", "LinearModel", "TabTransformer", "SAINT"] or (one_model == "TabTransformer" and args.dataset == "url"):
                     new_state_dict = OrderedDict()
                     for k, v in state_dict.items():
                         name = 'module.' + k[:]  # add `module.`

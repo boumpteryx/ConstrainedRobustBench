@@ -2,14 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="64d23c61-d57d-47e4-a0c8-6eee742820ec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Net_constraints_0.pth" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/transfer.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/autoattack/Cautoattack.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/Cautoattack.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/autoattack/examples/eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Linear_0.pth" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Linear_constraints_0.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Net_0_y.pth" beforeDir="false" afterPath="$PROJECT_DIR$/autoattack/examples/results/aa_custom_dataset_url_norm_L2_1_1000_eps_31935.03906_Net_0_y.pth" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/lcld_v2_time.yml" beforeDir="false" afterPath="$PROJECT_DIR$/config/lcld_v2_time.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/log_file.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pipeline/data-augmentation.py" beforeDir="false" afterPath="$PROJECT_DIR$/pipeline/data-augmentation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/saint.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/saint.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/saint_lib/augmentations.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/saint_lib/augmentations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/saint_lib/data_openml.py" beforeDir="false" afterPath="$PROJECT_DIR$/models/saint_lib/data_openml.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/losses.py" beforeDir="false" afterPath="$PROJECT_DIR$/utils/losses.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,22 +39,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/trained_models/XGBoost&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "last_opened_file_path": "C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/trained_models/SAINT/url",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\SAINT\url" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\XGBoost" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\RandomForest" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\ModelTree" />
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\LightGBM" />
-      <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\trained_models\KNN" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\antoine.desjardins\Documents\GitHub\ConstrainedRobustBench\pipeline\wids_raw" />
@@ -109,7 +111,7 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="PYTHONUNBUFFERED" value="1 CUDA_VISIBLE_DEVICES=" />
       </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/" />
@@ -117,7 +119,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/autoattack/examples/eval.py" />
-      <option name="PARAMETERS" value="--config config/url.yml --norm L2 --use_constraints 0 --model_name Net --transfer_from Linear --version transfer" />
+      <option name="PARAMETERS" value="--config config/url.yml --norm L2 --use_constraints 0 --model_name SAINT" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -292,13 +294,6 @@
           <option name="timeStamp" value="77" />
         </line-breakpoint>
       </breakpoints>
-      <default-breakpoints>
-        <breakpoint type="python-exception">
-          <properties notifyOnTerminate="true" exception="BaseException">
-            <option name="notifyOnTerminate" value="true" />
-          </properties>
-        </breakpoint>
-      </default-breakpoints>
     </breakpoint-manager>
   </component>
 </project>
