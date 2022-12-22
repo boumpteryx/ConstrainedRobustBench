@@ -249,9 +249,9 @@ class APGDAttack:
 
         if not self.is_tf_model:
             if self.loss == "ce":
-                criterion_indiv = nn.BCELoss(reduction="none") if isinstance(self.model,BaseModelTorch) else nn.CrossEntropyLoss(reduction="none")
+                criterion_indiv = nn.BCELoss(reduction="none") if isinstance(self.model, BaseModelTorch) else nn.CrossEntropyLoss(reduction="none")
             elif self.loss == "ce-constrained":
-                criterion_indiv = nn.BCELoss(reduction="none") if isinstance(self.model,BaseModelTorch) else nn.CrossEntropyLoss(reduction="none")
+                criterion_indiv = nn.BCELoss(reduction="none") if isinstance(self.model, BaseModelTorch) else nn.CrossEntropyLoss(reduction="none")
             elif self.loss == "ce-targeted-cfts":
                 criterion_indiv = lambda x, y: -1.0 * F.cross_entropy(
                     x, y, reduction="none"

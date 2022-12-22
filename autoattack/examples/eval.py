@@ -33,7 +33,7 @@ if __name__ == '__main__':
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=8./255.)
     parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
-    parser.add_argument('--n_ex', type=int, default=10)
+    parser.add_argument('--n_ex', type=int, default=1000)
     parser.add_argument('--individual', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./autoattack/examples/results')
     parser.add_argument('--batch_size', type=int, default=50)
