@@ -90,7 +90,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["Net"]#"DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["DeepFM"]#"DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
