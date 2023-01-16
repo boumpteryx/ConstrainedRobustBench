@@ -11,7 +11,6 @@ from sklearn.model_selection import train_test_split
 
 # from autoattack.other_utils import add_normalization_layer
 sys.path.insert(0,'.')
-from pipeline.pytorch import Net, Linear
 from constrained_attacks.constraints.relation_constraint import Constant
 from constrained_attacks.constraints.relation_constraint import LessEqualConstraint, Feature
 
@@ -20,9 +19,7 @@ from utils.models import init_model
 sys.path.insert(0,'..')
 
 from resnet import *
-
 import configargparse
-import yaml
 
 if __name__ == '__main__':
     # parser = argparse.ArgumentParser()
@@ -38,7 +35,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=50)
     parser.add_argument('--log_path', type=str, default='./log_file.txt')
     parser.add_argument('--version', type=str, default='custom')
-    parser.add_argument('--model_name', type=str, default='Net')
+    parser.add_argument('--model_name', type=str, default='Net',help="Use '#' to use multiple models in an ensemble")
     parser.add_argument('--use_constraints', type=int, default=1)
     parser.add_argument('--all_models', type=int, default=1)
 
@@ -88,7 +85,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["VIME"]#"DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["TabTransformer#TabTransformer"]#"VIME","DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
