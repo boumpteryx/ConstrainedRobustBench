@@ -31,8 +31,8 @@ train_stat2 = pd.concat([dico,train_stat],axis=0)
 train['apache_3j_diagnosis_split0'] = np.where(train['apache_3j_diagnosis'].isna() , np.nan , train['apache_3j_diagnosis'].astype('str').str.split('.',n=1,expand=True)[0]  )
 test['apache_3j_diagnosis_split0']   = np.where(test['apache_3j_diagnosis'].isna() , np.nan , test['apache_3j_diagnosis'].astype('str').str.split('.',n=1,expand=True)[0]  )
 
-# we also remove the target and the ids
-to_drop = ['encounter_id', 'patient_id', 'hospital_death']
+# we also remove the ids
+to_drop = ['encounter_id', 'patient_id']
 # this is a list of features that look like to be categorical
 categoricals_features = ['hospital_id','ethnicity','gender','hospital_admit_source','icu_admit_source','icu_stay_type','icu_type','apache_3j_bodysystem','apache_2_bodysystem','apache_3j_diagnosis_split0']
 categoricals_features = [col for col in categoricals_features if col not in to_drop]
@@ -88,10 +88,11 @@ for i in range(len(features)):
     if features[i] in categoricals_features:
         metadata.append([features[i], str(np.min(data[:][i])), str(np.max(data[:][i])),"true", "str"])
     else:
-        metadata.append([features[i], np.min(data[:][i]), np.max(data[:][i]), "true", "float"])
+        metadata.append([features[i], str(np.min(data[:][i])), str(np.max(data[:][i])), "true", "float"])
 new_path = ("C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/pipeline/wids.csv")
 metadata_path = ("C:/Users/antoine.desjardins/Documents/GitHub/ConstrainedRobustBench/pipeline/wids_metadata.csv")
 with open(new_path, "w+") as file:
+    np.savetxt(file, [features], fmt="%s", delimiter=",")
     np.savetxt(file, data, delimiter=",")
 file.close()
 with open(metadata_path, "w+") as file:

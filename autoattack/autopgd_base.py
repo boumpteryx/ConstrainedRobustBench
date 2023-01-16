@@ -20,7 +20,8 @@ from constrained_attacks.constraints.relation_constraint import AndConstraint
 from constrained_attacks.constraints.constraints import Constraints
 
 from models.basemodel_torch import BaseModelTorch
-
+from pipeline.pytorch import CustomNet
+from torch.nn import Sequential
 
 def L1_projection(x2, y2, eps1):
     """
@@ -248,9 +249,9 @@ class APGDAttack:
 
         if not self.is_tf_model:
             if self.loss == "ce":
-                criterion_indiv = nn.BCELoss(reduction="none") if isinstance(self.model,BaseModelTorch) else nn.CrossEntropyLoss(reduction="none")
+                criterion_indiv = nn.BCELoss(reduction="none") if isinstance(self.model, BaseModelTorch) else nn.CrossEntropyLoss(reduction="none")
             elif self.loss == "ce-constrained":
-                criterion_indiv = nn.BCELoss(reduction="none") if isinstance(self.model,BaseModelTorch) else nn.CrossEntropyLoss(reduction="none")
+                criterion_indiv = nn.BCELoss(reduction="none") if isinstance(self.model, BaseModelTorch) else nn.CrossEntropyLoss(reduction="none")
             elif self.loss == "ce-targeted-cfts":
                 criterion_indiv = lambda x, y: -1.0 * F.cross_entropy(
                     x, y, reduction="none"
@@ -281,7 +282,8 @@ class APGDAttack:
             if not self.is_tf_model:
                 with torch.enable_grad():
                     logits = self.model(x_adv) if callable(self.model) else self.model.predict_torch(x_adv)
-                    loss_indiv = criterion_indiv(logits.squeeze(), y.float())
+                    y = y if isinstance(criterion_indiv, nn.CrossEntropyLoss) else y.float()
+                    loss_indiv = criterion_indiv(logits.squeeze(), y)
                     constraints_loss = self.constraints_loss(x)
                     if self.constraints != None and self.loss in ["ce-constrained", "ce-targeted-constrained", "dlr-constrained", "dlr-targeted-constrained"]:
                         loss = loss_indiv.sum() + constraints_loss.sum()
@@ -419,7 +421,8 @@ class APGDAttack:
                 if not self.is_tf_model:
                     with torch.enable_grad():
                         logits = self.model(x_adv) if callable(self.model) else self.model.predict_torch(x_adv)
-                        loss_indiv = criterion_indiv(logits.squeeze(), y.float())
+                        y = y if isinstance(criterion_indiv, nn.CrossEntropyLoss) else y.float()
+                        loss_indiv = criterion_indiv(logits.squeeze(), y)
                         loss = loss_indiv.sum()
 
                     grad += torch.autograd.grad(loss, [x_adv])[0].detach()

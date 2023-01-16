@@ -19,6 +19,8 @@ from sklearn.metrics import (
 )
 from tqdm import tqdm
 
+from utils.losses import BalancedBCELossPytorch
+
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "DEBUG"))
 logger = logging.getLogger(__name__)
 
@@ -42,7 +44,11 @@ def compute_binary_metrics(y_true, y_score, threshold=None) -> dict:
     return metrics
 
 
-class Net(nn.Module):
+class CustomNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+class Net(CustomNet):
     def __init__(self, preprocessor, feature_number):
         super().__init__()
         self.preprocessor = preprocessor
@@ -51,15 +57,16 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(32, 16)
         self.fc3 = nn.Linear(16, 2)  # last input is # of classes
 
+
     def forward(self, x):
         x = F.relu(self.fc0(x))
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
-        return x
+        return torch.sigmoid(x)
 
 
-class Linear(nn.Module):
+class Linear(CustomNet):
     def __init__(self, preprocessor, feature_number):
         super().__init__()
         self.preprocessor = preprocessor
@@ -67,10 +74,10 @@ class Linear(nn.Module):
 
     def forward(self, x):
         x = F.relu(self.fc0(x))
-        return x
+        return torch.sigmoid(x)
 
-def train(net, x, y, epoch, batch_size):
-    criterion = nn.CrossEntropyLoss(weight=torch.Tensor([1.0, 1.0]))
+def train(net, x, y, epoch, batch_size,config):
+    criterion = BalancedBCELossPytorch(weight=torch.Tensor([1.0, 1.0]),dataset=config["dataset"])
     optimizer = optim.Adam(net.parameters(), lr=0.001)
     batch_indexes = np.array_split(np.arange(len(x)), len(x) // batch_size + 1)
 
@@ -81,6 +88,7 @@ def train(net, x, y, epoch, batch_size):
         for i, index in tqdm(enumerate(batch_indexes, 0), total=len(batch_indexes)):
             # get the inputs; data is a list of [inputs, labels]
             inputs, labels = torch.Tensor(x[index]), torch.LongTensor(y[index])
+            labels = torch.nn.functional.one_hot(labels, 2)
             # print(y[index].sum())
             # zero the parameter gradients
             optimizer.zero_grad()
@@ -116,6 +124,7 @@ def run(config: dict):
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     print(config)
     dataset = load_dataset(config["dataset"])
+    my_net = config["model"]
     dataset.drop_date = True
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
@@ -123,10 +132,12 @@ def run(config: dict):
     preprocessor.fit(x.iloc[splits["train"]])
     x = preprocessor.transform(x)
 
-    # net = Net(preprocessor, x.shape[1])
-    net = Linear(preprocessor, x.shape[1])
-    train(net, x[splits["train"]], y[splits["train"]], 10, 32)
-    path = "./tests/resources/pytorch_models/" + config["dataset"] + "Linear_torch.pth"
+    if my_net == "Net":
+        net = Net(preprocessor, x.shape[1])
+    elif my_net == "Linear":
+        net = Linear(preprocessor, x.shape[1])
+    train(net, x[splits["train"]], y[splits["train"]], 10, 32, config)
+    path = "./tests/resources/pytorch_models/" + config["dataset"] + "_" + config["model"] + "_torch.pt"
     torch.save(net.state_dict(), path)
     y_scores = predict(net, x[splits["test"]], y[splits["test"]])
     print(compute_binary_metrics(y[splits["test"]], y_scores))

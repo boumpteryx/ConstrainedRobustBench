@@ -5,6 +5,8 @@ import sys
 import numpy as np
 
 from autoattack.utils_tf2 import ModelAdapter
+
+# from autoattack.utils_tf2 import ModelAdapter
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
@@ -19,7 +21,9 @@ from utils.models import init_model
 sys.path.insert(0,'..')
 
 from resnet import *
+
 import configargparse
+import yaml
 
 if __name__ == '__main__':
     # parser = argparse.ArgumentParser()
@@ -37,7 +41,8 @@ if __name__ == '__main__':
     parser.add_argument('--version', type=str, default='custom')
     parser.add_argument('--model_name', type=str, default='Net',help="Use '#' to use multiple models in an ensemble")
     parser.add_argument('--use_constraints', type=int, default=1)
-    parser.add_argument('--all_models', type=int, default=1)
+    parser.add_argument('--all_models', type=int, default=0)
+    parser.add_argument('--transfer_from', type=str, default=None)
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     # parser.add('--model_name', required=True, help="Name of the model that should be trained")
@@ -135,15 +140,17 @@ if __name__ == '__main__':
             constraints.relation_constraints = [(a), (b)]
             #constraints = AndConstraint(operands =[(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))]) #Constraints([],[],[],[], [(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))], []) # AndConstraint(operands =[(Constant(0) <= Constant(1))]) #
         # constraints = None
-        adversary = AutoAttack(model=model, constraints=constraints, norm=args.norm, eps=args.epsilon,
+        adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
-                               version=args.version, is_tf_model=True,
+                               version=args.version,
                                fun_distance_preprocess=lambda x: preprocessor.transform(x))
 
         # l = [x for (x, y) in test_loader]
         # x_test = torch.cat(l, 0)
         # l = [y for (x, y) in test_loader]
         # y_test = torch.cat(l, 0)
+        if args.version == 'transfer':
+            adversary.attacks_to_run = ['transfer']
 
         # example of custom version
         if args.version == 'custom':
@@ -151,8 +158,7 @@ if __name__ == '__main__':
             if args.use_constraints:
                 adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             elif not args.use_constraints:
-                adversary.attacks_to_run = ['apgd-ce', 'fab','moeva2']
-                # 'apgd-t-ce-constrained', 'fab-constrained',
+                adversary.attacks_to_run = ['apgd-ce', 'fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
                 constraints = [Constant(0) <= Constant(1)]
             adversary.apgd.n_restarts = 2
             adversary.fab.n_restarts = 2
@@ -170,7 +176,7 @@ if __name__ == '__main__':
                                                                  return_labels=True,
                                                                  x_unscaled=x_unpreprocessed[:args.n_ex])
 
-                torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_{}.pth'.format(
+                torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_constraints_{}.pth'.format(
                     args.save_dir, 'aa', args.version, args.dataset, args.norm, adv_complete.shape[0],
                     args.epsilon, args.model_name, args.use_constraints))
                 torch.save({'y_adv_complete': y_adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_{}_y.pth'.format(

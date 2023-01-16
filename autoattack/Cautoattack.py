@@ -4,6 +4,7 @@ import time
 import numpy as np
 import torch
 from constrained_attacks.objective_calculator.cache_objective_calculator import ObjectiveCalculator
+from tqdm import tqdm
 
 from autoattack.other_utils import Logger
 from autoattack import checks
@@ -12,12 +13,17 @@ from constraints.constraints_checker import ConstraintChecker
 
 
 class AutoAttack():
-    def __init__(self, model, constraints=None, norm='Linf', eps=.3, seed=None, verbose=True,
+    def __init__(self, model, arguments, constraints=None, norm='Linf', eps=.3, seed=None, verbose=True,
                  attacks_to_run=[], version='standard', is_tf_model=False,
                  device='cpu', log_path=None, fun_distance_preprocess=None):
         self.model = model
+        self.n_ex = arguments.n_ex
+        self.use_constraints = arguments.use_constraints
+        self.dataset = arguments.dataset
         self.constraints = constraints
         self.norm = norm
+        self.save_dir = arguments.save_dir
+        self.transfer_from = arguments.transfer_from
         assert norm in ['Linf', 'L2', 'L1']
         self.epsilon = eps
         self.seed = seed
@@ -34,13 +40,13 @@ class AutoAttack():
 
         if not self.is_tf_model:
             from .autopgd_base import APGDAttack
-            self.apgd = APGDAttack(self.model, constraints=self.constraints, n_restarts=5, n_iter=100, verbose=self.verbose,
+            self.apgd = APGDAttack(self.model, constraints=self.constraints, n_restarts=5, n_iter=100, verbose=False,#self.verbose,
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed,
                 device=self.device, logger=self.logger)
 
             from .fab_pt import FABAttack_PT
             self.fab = FABAttack_PT(self.model, self.constraints, n_restarts=5, n_iter=100, eps=self.epsilon, seed=self.seed,
-                norm=self.norm, verbose=self.verbose, device=self.device)
+                norm=self.norm, verbose=False, device=self.device)
 
             from .square import SquareAttack
             self.square = SquareAttack(self.model, p_init=.8, n_queries=5000, eps=self.epsilon, norm=self.norm,
@@ -114,7 +120,7 @@ class AutoAttack():
             n_batches = int(np.ceil(x_orig.shape[0] / bs))
             robust_flags = torch.zeros(x_orig.shape[0], dtype=torch.bool, device=x_orig.device)
             y_adv = torch.empty_like(y_orig)
-            for batch_idx in range(n_batches):
+            for batch_idx in tqdm(range(n_batches)):
                 start_idx = batch_idx * bs
                 end_idx = min( (batch_idx + 1) * bs, x_orig.shape[0])
 
@@ -250,9 +256,8 @@ class AutoAttack():
                     elif attack == 'moeva2':
                         self.moeva2.is_targeted = False
                         adv_curr = self.moeva2.generate(np.array(x_unscaled_usable.numpy()),np.array(y.numpy()),x.shape[0])
-                        # adv_curr = self.moeva2.generate(np.array(x.numpy()),np.array(y.numpy()),x.shape[0])
                         threshold = {"misclassification":np.array([np.inf, np.inf]),"distance":self.epsilon, "constraints": 0.01}
-                        calcul = ObjectiveCalculator(self.model,constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_distance_preprocess)
+                        calcul = ObjectiveCalculator(Classifier(self.model),constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_distance_preprocess)
                         adv_curr = calcul.get_successful_attacks(
                             np.array(x_unscaled_usable.numpy()),
                             np.array(y.numpy()),
@@ -281,7 +286,7 @@ class AutoAttack():
                         adv_curr = self.moeva2.generate(np.array(x_unscaled.numpy()),np.array(y.numpy()),x.shape[0])
                         threshold = {"misclassification": np.array([np.inf, np.inf]), "distance": self.epsilon,
                                      "constraints": 0.01}
-                        calcul = ObjectiveCalculator(self.model, constraints=self.constraints, thresholds=threshold,
+                        calcul = ObjectiveCalculator(Classifier(self.model), constraints=self.constraints, thresholds=threshold,
                                                      norm=2, fun_distance_preprocess=self.fun_distance_preprocess)
                         adv_curr = calcul.get_successful_attacks(
                             np.array(x_unscaled_usable.numpy()),
@@ -303,6 +308,15 @@ class AutoAttack():
                                 counter += 1
                                 adv_curr[i] = x[i]
                         print("number of outputs not respecting constraints = ", counter)
+
+                    elif attack == "transfer":
+                        if self.transfer_from is not None:
+                            adv_curr = torch.load('{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_constraints_{}.pth'.format(
+                                self.save_dir, 'aa', "custom", self.dataset, self.norm, self.n_ex,
+                                self.epsilon, self.transfer_from, self.use_constraints))["adv_complete"][start_idx:end_idx]
+                            print(adv_curr.shape)
+                        else:
+                            print("missing specification of model to transfer from")
 
                     else:
                         raise ValueError('Attack not supported')
@@ -327,10 +341,10 @@ class AutoAttack():
                     x_adv[non_robust_lin_idcs] = adv_curr[false_batch].detach().to(x_adv.device)
                     y_adv[non_robust_lin_idcs] = output[false_batch].detach().to(x_adv.device)
 
-                    if self.verbose:
-                        num_non_robust_batch = torch.sum(false_batch)
-                        self.logger.log('{} - {}/{} - {} out of {} successfully perturbed'.format(
-                            attack, batch_idx + 1, n_batches, num_non_robust_batch, x.shape[0]))
+                if self.verbose:
+                    num_non_robust_batch = torch.sum(false_batch)
+                    self.logger.log('{} - {}/{} - {} out of {} successfully perturbed'.format(
+                        attack, batch_idx + 1, n_batches, num_non_robust_batch, x.shape[0]))
 
                 robust_accuracy = torch.sum(robust_flags).item() / x_orig.shape[0]
                 robust_AUC = roc_auc_score(y_orig, y_adv)

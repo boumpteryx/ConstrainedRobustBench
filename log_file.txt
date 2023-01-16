@@ -2877,3 +2877,741 @@ initial MCC: 90.78%
 initial accuracy: 94.80%
 initial AUC: 94.76%
 initial MCC: 89.58%
+initial accuracy: 97.50%
+initial AUC: 97.47%
+initial MCC: 94.99%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 88.10%
+initial AUC: 88.26%
+initial MCC: 76.50%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 79.40%
+initial AUC: 80.04%
+initial MCC: 61.98%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+initial accuracy: 82.90%
+initial AUC: 83.39%
+initial MCC: 67.88%
+apgd-ce-constrained - 1/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 2/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 3/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 4/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 5/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 6/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 7/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 8/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 9/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 10/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 11/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 12/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 13/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 14/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 15/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 16/17 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 17/17 - 0 out of 29 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 82.90% (total time 5.8 s)
+robust AUC after APGD-CE-CONSTRAINED: 83.39% (total time 5.8 s)
+robust MCC after APGD-CE-CONSTRAINED: 67.88% (total time 5.8 s)
+fab-constrained - 1/17 - 0 out of 50 successfully perturbed
+fab-constrained - 2/17 - 0 out of 50 successfully perturbed
+fab-constrained - 3/17 - 0 out of 50 successfully perturbed
+fab-constrained - 4/17 - 0 out of 50 successfully perturbed
+fab-constrained - 5/17 - 0 out of 50 successfully perturbed
+fab-constrained - 6/17 - 1 out of 50 successfully perturbed
+fab-constrained - 7/17 - 1 out of 50 successfully perturbed
+fab-constrained - 8/17 - 0 out of 50 successfully perturbed
+fab-constrained - 9/17 - 0 out of 50 successfully perturbed
+fab-constrained - 10/17 - 0 out of 50 successfully perturbed
+fab-constrained - 11/17 - 0 out of 50 successfully perturbed
+fab-constrained - 12/17 - 0 out of 50 successfully perturbed
+fab-constrained - 13/17 - 0 out of 50 successfully perturbed
+fab-constrained - 14/17 - 0 out of 50 successfully perturbed
+fab-constrained - 15/17 - 0 out of 50 successfully perturbed
+fab-constrained - 16/17 - 0 out of 50 successfully perturbed
+fab-constrained - 17/17 - 0 out of 29 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 82.70% (total time 19.3 s)
+robust AUC after FAB-CONSTRAINED: 83.18% (total time 19.3 s)
+robust MCC after FAB-CONSTRAINED: 67.40% (total time 19.3 s)
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce-constrained - 1/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 2/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 3/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 4/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 5/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 6/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 7/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 8/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 9/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 10/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 11/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 12/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 13/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 14/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 15/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 16/16 - 0 out of 28 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 77.80% (total time 25.2 s)
+robust AUC after APGD-CE-CONSTRAINED: 78.64% (total time 25.2 s)
+robust MCC after APGD-CE-CONSTRAINED: 60.79% (total time 25.2 s)
+fab-constrained - 1/16 - 0 out of 50 successfully perturbed
+fab-constrained - 2/16 - 0 out of 50 successfully perturbed
+fab-constrained - 3/16 - 0 out of 50 successfully perturbed
+fab-constrained - 4/16 - 0 out of 50 successfully perturbed
+fab-constrained - 5/16 - 0 out of 50 successfully perturbed
+fab-constrained - 6/16 - 0 out of 50 successfully perturbed
+fab-constrained - 7/16 - 1 out of 50 successfully perturbed
+fab-constrained - 8/16 - 0 out of 50 successfully perturbed
+fab-constrained - 9/16 - 0 out of 50 successfully perturbed
+fab-constrained - 10/16 - 0 out of 50 successfully perturbed
+fab-constrained - 11/16 - 0 out of 50 successfully perturbed
+fab-constrained - 12/16 - 0 out of 50 successfully perturbed
+fab-constrained - 13/16 - 1 out of 50 successfully perturbed
+fab-constrained - 14/16 - 0 out of 50 successfully perturbed
+fab-constrained - 15/16 - 0 out of 50 successfully perturbed
+fab-constrained - 16/16 - 0 out of 28 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 77.60% (total time 53.8 s)
+robust AUC after FAB-CONSTRAINED: 78.44% (total time 53.8 s)
+robust MCC after FAB-CONSTRAINED: 60.37% (total time 53.8 s)
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce-constrained - 1/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 2/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 3/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 4/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 5/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 6/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 7/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 8/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 9/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 10/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 11/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 12/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 13/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 14/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 15/16 - 0 out of 50 successfully perturbed
+apgd-ce-constrained - 16/16 - 0 out of 28 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 77.80% (total time 4.6 s)
+robust AUC after APGD-CE-CONSTRAINED: 78.64% (total time 4.6 s)
+robust MCC after APGD-CE-CONSTRAINED: 60.79% (total time 4.6 s)
+fab-constrained - 1/16 - 0 out of 50 successfully perturbed
+fab-constrained - 2/16 - 0 out of 50 successfully perturbed
+fab-constrained - 3/16 - 0 out of 50 successfully perturbed
+fab-constrained - 4/16 - 0 out of 50 successfully perturbed
+fab-constrained - 5/16 - 0 out of 50 successfully perturbed
+fab-constrained - 6/16 - 0 out of 50 successfully perturbed
+fab-constrained - 7/16 - 1 out of 50 successfully perturbed
+fab-constrained - 8/16 - 0 out of 50 successfully perturbed
+fab-constrained - 9/16 - 0 out of 50 successfully perturbed
+fab-constrained - 10/16 - 1 out of 50 successfully perturbed
+fab-constrained - 11/16 - 0 out of 50 successfully perturbed
+fab-constrained - 12/16 - 0 out of 50 successfully perturbed
+fab-constrained - 13/16 - 1 out of 50 successfully perturbed
+fab-constrained - 14/16 - 0 out of 50 successfully perturbed
+fab-constrained - 15/16 - 0 out of 50 successfully perturbed
+fab-constrained - 16/16 - 0 out of 28 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 77.50% (total time 21.7 s)
+robust AUC after FAB-CONSTRAINED: 78.34% (total time 21.7 s)
+robust MCC after FAB-CONSTRAINED: 60.21% (total time 21.7 s)
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce - 1/16 - 50 out of 50 successfully perturbed
+apgd-ce - 2/16 - 45 out of 50 successfully perturbed
+apgd-ce - 3/16 - 45 out of 50 successfully perturbed
+apgd-ce - 4/16 - 47 out of 50 successfully perturbed
+apgd-ce - 5/16 - 48 out of 50 successfully perturbed
+apgd-ce - 6/16 - 48 out of 50 successfully perturbed
+apgd-ce - 7/16 - 49 out of 50 successfully perturbed
+apgd-ce - 8/16 - 47 out of 50 successfully perturbed
+apgd-ce - 9/16 - 49 out of 50 successfully perturbed
+apgd-ce - 10/16 - 48 out of 50 successfully perturbed
+apgd-ce - 11/16 - 48 out of 50 successfully perturbed
+apgd-ce - 12/16 - 48 out of 50 successfully perturbed
+apgd-ce - 13/16 - 49 out of 50 successfully perturbed
+apgd-ce - 14/16 - 48 out of 50 successfully perturbed
+apgd-ce - 15/16 - 48 out of 50 successfully perturbed
+apgd-ce - 16/16 - 25 out of 28 successfully perturbed
+robust accuracy after APGD-CE: 3.60% (total time 7.0 s)
+robust AUC after APGD-CE: 3.44% (total time 7.0 s)
+robust MCC after APGD-CE: -93.05% (total time 7.0 s)
+fab - 1/1 - 32 out of 36 successfully perturbed
+robust accuracy after FAB: 0.40% (total time 8.0 s)
+robust AUC after FAB: 0.38% (total time 8.0 s)
+robust MCC after FAB: -99.20% (total time 8.0 s)
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce - 16/16 - 22 out of 28 successfully perturbed
+robust accuracy after APGD-CE: 3.40% (total time 4.3 s)
+robust AUC after APGD-CE: 3.25% (total time 4.3 s)
+robust MCC after APGD-CE: -93.42% (total time 4.3 s)
+fab - 1/1 - 27 out of 34 successfully perturbed
+robust accuracy after FAB: 0.70% (total time 4.9 s)
+robust AUC after FAB: 0.67% (total time 4.9 s)
+robust MCC after FAB: -98.61% (total time 4.9 s)
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce - 16/16 - 23 out of 28 successfully perturbed
+robust accuracy after APGD-CE: 4.00% (total time 4.6 s)
+robust AUC after APGD-CE: 3.82% (total time 4.6 s)
+robust MCC after APGD-CE: -92.31% (total time 4.6 s)
+fab - 1/1 - 31 out of 40 successfully perturbed
+robust accuracy after FAB: 0.90% (total time 5.5 s)
+robust AUC after FAB: 0.86% (total time 5.5 s)
+robust MCC after FAB: -98.21% (total time 5.5 s)
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce - 16/16 - 28 out of 28 successfully perturbed
+robust accuracy after APGD-CE: 4.90% (total time 17.0 s)
+robust AUC after APGD-CE: 4.68% (total time 17.0 s)
+robust MCC after APGD-CE: -90.66% (total time 17.0 s)
+fab - 1/1 - 41 out of 49 successfully perturbed
+robust accuracy after FAB: 0.80% (total time 19.0 s)
+robust AUC after FAB: 0.76% (total time 19.0 s)
+robust MCC after FAB: -98.41% (total time 19.0 s)
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce - 16/16 - 27 out of 28 successfully perturbed
+robust accuracy after APGD-CE: 5.00% (total time 1118.2 s)
+robust AUC after APGD-CE: 4.78% (total time 1118.2 s)
+robust MCC after APGD-CE: -90.48% (total time 1118.2 s)
+fab - 1/1 - 42 out of 50 successfully perturbed
+robust accuracy after FAB: 0.80% (total time 1120.7 s)
+robust AUC after FAB: 0.76% (total time 1120.7 s)
+robust MCC after FAB: -98.41% (total time 1120.7 s)
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce - 16/16 - 26 out of 28 successfully perturbed
+robust accuracy after APGD-CE: 4.50% (total time 18.0 s)
+robust AUC after APGD-CE: 4.30% (total time 18.0 s)
+robust MCC after APGD-CE: -91.39% (total time 18.0 s)
+fab - 1/1 - 37 out of 45 successfully perturbed
+robust accuracy after FAB: 0.80% (total time 19.9 s)
+robust AUC after FAB: 0.76% (total time 19.9 s)
+robust MCC after FAB: -98.41% (total time 19.9 s)
+moeva2 - 1/1 - 2 out of 8 successfully perturbed
+robust accuracy after MOEVA2: 0.60% (total time 96.7 s)
+robust AUC after MOEVA2: 0.57% (total time 96.7 s)
+robust MCC after MOEVA2: -98.81% (total time 96.7 s)
+max L2 perturbation: 22252.15430, nan in tensor: 0, max: 22211.00000, min: -1.94214
+robust accuracy: 0.60%
+robust AUC: 0.57%
+robust MCC: -98.81%
+initial accuracy: 42.90%
+initial AUC: 66.09%
+initial MCC: 17.85%
+apgd-ce - 9/9 - 24 out of 29 successfully perturbed
+robust accuracy after APGD-CE: 7.20% (total time 2.5 s)
+robust AUC after APGD-CE: 46.75% (total time 2.5 s)
+robust MCC after APGD-CE: -24.54% (total time 2.5 s)
+fab - 2/2 - 0 out of 22 successfully perturbed
+robust accuracy after FAB: 6.80% (total time 3.9 s)
+robust AUC after FAB: 44.16% (total time 3.9 s)
+robust MCC after FAB: -32.99% (total time 3.9 s)
+initial accuracy: 79.70%
+initial AUC: 80.36%
+initial MCC: 62.82%
+apgd-ce - 16/16 - 32 out of 47 successfully perturbed
+robust accuracy after APGD-CE: 36.70% (total time 3.4 s)
+robust AUC after APGD-CE: 38.47% (total time 3.4 s)
+robust MCC after APGD-CE: -36.81% (total time 3.5 s)
+fab - 8/8 - 1 out of 17 successfully perturbed
+robust accuracy after FAB: 33.00% (total time 8.1 s)
+robust AUC after FAB: 34.59% (total time 8.1 s)
+robust MCC after FAB: -43.47% (total time 8.1 s)
+moeva2 - 7/7 - 30 out of 30 successfully perturbed
+robust accuracy after MOEVA2: 1.70% (total time 1001.9 s)
+robust AUC after MOEVA2: 1.78% (total time 1001.9 s)
+robust MCC after MOEVA2: -96.64% (total time 1001.9 s)
+max L2 perturbation: 8998651.00000, nan in tensor: 0, max: 8998652.00000, min: -11.00000
+robust accuracy: 1.70%
+robust AUC: 1.78%
+robust MCC: -96.64%
+initial accuracy: 99.30%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce - 20/20 - 0 out of 43 successfully perturbed
+robust accuracy after APGD-CE: 99.30% (total time 13.9 s)
+robust AUC after APGD-CE: 50.00% (total time 13.9 s)
+robust MCC after APGD-CE: 0.00% (total time 13.9 s)
+fab - 20/20 - 27 out of 43 successfully perturbed
+robust accuracy after FAB: 43.20% (total time 88.7 s)
+robust AUC after FAB: 21.75% (total time 88.7 s)
+robust MCC after FAB: -9.49% (total time 88.7 s)
+moeva2 - 9/9 - 29 out of 32 successfully perturbed
+robust accuracy after MOEVA2: 7.50% (total time 62110.2 s)
+robust AUC after MOEVA2: 3.78% (total time 62110.2 s)
+robust MCC after MOEVA2: -28.09% (total time 62110.2 s)
+max L2 perturbation: 390787648.00000, nan in tensor: 0, max: 390785056.00000, min: -0.58657
+robust accuracy: 7.50%
+robust AUC: 3.78%
+robust MCC: -28.09%
+initial accuracy: 62.20%
+initial AUC: 63.94%
+initial MCC: 38.07%
+apgd-ce - 13/13 - 15 out of 22 successfully perturbed
+robust accuracy after APGD-CE: 15.30% (total time 107.6 s)
+robust AUC after APGD-CE: 14.57% (total time 107.6 s)
+robust MCC after APGD-CE: -73.21% (total time 107.6 s)
+fab - 4/4 - 3 out of 3 successfully perturbed
+robust accuracy after FAB: 0.60% (total time 199.8 s)
+robust AUC after FAB: 0.57% (total time 199.8 s)
+robust MCC after FAB: -98.80% (total time 199.8 s)
+moeva2 - 1/1 - 6 out of 6 successfully perturbed
+robust accuracy after MOEVA2: 0.00% (total time 967.9 s)
+robust AUC after MOEVA2: 0.00% (total time 967.9 s)
+robust MCC after MOEVA2: -100.00% (total time 967.9 s)
+max L2 perturbation: 5844792320.00000, nan in tensor: 0, max: 4132891136.00000, min: -20.15290
+robust accuracy: 0.00%
+robust AUC: 0.00%
+robust MCC: -100.00%
+initial accuracy: 81.60%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce - 17/17 - 0 out of 16 successfully perturbed
+robust accuracy after APGD-CE: 81.60% (total time 4.5 s)
+robust AUC after APGD-CE: 50.00% (total time 4.5 s)
+robust MCC after APGD-CE: 0.00% (total time 4.5 s)
+fab - 17/17 - 0 out of 16 successfully perturbed
+robust accuracy after FAB: 81.60% (total time 13.4 s)
+robust AUC after FAB: 50.00% (total time 13.4 s)
+robust MCC after FAB: 0.00% (total time 13.4 s)
+initial accuracy: 99.30%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce - 20/20 - 0 out of 43 successfully perturbed
+robust accuracy after APGD-CE: 99.30% (total time 12.3 s)
+robust AUC after APGD-CE: 50.00% (total time 12.3 s)
+robust MCC after APGD-CE: 0.00% (total time 12.3 s)
+fab - 20/20 - 25 out of 43 successfully perturbed
+robust accuracy after FAB: 42.60% (total time 61.0 s)
+robust AUC after FAB: 21.45% (total time 61.0 s)
+robust MCC after FAB: -9.61% (total time 61.0 s)
+initial accuracy: 99.30%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce - 20/20 - 0 out of 43 successfully perturbed
+robust accuracy after APGD-CE: 99.30% (total time 7.8 s)
+robust AUC after APGD-CE: 50.00% (total time 7.8 s)
+robust MCC after APGD-CE: 0.00% (total time 7.8 s)
+fab - 20/20 - 28 out of 43 successfully perturbed
+robust accuracy after FAB: 43.80% (total time 40.4 s)
+robust AUC after FAB: 22.05% (total time 40.4 s)
+robust MCC after FAB: -9.38% (total time 40.4 s)
+moeva2 - 9/9 - 33 out of 38 successfully perturbed
+robust accuracy after MOEVA2: 7.60% (total time 2566.8 s)
+robust AUC after MOEVA2: 3.83% (total time 2566.8 s)
+robust MCC after MOEVA2: -27.91% (total time 2566.8 s)
+max L2 perturbation: 601629568.00000, nan in tensor: 0, max: 584757248.00000, min: -0.58657
+robust accuracy: 7.60%
+robust AUC: 3.83%
+robust MCC: -27.91%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+apgd-ce - 16/16 - 25 out of 28 successfully perturbed
+robust accuracy after APGD-CE: 4.40% (total time 9.0 s)
+robust AUC after APGD-CE: 4.21% (total time 9.0 s)
+robust MCC after APGD-CE: -91.57% (total time 9.0 s)
+fab - 1/1 - 31 out of 44 successfully perturbed
+robust accuracy after FAB: 1.30% (total time 10.0 s)
+robust AUC after FAB: 1.24% (total time 10.0 s)
+robust MCC after FAB: -97.43% (total time 10.0 s)
+moeva2 - 1/1 - 5 out of 13 successfully perturbed
+robust accuracy after MOEVA2: 0.80% (total time 78.9 s)
+robust AUC after MOEVA2: 0.76% (total time 78.9 s)
+robust MCC after MOEVA2: -98.41% (total time 78.9 s)
+max L2 perturbation: 22252.10547, nan in tensor: 0, max: 22211.00000, min: -1.94214
+robust accuracy: 0.80%
+robust AUC: 0.76%
+robust MCC: -98.41%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+initial accuracy: 77.80%
+initial AUC: 78.64%
+initial MCC: 60.79%
+transfer - 16/16 - 13 out of 28 successfully perturbed
+robust accuracy after TRANSFER: 37.20% (total time 0.0 s)
+robust AUC after TRANSFER: 37.70% (total time 0.0 s)
+robust MCC after TRANSFER: -25.24% (total time 0.0 s)
+max L2 perturbation: 22252.12891, nan in tensor: 0, max: 22211.00000, min: -1.94214
+robust accuracy: 37.20%
+robust AUC: 37.70%
+robust MCC: -25.24%
+initial accuracy: 96.90%
+initial AUC: 96.87%
+initial MCC: 93.79%
+initial accuracy: 96.90%
+initial AUC: 96.87%
+initial MCC: 93.79%
+initial accuracy: 96.90%
+initial AUC: 96.87%
+initial MCC: 93.79%
+initial accuracy: 96.90%
+initial AUC: 96.87%
+initial MCC: 93.79%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+apgd-ce - 1/1 - 5 out of 10 successfully perturbed
+robust accuracy after APGD-CE: 50.00% (total time 157.9 s)
+robust AUC after APGD-CE: 50.00% (total time 157.9 s)
+robust MCC after APGD-CE: 0.00% (total time 157.9 s)
+fab - 1/1 - 4 out of 5 successfully perturbed
+robust accuracy after FAB: 10.00% (total time 267.4 s)
+robust AUC after FAB: 10.00% (total time 267.4 s)
+robust MCC after FAB: -81.65% (total time 267.4 s)
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+apgd-ce - 1/1 - 5 out of 10 successfully perturbed
+robust accuracy after APGD-CE: 50.00% (total time 100.9 s)
+robust AUC after APGD-CE: 50.00% (total time 100.9 s)
+robust MCC after APGD-CE: 0.00% (total time 100.9 s)
+fab - 1/1 - 4 out of 5 successfully perturbed
+robust accuracy after FAB: 10.00% (total time 183.6 s)
+robust AUC after FAB: 10.00% (total time 183.6 s)
+robust MCC after FAB: -81.65% (total time 183.6 s)
+initial accuracy: 100.00%
+initial AUC: 100.00%
+initial MCC: 100.00%
+apgd-ce - 1/1 - 5 out of 10 successfully perturbed
+robust accuracy after APGD-CE: 50.00% (total time 76.5 s)
+robust AUC after APGD-CE: 50.00% (total time 76.5 s)
+robust MCC after APGD-CE: 0.00% (total time 76.5 s)
+fab - 1/1 - 4 out of 5 successfully perturbed
+robust accuracy after FAB: 10.00% (total time 211.2 s)
+robust AUC after FAB: 10.00% (total time 211.2 s)
+robust MCC after FAB: -81.65% (total time 211.2 s)
+initial accuracy: 50.00%
+initial AUC: 27.78%
+initial MCC: -27.22%
+apgd-ce - 1/1 - 5 out of 5 successfully perturbed
+robust accuracy after APGD-CE: 0.00% (total time 0.2 s)
+robust AUC after APGD-CE: 0.00% (total time 0.2 s)
+robust MCC after APGD-CE: -100.00% (total time 0.2 s)
+max L2 perturbation: 12.44199, nan in tensor: 0, max: 5.88784, min: -4.47032
+robust accuracy: 0.00%
+robust AUC: 0.00%
+robust MCC: -100.00%
+initial accuracy: 20.00%
+initial AUC: 55.56%
+initial MCC: 11.11%
+initial accuracy: 70.00%
+initial AUC: 70.00%
+initial MCC: 40.82%
+apgd-ce - 1/1 - 3 out of 7 successfully perturbed
+robust accuracy after APGD-CE: 40.00% (total time 0.2 s)
+robust AUC after APGD-CE: 40.00% (total time 0.2 s)
+robust MCC after APGD-CE: -33.33% (total time 0.2 s)
+fab - 1/1 - 0 out of 4 successfully perturbed
+robust accuracy after FAB: 40.00% (total time 0.6 s)
+robust AUC after FAB: 40.00% (total time 0.6 s)
+robust MCC after FAB: -33.33% (total time 0.6 s)
+initial accuracy: 20.00%
+initial AUC: 55.56%
+initial MCC: 11.11%
+initial accuracy: 20.00%
+initial AUC: 55.56%
+initial MCC: 11.11%
+initial accuracy: 50.00%
+initial AUC: 27.78%
+initial MCC: -27.22%
+apgd-ce - 1/1 - 5 out of 5 successfully perturbed
+robust accuracy after APGD-CE: 0.00% (total time 0.1 s)
+robust AUC after APGD-CE: 0.00% (total time 0.1 s)
+robust MCC after APGD-CE: -100.00% (total time 0.1 s)
+max L2 perturbation: 12.33495, nan in tensor: 0, max: 5.88784, min: -4.47032
+robust accuracy: 0.00%
+robust AUC: 0.00%
+robust MCC: -100.00%
+initial accuracy: 20.00%
+initial AUC: 55.56%
+initial MCC: 11.11%
+initial accuracy: 20.00%
+initial AUC: 55.56%
+initial MCC: 11.11%
+initial accuracy: 20.00%
+initial AUC: 55.56%
+initial MCC: 11.11%
+initial accuracy: 20.00%
+initial AUC: 55.56%
+initial MCC: 11.11%
+initial accuracy: 70.00%
+initial AUC: 70.00%
+initial MCC: 40.82%
+apgd-ce-constrained - 1/1 - 0 out of 7 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 70.00% (total time 40.4 s)
+robust AUC after APGD-CE-CONSTRAINED: 70.00% (total time 40.4 s)
+robust MCC after APGD-CE-CONSTRAINED: 40.82% (total time 40.4 s)
+fab-constrained - 1/1 - 0 out of 7 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 70.00% (total time 40.9 s)
+robust AUC after FAB-CONSTRAINED: 70.00% (total time 40.9 s)
+robust MCC after FAB-CONSTRAINED: 40.82% (total time 40.9 s)
+initial accuracy: 70.00%
+initial AUC: 70.00%
+initial MCC: 40.82%
+apgd-ce-constrained - 1/1 - 0 out of 7 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 70.00% (total time 0.2 s)
+robust AUC after APGD-CE-CONSTRAINED: 70.00% (total time 0.2 s)
+robust MCC after APGD-CE-CONSTRAINED: 40.82% (total time 0.2 s)
+fab-constrained - 1/1 - 0 out of 7 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 70.00% (total time 0.6 s)
+robust AUC after FAB-CONSTRAINED: 70.00% (total time 0.6 s)
+robust MCC after FAB-CONSTRAINED: 40.82% (total time 0.6 s)
+initial accuracy: 70.00%
+initial AUC: 70.00%
+initial MCC: 40.82%
+initial accuracy: 20.00%
+initial AUC: 55.56%
+initial MCC: 11.11%
+initial accuracy: 8.80%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 8.80% (total time 14.9 s)
+robust AUC after APGD-CE-CONSTRAINED: 50.00% (total time 14.9 s)
+robust MCC after APGD-CE-CONSTRAINED: 0.00% (total time 14.9 s)
+fab-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 8.80% (total time 16.1 s)
+robust AUC after FAB-CONSTRAINED: 50.00% (total time 16.1 s)
+robust MCC after FAB-CONSTRAINED: 0.00% (total time 16.1 s)
+initial accuracy: 8.80%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 8.80% (total time 4.5 s)
+robust AUC after APGD-CE-CONSTRAINED: 50.00% (total time 4.5 s)
+robust MCC after APGD-CE-CONSTRAINED: 0.00% (total time 4.5 s)
+fab-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 8.80% (total time 5.7 s)
+robust AUC after FAB-CONSTRAINED: 50.00% (total time 5.8 s)
+robust MCC after FAB-CONSTRAINED: 0.00% (total time 5.8 s)
+initial accuracy: 8.80%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 8.80% (total time 0.4 s)
+robust AUC after APGD-CE-CONSTRAINED: 50.00% (total time 0.4 s)
+robust MCC after APGD-CE-CONSTRAINED: 0.00% (total time 0.4 s)
+fab-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 8.80% (total time 1.5 s)
+robust AUC after FAB-CONSTRAINED: 50.00% (total time 1.5 s)
+robust MCC after FAB-CONSTRAINED: 0.00% (total time 1.5 s)
+initial accuracy: 8.80%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 8.80% (total time 0.5 s)
+robust AUC after APGD-CE-CONSTRAINED: 50.00% (total time 0.5 s)
+robust MCC after APGD-CE-CONSTRAINED: 0.00% (total time 0.5 s)
+fab-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 8.80% (total time 1.7 s)
+robust AUC after FAB-CONSTRAINED: 50.00% (total time 1.7 s)
+robust MCC after FAB-CONSTRAINED: 0.00% (total time 1.7 s)
+initial accuracy: 8.80%
+initial AUC: 50.00%
+initial MCC: 0.00%
+apgd-ce-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 8.80% (total time 0.4 s)
+robust AUC after APGD-CE-CONSTRAINED: 50.00% (total time 0.4 s)
+robust MCC after APGD-CE-CONSTRAINED: 0.00% (total time 0.4 s)
+fab-constrained - 2/2 - 0 out of 38 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 8.80% (total time 1.5 s)
+robust AUC after FAB-CONSTRAINED: 50.00% (total time 1.5 s)
+robust MCC after FAB-CONSTRAINED: 0.00% (total time 1.5 s)
+initial accuracy: 52.10%
+initial AUC: 49.81%
+initial MCC: -4.28%
+apgd-ce-constrained - 11/11 - 0 out of 21 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 52.10% (total time 8.5 s)
+robust AUC after APGD-CE-CONSTRAINED: 49.81% (total time 8.5 s)
+robust MCC after APGD-CE-CONSTRAINED: -4.28% (total time 8.5 s)
+fab-constrained - 11/11 - 0 out of 21 successfully perturbed
+robust accuracy after FAB-CONSTRAINED: 52.10% (total time 41.3 s)
+robust AUC after FAB-CONSTRAINED: 49.81% (total time 41.3 s)
+robust MCC after FAB-CONSTRAINED: -4.28% (total time 41.3 s)
