@@ -132,7 +132,8 @@ def run(config: dict):
     # splits = dataset.get_splits()
     kf = StratifiedKFold(n_splits=3, shuffle=True, random_state=221)
     splits = {}
-    splits["train"], splits["test"] = kf.splits(x, y)
+    for i, (train_index, test_index) in enumerate(kf.split(x, y)):
+        splits["train"], splits["test"] = train_index, test_index
     preprocessor.fit(x.iloc[splits["train"]])
     x = preprocessor.transform(x)
 
