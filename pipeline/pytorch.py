@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from constrained_attacks.datasets import load_dataset
+from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import (
     classification_report,
@@ -128,7 +129,10 @@ def run(config: dict):
     dataset.drop_date = True
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
-    splits = dataset.get_splits()
+    # splits = dataset.get_splits()
+    kf = StratifiedKFold(n_splits=3, shuffle=True, random_state=221)
+    splits = {}
+    splits["train"], splits["test"] = kf.splits(x, y)
     preprocessor.fit(x.iloc[splits["train"]])
     x = preprocessor.transform(x)
 

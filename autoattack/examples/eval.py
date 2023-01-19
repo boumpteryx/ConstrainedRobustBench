@@ -9,7 +9,7 @@ from autoattack.utils_tf2 import ModelAdapter
 # from autoattack.utils_tf2 import ModelAdapter
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
 
 # from autoattack.other_utils import add_normalization_layer
 sys.path.insert(0,'.')
@@ -98,7 +98,10 @@ if __name__ == '__main__':
     dataset = datasets.load_dataset(args.dataset)
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
-    splits = dataset.get_splits()
+    # splits = dataset.get_splits()
+    kf = StratifiedKFold(n_splits=args.num_splits, shuffle=args.shuffle, random_state=args.seed)
+    splits = {}
+    splits["train"], splits["test"] = kf.splits(x,y)
     preprocessor.fit(x.iloc[splits["train"]])
     x_unpreprocessed = torch.FloatTensor(np.array(x)[splits["test"]])
     x = preprocessor.transform(x).astype(np.float32)

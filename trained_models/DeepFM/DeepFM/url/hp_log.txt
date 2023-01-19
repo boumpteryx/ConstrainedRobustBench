@@ -1,0 +1,32 @@
+2022-12-17 22:25:50.927333
+Parameters: {'dnn_dropout': 0.2752184826654207}
+
+Log Loss - mean: 9.97168
+Log Loss - std: 1.60364
+AUC - mean: 0.39118
+AUC - std: 0.01366
+Accuracy - mean: 0.49939
+Accuracy - std: 0.00087
+F1 score - mean: 0.49939
+F1 score - std: 0.00087
+
+Train time: 221.232486
+Test time: 5.029631
+
+---------------------------------------
+2022-12-17 22:28:02.749133
+Parameters: {'dnn_dropout': 0.6620917857529981}
+
+Log Loss - mean: 11.73553
+Log Loss - std: 2.75959
+AUC - mean: 0.42229
+AUC - std: 0.02525
+Accuracy - mean: 0.49939
+Accuracy - std: 0.00087
+F1 score - mean: 0.49939
+F1 score - std: 0.00087
+
+Train time: 617.258184
+Test time: 0.483463
+
+---------------------------------------
