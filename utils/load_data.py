@@ -107,9 +107,14 @@ def load_data(args):
         X = df.drop(label_col, axis=1).to_numpy()
         y = df[label_col].to_numpy()
 
-    elif args.dataset in ["url", "malware", "ctu_13_neris", "lcld_v2_time"]:
+    elif args.dataset in ["url", "malware", "ctu_13_neris", "lcld_v2_time", "wids"]:
         X, y = datasets.load_dataset(args.dataset).get_x_y()
         X, y = np.array(X), np.array(y)
+
+    elif args.dataset in []:
+        import random
+        X, y = pd.read_csv(args.dataset)[:-1], pd.read_csv(args.dataset)[-1]
+        X, y = random.shuffle(X), random.shuffle(y)
 
     else:
         raise AttributeError("Dataset \"" + args.dataset + "\" not available")
@@ -138,6 +143,7 @@ def load_data(args):
 
             # Setting this?
             args.cat_dims.append(len(le.classes_))
+            print("cat_dim = ", len(le.classes_))
 
         else:
             num_idx.append(i)

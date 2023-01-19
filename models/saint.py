@@ -12,7 +12,7 @@ from torch import einsum
 from einops import rearrange
 
 from models.saint_lib.models.pretrainmodel import SAINT as SAINTModel
-from models.saint_lib.data_openml import DataSetCatCon, DataSetCatConTorch
+from models.saint_lib.data_openml import DataSetCatCon
 from models.saint_lib.augmentations import embed_data_mask
 
 '''
@@ -25,8 +25,8 @@ from models.saint_lib.augmentations import embed_data_mask
 
 class SAINT(BaseModelTorch):
 
-    def __init__(self, params, args):
-        super().__init__(params, args)
+    def __init__(self, params, args, experiment=None):
+        super().__init__(params, args, experiment)
         if args.cat_idx:
             num_idx = list(set(range(args.num_features)) - set(args.cat_idx))
             # Appending 1 for CLS token, this is later used to generate embeddings.
@@ -36,9 +36,10 @@ class SAINT(BaseModelTorch):
             cat_dims = np.array([1])
 
         # Decreasing some hyperparameter to cope with memory issues
-        dim = self.params["dim"] if args.num_features < 50 else 8
-        self.batch_size = self.args.batch_size if args.num_features < 50 else 64
-
+        dim = self.params["dim"] if args.num_features < 20000 else 8
+        self.batch_size = self.args.batch_size
+        depth = self.params["depth"] if args.num_features < 20000 else 3
+        heads= self.params["heads"] if args.num_features < 20000 else 4
         print("Using dim %d and batch size %d" % (dim, self.batch_size))
 
         self.model = SAINTModel(
@@ -46,8 +47,8 @@ class SAINT(BaseModelTorch):
             num_continuous=len(num_idx),
             dim=dim,
             dim_out=1,
-            depth=self.params["depth"],  # 6
-            heads=self.params["heads"],  # 8
+            depth=depth,  # 6
+            heads=heads,  # 8
             attn_dropout=self.params["dropout"],  # 0.1
             ff_dropout=self.params["dropout"],  # 0.1
             mlp_hidden_mults=(4, 2),
@@ -132,6 +133,7 @@ class SAINT(BaseModelTorch):
                 optimizer.step()
 
                 loss_history.append(loss.item())
+                self.experiment.log_metric("train_loss",loss.item())
 
                 # print("Loss", loss.item())
 
@@ -158,13 +160,14 @@ class SAINT(BaseModelTorch):
                     else:
                         y_gts = y_gts.to(self.device).float()
 
-                    val_loss += criterion(y_outs, y_gts)
+                    val_loss += criterion(y_outs, y_gts).item()
                     val_dim += 1
             val_loss /= val_dim
 
-            val_loss_history.append(val_loss.item())
+            val_loss_history.append(val_loss)
+            self.experiment.log_metric("validation_loss",val_loss)
 
-            print("Epoch", epoch, "loss", val_loss.item())
+            print("Epoch", epoch, "loss", val_loss)
 
             if val_loss < min_val_loss:
                 min_val_loss = val_loss
@@ -181,24 +184,25 @@ class SAINT(BaseModelTorch):
         self.load_model(filename_extension="best", directory="tmp")
         return loss_history, val_loss_history
 
-    def predict_helper(self, X, keep_grad=False):
-        if keep_grad:
-            X = {'data': X, 'mask': torch.ones_like(torch.clone(X).detach())}
-            y = {'data': np.ones((X['data'].shape[0], 1))}
+    def predict_helper(self, X):
+        X = {'data': X, 'mask': np.ones_like(X)}
+        y = {'data': np.ones((X['data'].shape[0], 1))}
 
-            test_ds = DataSetCatConTorch(X, y, self.args.cat_idx, self.args.objective)
+        test_ds = DataSetCatCon(X, y, self.args.cat_idx, self.args.objective)
+        testloader = DataLoader(test_ds, batch_size=self.args.val_batch_size, shuffle=False, num_workers=4)
 
-            self.model.eval()
+        self.model.eval()
 
-            predictions = []
+        predictions = []
 
-            for test_ds_e in test_ds:
-                x_categ, x_cont, y_gts, cat_mask, con_mask = test_ds_e
+        with torch.no_grad():
+            for data in testloader:
+                x_categ, x_cont, y_gts, cat_mask, con_mask = data
 
                 x_categ, x_cont = x_categ.to(self.device), x_cont.to(self.device)
-                cat_mask, con_mask = cat_mask, con_mask
+                cat_mask, con_mask = cat_mask.to(self.device), con_mask.to(self.device)
 
-                _, x_categ_enc, x_cont_enc = embed_data_mask(x_categ.unsqueeze(0), x_cont.unsqueeze(0), cat_mask.unsqueeze(0), con_mask.unsqueeze(0), self.model)
+                _, x_categ_enc, x_cont_enc = embed_data_mask(x_categ, x_cont, cat_mask, con_mask, self.model)
                 reps = self.model.transformer(x_categ_enc, x_cont_enc)
                 y_reps = reps[:, 0, :]
                 y_outs = self.model.mlpfory(y_reps)
@@ -208,41 +212,8 @@ class SAINT(BaseModelTorch):
                 elif self.args.objective == "classification":
                     y_outs = F.softmax(y_outs, dim=1)
 
-                predictions.append(y_outs)
-            return torch.cat(predictions)
-        else:
-            if torch.is_tensor(X):
-                X = {'data': X.numpy(), 'mask': np.ones_like(X)}
-            else:
-                X = {'data': X, 'mask': np.ones_like(X)}
-            y = {'data': np.ones((X['data'].shape[0], 1))}
-
-            test_ds = DataSetCatCon(X, y, self.args.cat_idx, self.args.objective)
-            testloader = DataLoader(test_ds, batch_size=self.args.val_batch_size, shuffle=False, num_workers=4)
-
-            self.model.eval()
-
-            predictions = []
-
-            with torch.no_grad():
-                for data in testloader:
-                    x_categ, x_cont, y_gts, cat_mask, con_mask = data
-
-                    x_categ, x_cont = x_categ.to(self.device), x_cont.to(self.device)
-                    cat_mask, con_mask = cat_mask.to(self.device), con_mask.to(self.device)
-
-                    _, x_categ_enc, x_cont_enc = embed_data_mask(x_categ, x_cont, cat_mask, con_mask, self.model)
-                    reps = self.model.transformer(x_categ_enc, x_cont_enc)
-                    y_reps = reps[:, 0, :]
-                    y_outs = self.model.mlpfory(y_reps)
-
-                    if self.args.objective == "binary":
-                        y_outs = torch.sigmoid(y_outs)
-                    elif self.args.objective == "classification":
-                        y_outs = F.softmax(y_outs, dim=1)
-
-                    predictions.append(y_outs.detach().cpu().numpy())
-            return np.concatenate(predictions)
+                predictions.append(y_outs.detach().cpu().numpy())
+        return np.concatenate(predictions)
 
     def attribute(self, X, y, strategy=""):
         """ Generate feature attributions for the model input.

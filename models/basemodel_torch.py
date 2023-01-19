@@ -9,13 +9,16 @@ import numpy as np
 
 from utils.io_utils import get_output_path
 
+from utils.losses import BalancedBCELossPytorch
+from utils.comet import init_comet
 
 class BaseModelTorch(BaseModel):
 
-    def __init__(self, params, args):
+    def __init__(self, params, args, experiment=None):
         super().__init__(params, args)
         self.device = self.get_device()
         self.gpus = args.gpu_ids if args.use_gpu and torch.cuda.is_available() and args.data_parallel else None
+        self.experiment = experiment if experiment is not None else init_comet(args=vars(args), project_name="tabsurvey_basemodel")
 
     def to_device(self):
         if self.args.data_parallel:
@@ -52,6 +55,7 @@ class BaseModelTorch(BaseModel):
             loss_func = nn.CrossEntropyLoss()
         else:
             loss_func = nn.BCEWithLogitsLoss()
+            #loss_func = BalancedBCELossPytorch(self.dataset)
             y = y.float()
             y_val = y_val.float()
 
@@ -71,17 +75,7 @@ class BaseModelTorch(BaseModel):
         for epoch in range(self.args.epochs):
             for i, (batch_X, batch_y) in enumerate(train_loader):
 
-                out = self.model(batch_X.to(self.device))
-
-                if self.args.objective == "regression" or self.args.objective == "binary":
-                    out = out.squeeze()
-
-                loss = loss_func(out, batch_y.to(self.device))
-                loss_history.append(loss.item())
-
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
+                self.run_batch(batch_X, batch_y, loss_func, loss_history, optimizer)
 
             # Early Stopping
             val_loss = 0.0
@@ -97,6 +91,7 @@ class BaseModelTorch(BaseModel):
 
             val_loss /= val_dim
             val_loss_history.append(val_loss.item())
+            self.experiment.log_metric("validation_loss",val_loss.item())
 
             print("Epoch %d, Val Loss: %.5f" % (epoch, val_loss))
 
@@ -115,6 +110,20 @@ class BaseModelTorch(BaseModel):
         # Load best model
         self.load_model(filename_extension="best", directory="tmp")
         return loss_history, val_loss_history
+
+    def run_batch(self, batch_X, batch_y, loss_func, loss_history, optimizer):
+        out = self.model(batch_X.to(self.device))
+
+        if self.args.objective == "regression" or self.args.objective == "binary":
+            out = out.squeeze()
+
+        loss = loss_func(out, batch_y.to(self.device))
+        loss_history.append(loss.item())
+        self.experiment.log_metric("train_loss",loss.item())
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
 
     def predict(self, X, return_torch=False):
         if self.args.objective == "regression":

@@ -15,8 +15,8 @@ import numpy as np
 
 class TabTransformer(BaseModelTorch):
 
-    def __init__(self, params, args):
-        super().__init__(params, args)
+    def __init__(self, params, args, experiment=None):
+        super().__init__(params, args, experiment)
 
         if args.cat_idx:
             self.num_idx = list(set(range(args.num_features)) - set(args.cat_idx))
@@ -30,8 +30,8 @@ class TabTransformer(BaseModelTorch):
         print("On Device:", self.device)
 
         # Decreasing some hyperparameter to cope with memory issues
-        dim = self.params["dim"] if args.num_features < 50 else 8
-        self.batch_size = self.args.batch_size if args.num_features < 50 else 64
+        dim = self.params["dim"]
+        self.batch_size = self.args.batch_size
 
         print("Using dim %d and batch size %d" % (dim, self.batch_size))
 
@@ -106,6 +106,7 @@ class TabTransformer(BaseModelTorch):
 
                 loss = loss_func(out, batch_y.to(self.device))
                 loss_history.append(loss.item())
+                self.experiment.log_metric("train_loss",loss.item())
 
                 optimizer.zero_grad()
                 loss.backward()
@@ -114,24 +115,26 @@ class TabTransformer(BaseModelTorch):
             # Early Stopping
             val_loss = 0.0
             val_dim = 0
-            for val_i, (batch_val_X, batch_val_y) in enumerate(val_loader):
+            with torch.no_grad():
+                for val_i, (batch_val_X, batch_val_y) in enumerate(val_loader):
 
-                if self.args.cat_idx:
-                    x_categ = batch_val_X[:, self.args.cat_idx].int().to(self.device)
-                else:
-                    x_categ = None
+                    if self.args.cat_idx:
+                        x_categ = batch_val_X[:, self.args.cat_idx].int().to(self.device)
+                    else:
+                        x_categ = None
 
-                x_cont = batch_val_X[:, self.num_idx].to(self.device)
+                    x_cont = batch_val_X[:, self.num_idx].to(self.device)
 
-                out = self.model(x_categ, x_cont)
+                    out = self.model(x_categ, x_cont)
 
-                if self.args.objective == "regression" or self.args.objective == "binary":
-                    out = out.squeeze()
+                    if self.args.objective == "regression" or self.args.objective == "binary":
+                        out = out.squeeze()
 
-                val_loss += loss_func(out, batch_val_y.to(self.device))
-                val_dim += 1
+                    val_loss += loss_func(out, batch_val_y.to(self.device)).item()
+                    val_dim += 1
             val_loss /= val_dim
-            val_loss_history.append(val_loss.item())
+            val_loss_history.append(val_loss)
+            self.experiment.log_metric("validation_loss",val_loss)
 
             print("Epoch %d: Val Loss %.5f" % (epoch, val_loss))
 

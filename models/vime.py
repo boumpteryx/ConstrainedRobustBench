@@ -20,8 +20,8 @@ from utils.io_utils import get_output_path
 
 class VIME(BaseModelTorch):
 
-    def __init__(self, params, args):
-        super().__init__(params, args)
+    def __init__(self, params, args, experiment=None):
+        super().__init__(params, args, experiment)
 
         self.model_self = VIMESelf(args.num_features).to(self.device)
         self.model_semi = VIMESemi(args, args.num_features, args.num_classes).to(self.device)
@@ -182,6 +182,7 @@ class VIME(BaseModelTorch):
                 yu_loss = torch.mean(torch.var(yv_hats, dim=0))
                 loss = y_loss + beta * yu_loss
                 loss_history.append(loss.item())
+                self.experiment.log_metric("train_loss",loss.item())
 
                 optimizer.zero_grad()
                 loss.backward()
@@ -190,18 +191,20 @@ class VIME(BaseModelTorch):
             # Early Stopping
             val_loss = 0.0
             val_dim = 0
-            for val_i, (batch_val_X, batch_val_y) in enumerate(val_loader):
-                batch_val_X_encoded = self.encoder_layer(batch_val_X.to(self.device))
-                y_hat = self.model_semi(batch_val_X_encoded)
+            with torch.no_grad():
+                for val_i, (batch_val_X, batch_val_y) in enumerate(val_loader):
+                    batch_val_X_encoded = self.encoder_layer(batch_val_X.to(self.device))
+                    y_hat = self.model_semi(batch_val_X_encoded)
 
-                if self.args.objective == "regression" or self.args.objective == "binary":
-                    y_hat = y_hat.squeeze()
+                    if self.args.objective == "regression" or self.args.objective == "binary":
+                        y_hat = y_hat.squeeze()
 
-                val_loss += loss_func_supervised(y_hat, batch_val_y.to(self.device))
-                val_dim += 1
+                    val_loss += loss_func_supervised(y_hat, batch_val_y.to(self.device)).item()
+                    val_dim += 1
 
             val_loss /= val_dim
-            val_loss_history.append(val_loss.item())
+            val_loss_history.append(val_loss)
+            self.experiment.log_metric("validation_loss",val_loss)
 
             print("Epoch %d, Val Loss: %.5f" % (epoch, val_loss))
 
