@@ -3642,3 +3642,21 @@ robust MCC after APGD-CE-CONSTRAINED: -4.28% (total time 9.4 s)
 initial accuracy: 44.80%
 initial AUC: 46.82%
 initial MCC: -13.47%
+initial accuracy: 79.20%
+initial AUC: 78.48%
+initial MCC: 60.80%
+apgd-ce-constrained - 16/16 - 0 out of 42 successfully perturbed
+robust accuracy after APGD-CE-CONSTRAINED: 79.20% (total time 5.7 s)
+robust AUC after APGD-CE-CONSTRAINED: 78.48% (total time 5.7 s)
+robust MCC after APGD-CE-CONSTRAINED: 60.80% (total time 5.7 s)
+initial accuracy: 79.20%
+initial AUC: 78.48%
+initial MCC: 60.80%
+apgd-ce - 16/16 - 30 out of 42 successfully perturbed
+robust accuracy after APGD-CE: 16.80% (total time 5.1 s)
+robust AUC after APGD-CE: 16.09% (total time 5.1 s)
+robust MCC after APGD-CE: -70.84% (total time 5.1 s)
+fab - 4/4 - 2 out of 18 successfully perturbed
+robust accuracy after FAB: 15.50% (total time 8.5 s)
+robust AUC after FAB: 14.85% (total time 8.5 s)
+robust MCC after FAB: -72.86% (total time 8.5 s)
