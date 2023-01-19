@@ -3639,3 +3639,6 @@ apgd-ce-constrained - 11/11 - 0 out of 21 successfully perturbed
 robust accuracy after APGD-CE-CONSTRAINED: 52.10% (total time 9.4 s)
 robust AUC after APGD-CE-CONSTRAINED: 49.81% (total time 9.4 s)
 robust MCC after APGD-CE-CONSTRAINED: -4.28% (total time 9.4 s)
+initial accuracy: 44.80%
+initial AUC: 46.82%
+initial MCC: -13.47%
