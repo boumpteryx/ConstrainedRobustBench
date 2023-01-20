@@ -16,8 +16,8 @@ def embed_data_mask(x_categ, x_cont, cat_mask, con_mask, model, vision_dset=Fals
         raise Exception('This case should not work!')
 
     x_cont_enc = x_cont_enc.to(device)
-    cat_mask_temp = cat_mask + model.cat_mask_offset  # .type_as(cat_mask)
-    con_mask_temp = con_mask + model.con_mask_offset  # .type_as(con_mask)
+    cat_mask_temp = cat_mask + model.cat_mask_offset.type_as(cat_mask)
+    con_mask_temp = con_mask + model.con_mask_offset.type_as(con_mask)
 
     cat_mask_temp = model.mask_embeds_cat(cat_mask_temp)
     con_mask_temp = model.mask_embeds_cont(con_mask_temp)

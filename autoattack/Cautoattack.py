@@ -17,6 +17,7 @@ class AutoAttack():
                  attacks_to_run=[], version='standard', is_tf_model=False,
                  device='cpu', log_path=None, fun_distance_preprocess=None):
         self.model = model
+        self.arguments = arguments
         self.n_ex = arguments.n_ex
         self.use_constraints = arguments.use_constraints
         self.dataset = arguments.dataset
@@ -58,7 +59,12 @@ class AutoAttack():
                 logger=self.logger)
 
             from constrained_attacks.attacks.moeva.moeva import Moeva2
-            self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1, verbose=0)
+            if self.arguments.model_name == "Linear" or self.arguments.model_name == "Net":
+                self.moeva2 = Moeva2(classifier_class=self.model, constraints=self.constraints,
+                                     norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1,
+                                     verbose=0)
+            else:
+                self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1, verbose=0)
 
         else:
             from .autopgd_base import APGDAttack

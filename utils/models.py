@@ -114,8 +114,7 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
                 model = state_dict
             else:
                 from collections import OrderedDict
-                if one_model not in ["DeepFM", "LinearModel", "TabTransformer"] or (
-                        one_model == "TabTransformer" and args.dataset == "url"):
+                if one_model not in ["DeepFM", "TabTransformer", "TORCHRLN", "SAINT"]:
                     new_state_dict = OrderedDict()
                     for k, v in state_dict.items():
                         name = 'module.' + k[:]  # add `module.`

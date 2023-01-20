@@ -1,0 +1,18 @@
+2022-12-17 22:30:06.629428
+DeepFM - url
+
+Log Loss - mean: 11.73553
+Log Loss - std: 2.75959
+AUC - mean: 0.42229
+AUC - std: 0.02525
+Accuracy - mean: 0.49939
+Accuracy - std: 0.00087
+F1 score - mean: 0.49939
+F1 score - std: 0.00087
+
+Train time: 586.475999
+Test time: 0.488399
+
+Best Parameters: {'dnn_dropout': 0.6620917857529981}
+
+

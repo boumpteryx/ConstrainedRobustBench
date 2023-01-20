@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from constrained_attacks.datasets import load_dataset
+from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import (
     classification_report,
@@ -48,6 +49,7 @@ class CustomNet(nn.Module):
     def __init__(self):
         super().__init__()
 
+
 class Net(CustomNet):
     def __init__(self, preprocessor, feature_number):
         super().__init__()
@@ -75,6 +77,7 @@ class Linear(CustomNet):
     def forward(self, x):
         x = F.relu(self.fc0(x))
         return torch.sigmoid(x)
+
 
 def train(net, x, y, epoch, batch_size,config):
     criterion = BalancedBCELossPytorch(weight=torch.Tensor([1.0, 1.0]),dataset=config["dataset"])
@@ -128,7 +131,11 @@ def run(config: dict):
     dataset.drop_date = True
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
-    splits = dataset.get_splits()
+    # splits = dataset.get_splits()
+    kf = StratifiedKFold(n_splits=3, shuffle=True, random_state=221)
+    splits = {}
+    for i, (train_index, test_index) in enumerate(kf.split(x, y)):
+        splits["train"], splits["test"] = train_index, test_index
     preprocessor.fit(x.iloc[splits["train"]])
     x = preprocessor.transform(x)
 

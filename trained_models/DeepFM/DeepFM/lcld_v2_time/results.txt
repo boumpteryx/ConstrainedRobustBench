@@ -1,0 +1,18 @@
+2022-12-18 07:54:30.063269
+DeepFM - lcld_v2_time
+
+Log Loss - mean: 27.72562
+Log Loss - std: 0.00015
+AUC - mean: 0.50000
+AUC - std: 0.00001
+Accuracy - mean: 0.19726
+Accuracy - std: 0.00000
+F1 score - mean: 0.19726
+F1 score - std: 0.00000
+
+Train time: 40902.604222
+Test time: 48.216092
+
+Best Parameters: {'dnn_dropout': 0.22217649986343543}
+
+

@@ -1,0 +1,18 @@
+2022-12-18 02:13:52.062341
+DeepFM - ctu_13_neris
+
+Log Loss - mean: 33.41451
+Log Loss - std: 0.26663
+AUC - mean: 0.50733
+AUC - std: 0.00380
+Accuracy - mean: 0.03057
+Accuracy - std: 0.00782
+F1 score - mean: 0.03057
+F1 score - std: 0.00782
+
+Train time: 18775.579524
+Test time: 202.092087
+
+Best Parameters: {'dnn_dropout': 0.40591826651008417}
+
+

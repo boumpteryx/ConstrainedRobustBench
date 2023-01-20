@@ -16,6 +16,9 @@ def get_parser():
                                                                                       "binary"],
                help="Set the type of the task")
 
+    parser.add('--api_key', required=True, help="The COMET ML API key")
+    parser.add('--workspace', required=True, help="The COMET ML workspace")
+
     parser.add('--use_gpu', action="store_true", help="Set to true if GPU is available")
     parser.add('--gpu_ids', type=int, action="append", help="IDs of the GPUs used when data_parallel is true")
     parser.add('--data_parallel', action="store_true", help="Distribute the training over multiple GPUs")
@@ -34,8 +37,8 @@ def get_parser():
     parser.add('--target_encode', action="store_true", help="Encode the targets that they start at 0. (0, 1, 2,...)")
     parser.add('--one_hot_encode', action="store_true", help="OneHotEncode the categorical features")
 
-    parser.add('--batch_size', type=int, default=128, help="Batch size used for training")
-    parser.add('--val_batch_size', type=int, default=128, help="Batch size used for training and testing")
+    parser.add('--batch_size', type=int, default=256, help="Batch size used for training")
+    parser.add('--val_batch_size', type=int, default=256, help="Batch size used for training and testing")
     parser.add('--early_stopping_rounds', type=int, default=20, help="Number of rounds before early stopping applies.")
     parser.add('--epochs', type=int, default=1000, help="Max number of epochs to train.")
     parser.add('--logging_period', type=int, default=100, help="Number of iteration after which validation is printed.")

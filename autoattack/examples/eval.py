@@ -6,7 +6,7 @@ import numpy as np
 
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold
 
 sys.path.insert(0,'.')
 from constrained_attacks.constraints.relation_constraint import Constant
@@ -94,7 +94,11 @@ if __name__ == '__main__':
     dataset = datasets.load_dataset(args.dataset)
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
-    splits = dataset.get_splits()
+    # splits = dataset.get_splits()
+    kf = StratifiedKFold(n_splits=args.num_splits, shuffle=args.shuffle, random_state=args.seed)
+    splits = {}
+    for i, (train_index, test_index) in enumerate(kf.split(x, y)):
+        splits["train"], splits["test"] = train_index, test_index
     preprocessor.fit(x.iloc[splits["train"]])
     x_unpreprocessed = torch.FloatTensor(np.array(x)[splits["test"]])
     x = preprocessor.transform(x).astype(np.float32)
