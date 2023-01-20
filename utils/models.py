@@ -1,7 +1,6 @@
 import torch
 import numpy as np
 from pipeline.pytorch import Net, Linear
-from autoattack.utils_tf2 import ModelAdapter
 from models.basemodel_torch import BaseModelTorch
 
 from tqdm import tqdm
@@ -104,6 +103,7 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
         print("parameters : ", parameters)
         model = str2model(one_model)(parameters, args)
         if one_model == "RLN":
+            from autoattack.utils_tf2 import ModelAdapter
             X_test, Y_test = np.array(x_test), np.array(y_test)
             X_train, Y_train = np.array(x_train), np.array(y_train)
             model.fit(X_train, Y_train, X_test, Y_test)
