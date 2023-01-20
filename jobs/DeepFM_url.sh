@@ -21,5 +21,5 @@ module load lang/Python/3.8.6-GCCcore-10.2.0
 
 pip install --upgrade pip setuptools wheel config-utils configutils
 pip install -r requirements.txt
-pip install -e git+https://github.com/boumpteryx/constrained-attacks.git@bd6e8448892621198ac8b0e14c250fb035dd4f2d#egg=constrained_attacks
+pip install -e git+https://github.com/serval-uni-lu/constrained-attacks.git@ee7acd54f96b974157c55bbf551d4089a9a7a4e2
 python autoattack/examples/eval.py --config config/url.yml --norm L2 --use_constraints 0 --model_name DeepFM
