@@ -4,14 +4,10 @@ import sys
 
 import numpy as np
 
-from autoattack.utils_tf2 import ModelAdapter
-
-# from autoattack.utils_tf2 import ModelAdapter
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
-# from autoattack.other_utils import add_normalization_layer
 sys.path.insert(0,'.')
 from constrained_attacks.constraints.relation_constraint import Constant
 from constrained_attacks.constraints.relation_constraint import LessEqualConstraint, Feature
@@ -90,7 +86,7 @@ if __name__ == '__main__':
                  './tests/resources/pytorch_models/url_test_torch.pth',
                  './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
-        all_models = ["TabTransformer#TabTransformer"]#"VIME","DeepFM","TabTransformer","DeepFM","RLN", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
+        all_models = ["DeepFM","TabTransformer","Linear","TORCHRLN","VIME", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
