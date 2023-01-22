@@ -424,7 +424,7 @@ class APGDAttack:
                     grad_step = torch.autograd.grad(loss, [x_adv])[0].detach()
                     grad += grad_step
 
-                    grad += torch.autograd.grad(loss, [x_adv])[0].detach()
+                        #print("loss",loss, "grad",grad_step.sum())
                 else:
                     if self.y_target is None:
                         logits, loss_indiv, grad_curr = criterion_indiv(x_adv, y)
