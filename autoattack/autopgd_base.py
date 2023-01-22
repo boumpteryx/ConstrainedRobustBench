@@ -215,7 +215,7 @@ class APGDAttack:
     def ce_loss(self, logits, x, y):
         return nn.CrossEntropyLoss(reduction="none") + self.constraints_loss(x)
 
-    def attack_single_run(self, x, y, x_init=None):
+    def attack_single_run(self, x, y, x_init=None, _min=0, _max=1):
         if len(x.shape) < self.ndims:
             x = x.unsqueeze(0)
             y = y.unsqueeze(0)
@@ -240,7 +240,7 @@ class APGDAttack:
                     )
                 )
 
-        x_adv = x_adv.clamp(0.0, 1.0)
+        x_adv = x_adv.clamp(_min,_max)
         x_best = x_adv.clone()
         x_best_adv = x_adv.clone()
         loss_steps = torch.zeros([self.n_iter, x.shape[0]]).to(self.device)
@@ -284,7 +284,7 @@ class APGDAttack:
                     logits = self.model(x_adv) if callable(self.model) else self.model.predict_torch(x_adv)
                     y = y if isinstance(criterion_indiv, nn.CrossEntropyLoss) else y.float()
                     loss_indiv = criterion_indiv(logits.squeeze(), y)
-                    constraints_loss = self.constraints_loss(x)
+
                     if self.constraints != None and self.loss in ["ce-constrained", "ce-targeted-constrained", "dlr-constrained", "dlr-targeted-constrained"]:
                         constraints_loss = self.constraints_loss(x)
                         loss = loss_indiv.sum() + constraints_loss.sum()
@@ -357,8 +357,7 @@ class APGDAttack:
                     x_adv_1 = x_adv + step_size * torch.sign(grad)
                     x_adv_1 = torch.clamp(
                         torch.min(torch.max(x_adv_1, x - self.eps), x + self.eps),
-                        0.0,
-                        1.0,
+                        _min,_max
                     )
                     x_adv_1 = torch.clamp(
                         torch.min(
@@ -368,8 +367,7 @@ class APGDAttack:
                             ),
                             x + self.eps,
                         ),
-                        0.0,
-                        1.0,
+                        _min,_max
                     )
 
                 elif self.norm == "L2":
@@ -381,8 +379,7 @@ class APGDAttack:
                             self.eps * torch.ones_like(x).detach(),
                             L2_norm(x_adv_1 - x, keepdim=True),
                         ),
-                        0.0,
-                        1.0,
+                        _min,_max
                     )
                     x_adv_1 = x_adv + (x_adv_1 - x_adv) * a + grad2 * (1 - a)
                     x_adv_1 = torch.clamp(
@@ -392,8 +389,7 @@ class APGDAttack:
                             self.eps * torch.ones_like(x).detach(),
                             L2_norm(x_adv_1 - x, keepdim=True),
                         ),
-                        0.0,
-                        1.0,
+                        _min,_max
                     )
 
                 elif self.norm == "L1":
@@ -515,7 +511,7 @@ class APGDAttack:
 
         return (x_best, acc, loss_best, x_best_adv)
 
-    def perturb(self, x, y=None, best_loss=False, x_init=None):
+    def perturb(self, x, y=None, best_loss=False, x_init=None, _min=0, _max=1):
         """
         :param x:           clean images
         :param y:           clean labels, if None we use the predicted labels
@@ -555,7 +551,7 @@ class APGDAttack:
                 "running {}-attack with epsilon {:.5f}".format(self.norm, self.eps),
                 "--------------------------",
             )
-            print("initial accuracy: {:.2%}".format(acc.float().mean()))
+            print("initial accuracy perturb: {:.2%}".format(acc.float().mean()))
 
         if self.use_largereps:
             epss = [3.0 * self.eps_orig, 2.0 * self.eps_orig, 1.0 * self.eps_orig]
@@ -590,7 +586,7 @@ class APGDAttack:
                     y_to_fool = y[ind_to_fool].clone()
 
                     if not self.use_largereps:
-                        res_curr = self.attack_single_run(x_to_fool, y_to_fool)
+                        res_curr = self.attack_single_run(x_to_fool, y_to_fool, _min=_min, _max=_max)
                     else:
                         res_curr = self.decr_eps_pgd(x_to_fool, y_to_fool, epss, iters)
                     best_curr, acc_curr, loss_curr, adv_curr = res_curr
