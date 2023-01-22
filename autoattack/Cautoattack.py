@@ -126,6 +126,8 @@ class AutoAttack():
             n_batches = int(np.ceil(x_orig.shape[0] / bs))
             robust_flags = torch.zeros(x_orig.shape[0], dtype=torch.bool, device=x_orig.device)
             y_adv = torch.empty_like(y_orig)
+            _min, _max = x_orig.min(), x_orig.max()
+
             for batch_idx in tqdm(range(n_batches)):
                 start_idx = batch_idx * bs
                 end_idx = min( (batch_idx + 1) * bs, x_orig.shape[0])
@@ -187,7 +189,7 @@ class AutoAttack():
                         # apgd on cross-entropy loss
                         self.apgd.loss = 'ce'
                         self.apgd.seed = self.get_seed()
-                        adv_curr = self.apgd.perturb(x, y) #cheap=True
+                        adv_curr = self.apgd.perturb(x, y, _min=_min, _max=_max) #cheap=True
 
                     elif attack == 'apgd-ce-constrained':
                         # apgd on cross-entropy loss
