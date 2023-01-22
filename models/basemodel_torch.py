@@ -146,7 +146,10 @@ class BaseModelTorch(BaseModel):
 
     def predict_torch(self, X):
 
-        return self.predict_helper(X.to(self.device), True)
+        out = self.predict_helper(X.to(self.device), True)
+        if out.shape[1] == 1:
+            out = torch.concat([1-out,out],1)
+        return out
 
     def predict_helper(self, X, keep_grad=False):
         self.model.eval()
