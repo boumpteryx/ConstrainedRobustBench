@@ -13,7 +13,7 @@ from constraints.constraints_checker import ConstraintChecker
 
 
 class AutoAttack():
-    def __init__(self, model, arguments, constraints=None, norm='Linf', eps=.3, seed=None, verbose=True,
+    def __init__(self, model, arguments, constraints=None, norm='Linf', eps=.3, seed=None, verbose=False,
                  attacks_to_run=[], version='standard', is_tf_model=False,
                  device='cpu', log_path=None, fun_distance_preprocess=None):
         self.model = model
@@ -41,7 +41,7 @@ class AutoAttack():
 
         if not self.is_tf_model:
             from .autopgd_base import APGDAttack
-            self.apgd = APGDAttack(self.model, constraints=self.constraints, n_restarts=5, n_iter=100, verbose=False,#self.verbose,
+            self.apgd = APGDAttack(self.model, constraints=self.constraints, n_restarts=5, n_iter=100, verbose=self.verbose,#self.verbose,
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed,
                 device=self.device, logger=self.logger)
 

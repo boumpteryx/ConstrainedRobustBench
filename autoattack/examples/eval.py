@@ -26,6 +26,7 @@ if __name__ == '__main__':
     parser = configargparse.ArgumentParser(config_file_parser_class=configargparse.YAMLConfigFileParser,
                                            formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--data_dir', type=str, default='./data')
+    parser.add_argument('--verbose', type=int, default=0)
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=8./255.)
     parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
@@ -112,10 +113,12 @@ if __name__ == '__main__':
         )
 
 
-    mean, std = preprocessor.mean_, preprocessor.scale_
-    mean = mean.reshape(1,-1).astype(np.float32)
-    std = std.reshape(1,-1).astype(np.float32)
-    args.epsilon = np.mean(std) # budget to be adapted
+    #mean, var = preprocessor.mean_, preprocessor.var_
+    #mean = mean.reshape(1,-1).astype(np.float32)
+    #std = np.sqrt(var.reshape(1,-1).astype(np.float32))
+    #args.epsilon = np.mean(std) # budget to be adapted
+    args.epsilon = 4*x_test.std()
+    args.epsilon =  16*x_test.max()/255 #(to mimic L2 of 8/255 or 16/255 in images)
 
     x_test = torch.Tensor(x_test)
     y_test = torch.Tensor(y_test)
@@ -142,7 +145,7 @@ if __name__ == '__main__':
         # constraints = None
         adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
-                               version=args.version,
+                               version=args.version, verbose=args.verbose,
                                fun_distance_preprocess=lambda x: preprocessor.transform(x))
 
         # l = [x for (x, y) in test_loader]
