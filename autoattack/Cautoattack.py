@@ -47,7 +47,7 @@ class AutoAttack():
 
             from .fab_pt import FABAttack_PT
             self.fab = FABAttack_PT(self.model, self.constraints, n_restarts=5, n_iter=100, eps=self.epsilon, seed=self.seed,
-                norm=self.norm, verbose=False, device=self.device)
+                norm=self.norm, verbose=self.verbose, device=self.device)
 
             from .square import SquareAttack
             self.square = SquareAttack(self.model, p_init=.8, n_queries=5000, eps=self.epsilon, norm=self.norm,
@@ -195,26 +195,26 @@ class AutoAttack():
                         # apgd on cross-entropy loss
                         self.apgd.loss = 'ce-constrained'
                         self.apgd.seed = self.get_seed()
-                        adv_curr = self.apgd.perturb(x, y) #cheap=True
+                        adv_curr = self.apgd.perturb(x, y, _min=_min, _max=_max) #cheap=True
 
                     elif attack == 'apgd-dlr':
                         # apgd on dlr loss
                         self.apgd.loss = 'dlr'
                         self.apgd.seed = self.get_seed()
-                        adv_curr = self.apgd.perturb(x, y) #cheap=True
+                        adv_curr = self.apgd.perturb(x, y, _min=_min, _max=_max) #cheap=True
 
                     elif attack == 'apgd-dlr-constrained':
                         # apgd on dlr loss
                         self.apgd.loss = 'dlr-constrained'
                         self.apgd.seed = self.get_seed()
-                        adv_curr = self.apgd.perturb(x, y) #cheap=True
+                        adv_curr = self.apgd.perturb(x, y, _min=_min, _max=_max) #cheap=True
 
                     elif attack == 'fab':
                         # fab
                         self.fab.targeted = False
                         self.fab.is_constrained = False
                         self.fab.seed = self.get_seed()
-                        adv_curr = self.fab.perturb(x, y)
+                        adv_curr = self.fab.perturb(x, y, _min=_min, _max=_max)
 
                     elif attack == 'fab-constrained': # constraints checked within the perturb function
                         # fab

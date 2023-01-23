@@ -86,7 +86,7 @@ class FABAttack():
     def get_diff_logits_grads_batch_targeted(self, imgs, la, la_target):
        raise NotImplementedError("Virtual function.")
 
-    def attack_single_run(self, x, y=None, use_rand_start=False, is_targeted=False):
+    def attack_single_run(self, x, y=None, use_rand_start=False, is_targeted=False, _min=0, _max=1):
         """
         :param x:             clean images
         :param y:             clean labels, if None we use the predicted labels
@@ -164,7 +164,7 @@ class FABAttack():
                                         .sum(dim=-1)
                                         .view(t.shape[0], *[1]*self.ndims)) / 2
 
-            x1 = x1.clamp(0.0, 1.0)
+            x1 = x1.clamp(_min, _max)
 
         counter_iter = 0
         while counter_iter < self.n_iter:
@@ -229,7 +229,7 @@ class FABAttack():
                                     self.alpha_max * torch.ones(a1.shape)
                                     .to(self.device))
                 x1 = ((x1 + self.eta * d1) * (1 - alpha) +
-                        (im2 + d2 * self.eta) * alpha).clamp(0.0, 1.0)
+                        (im2 + d2 * self.eta) * alpha).clamp(_min,_max)
 
                 is_adv = self._get_predicted_label(x1) != la2
 
@@ -268,7 +268,7 @@ class FABAttack():
 
         return adv_c
 
-    def perturb(self, x, y):
+    def perturb(self, x, y, _min=0, _max=1):
         if self.device is None:
             self.device = x.device
         adv = x.clone()
@@ -286,7 +286,7 @@ class FABAttack():
                     if len(ind_to_fool.shape) == 0: ind_to_fool = ind_to_fool.unsqueeze(0)
                     if ind_to_fool.numel() != 0:
                         x_to_fool, y_to_fool = x[ind_to_fool].clone(), y[ind_to_fool].clone()
-                        adv_curr = self.attack_single_run(x_to_fool, y_to_fool, use_rand_start=(counter > 0), is_targeted=False)
+                        adv_curr = self.attack_single_run(x_to_fool, y_to_fool, use_rand_start=(counter > 0), is_targeted=False, _min=_min, _max=_max)
 
                         if self.is_constrained:
                             checker = ConstraintChecker(self.constraints, tolerance = 0.01)
