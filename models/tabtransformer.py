@@ -156,11 +156,15 @@ class TabTransformer(BaseModelTorch):
     def predict_helper(self, X, keep_grad=False):
         self.model.eval()
 
+        if isinstance(self.model, torch.nn.Sequential):
+            X = self.model[0](X) #denormalization layer
+            model = self.model[1]
+
         if keep_grad:
             x_categ = X[:, self.args.cat_idx].int().to(self.device) if self.args.cat_idx else None
             x_cont = X[:, self.num_idx].to(self.device)
 
-            preds = self.model(x_categ, x_cont)
+            preds = model(x_categ, x_cont)
 
             if self.args.objective == "binary":
                 preds = torch.sigmoid(preds)
@@ -182,7 +186,7 @@ class TabTransformer(BaseModelTorch):
                     x_categ = batch_X[0][:, self.args.cat_idx].int().to(self.device) if self.args.cat_idx else None
                     x_cont = batch_X[0][:, self.num_idx].to(self.device)
 
-                    preds = self.model(x_categ, x_cont)
+                    preds = model(x_categ, x_cont)
 
                     if self.args.objective == "binary":
                         preds = torch.sigmoid(preds)
