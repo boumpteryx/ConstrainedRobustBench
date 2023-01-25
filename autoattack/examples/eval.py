@@ -105,7 +105,7 @@ if __name__ == '__main__':
     x = preprocessor.transform(x).astype(np.float32)
     x_test = x[splits["test"]]
     y_test = y[splits["test"]]
-    x_train = x[splits["train"]]
+    x_train_original = x[splits["train"]]
     y_train = y[splits["train"]]
     if args.dataset == "ctu_13_neris":
         _, x_test, _, y_test = train_test_split(
@@ -118,17 +118,17 @@ if __name__ == '__main__':
     #std = np.sqrt(var.reshape(1,-1).astype(np.float32))
     #args.epsilon = np.mean(std) # budget to be adapted
     args.epsilon = 4*x_test.std()
-    args.epsilon =  16*x_test.max()/255 #(to mimic L2 of 8/255 or 16/255 in images)
+    args.epsilon =  16/255 #(to mimic L2 of 8/255 or 16/255 in images)
 
-    x_test = torch.Tensor(x_test)
+    x_test_original = torch.Tensor(x_test)
     y_test = torch.Tensor(y_test)
     y_test = y_test.to(torch.long)
 
 
 
     for one_model in all_models:
-        model = init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test)
-
+        model, x_train, x_test = init_model(one_model, args, preprocessor, x_train_original, x_test_original, y_train, y_test)
+        min_, max_ = x_train.min(), x_train.max()
         # create save dir
         if not os.path.exists(args.save_dir):
             os.makedirs(args.save_dir)
@@ -162,6 +162,8 @@ if __name__ == '__main__':
                 adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             elif not args.use_constraints:
                 adversary.attacks_to_run = ['apgd-ce', 'fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
+                #adversary.attacks_to_run = ['fab', 'moeva2']
+
                 constraints = [Constant(0) <= Constant(1)]
             adversary.apgd.n_restarts = 2
             adversary.fab.n_restarts = 2
@@ -177,7 +179,8 @@ if __name__ == '__main__':
                 adv_complete, y_adv_complete = adversary.run_standard_evaluation(x_test_l, y_test_l,
                                                                  bs=args.batch_size,
                                                                  return_labels=True,
-                                                                 x_unscaled=x_unpreprocessed[:args.n_ex])
+                                                                 x_unscaled=x_unpreprocessed[:args.n_ex],
+                                                                 min_ = min_, max_ =max_             )
 
                 torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_constraints_{}.pth'.format(
                     args.save_dir, 'aa', args.version, args.dataset, args.norm, adv_complete.shape[0],

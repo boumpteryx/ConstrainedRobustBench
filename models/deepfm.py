@@ -117,13 +117,22 @@ class DeepFM(BaseModelTorch):
             out = self.model(X_formatted)
             return out
         else:
-            X = np.array(X, dtype=np.float)
-            X_dict = {str(name): X[:, name] for name in range(self.args.num_features)}
+            if isinstance(self.model, torch.nn.Sequential):
+                X = np.array(self.model[0](X), dtype=np.float)
+                X_dict = {str(name): X[:, name] for name in range(self.args.num_features)}
 
-            # Adding dummy spare feature
-            if not self.args.cat_idx:
-                X_dict["dummy"] = np.zeros(X.shape[0])
-            return self.model.predict(X_dict, batch_size=self.args.batch_size)
+                # Adding dummy spare feature
+                if not self.args.cat_idx:
+                    X_dict["dummy"] = np.zeros(X.shape[0])
+                return self.model[1].predict(X_dict, batch_size=self.args.batch_size)
+            else:
+                X = np.array(X, dtype=np.float)
+                X_dict = {str(name): X[:, name] for name in range(self.args.num_features)}
+
+                # Adding dummy spare feature
+                if not self.args.cat_idx:
+                    X_dict["dummy"] = np.zeros(X.shape[0])
+                return self.model.predict(X_dict, batch_size=self.args.batch_size)
 
     @classmethod
     def define_trial_parameters(cls, trial, args):
