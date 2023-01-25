@@ -707,7 +707,7 @@ class APGDAttack_targeted(APGDAttack):
     def ce_loss_targeted(self, x, y):
         return -1.0 * F.cross_entropy(x, self.y_target, reduction="none")
 
-    def perturb(self, x, y=None, x_init=None):
+    def perturb(self, x, y=None, x_init=None, _min=0, _max=1):
         """
         :param x:           clean images
         :param y:           clean labels, if None we use the predicted labels

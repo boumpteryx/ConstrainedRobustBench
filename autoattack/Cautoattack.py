@@ -105,7 +105,8 @@ class AutoAttack():
     def get_seed(self):
         return time.time() if self.seed is None else self.seed
 
-    def run_standard_evaluation(self, x_orig, y_orig, bs=250, return_labels=False, x_unscaled=None):
+    def run_standard_evaluation(self, x_orig, y_orig, bs=250, return_labels=False, x_unscaled=None,
+                                min_ = None, max_ =None):
         if self.verbose:
             print('using {} version including {}'.format(self.version,
                 ', '.join(self.attacks_to_run)))
@@ -126,7 +127,7 @@ class AutoAttack():
             n_batches = int(np.ceil(x_orig.shape[0] / bs))
             robust_flags = torch.zeros(x_orig.shape[0], dtype=torch.bool, device=x_orig.device)
             y_adv = torch.empty_like(y_orig)
-            _min, _max = x_orig.min(), x_orig.max()
+            (_min, _max) = (x_orig.min(), x_orig.max()) if min_ is None else (min_, max_)
 
             for batch_idx in tqdm(range(n_batches)):
                 start_idx = batch_idx * bs
@@ -221,7 +222,7 @@ class AutoAttack():
                         self.fab.targeted = False
                         self.fab.is_constrained = True
                         self.fab.seed = self.get_seed()
-                        adv_curr = self.fab.perturb(x, y)
+                        adv_curr = self.fab.perturb(x, y, _min=_min, _max=_max)
 
                     elif attack == 'square':
                         # square
@@ -231,19 +232,19 @@ class AutoAttack():
                     elif attack == 'apgd-t':
                         # targeted apgd
                         self.apgd_targeted.seed = self.get_seed()
-                        adv_curr = self.apgd_targeted.perturb(x, y) #cheap=True
+                        adv_curr = self.apgd_targeted.perturb(x, y, _min=_min, _max=_max) #cheap=True
 
                     elif attack == 'apgd-t-constrained':
                         # targeted apgd
                         self.apgd_targeted.loss = 'dlr-targeted-constrained'
                         self.apgd_targeted.seed = self.get_seed()
-                        adv_curr = self.apgd_targeted.perturb(x, y) #cheap=True
+                        adv_curr = self.apgd_targeted.perturb(x, y, _min=_min, _max=_max) #cheap=True
 
                     elif attack == 'apgd-t-ce-constrained':
                         # targeted apgd
                         self.apgd_targeted.loss = 'ce-targeted-constrained'
                         self.apgd_targeted.seed = self.get_seed()
-                        adv_curr = self.apgd_targeted.perturb(x, y) #cheap=True
+                        adv_curr = self.apgd_targeted.perturb(x, y, _min=_min, _max=_max) #cheap=True
 
                     elif attack == 'fab-t':
                         # fab targeted
@@ -251,7 +252,7 @@ class AutoAttack():
                         self.fab.is_constrained = False
                         self.fab.n_restarts = 1
                         self.fab.seed = self.get_seed()
-                        adv_curr = self.fab.perturb(x, y)
+                        adv_curr = self.fab.perturb(x, y, _min=_min, _max=_max)
 
                     elif attack == 'fab-t-constrained': # constraints checked within the perturb function
                         # fab targeted
@@ -259,7 +260,7 @@ class AutoAttack():
                         self.fab.is_constrained = True
                         self.fab.n_restarts = 1
                         self.fab.seed = self.get_seed()
-                        adv_curr = self.fab.perturb(x, y)
+                        adv_curr = self.fab.perturb(x, y, _min=_min, _max=_max)
 
                     elif attack == 'moeva2':
                         self.moeva2.is_targeted = False
