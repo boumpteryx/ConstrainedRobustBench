@@ -2,14 +2,15 @@ from comet_ml import Experiment
 import time
 
 def init_comet(args, project_name="train_tab", api_key=""):
-    if project_name=="" or project_name==None:
+    api_key = args.get("api_key", api_key)
+    if project_name=="" or project_name==None or not api_key:
         return None
 
     timestamp = time.time()
     args["timestamp"] = timestamp
     workspace = args.get("workspace", "yamizi")
     xp = args.get("model_name", "")
-    api_key = args.get("api_key", api_key)
+
     experiment_name = "{}_{}_{}".format(xp, args.get("dataset",""), timestamp)
     experiment = Experiment(api_key=api_key,
                             project_name=project_name,

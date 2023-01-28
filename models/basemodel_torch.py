@@ -10,7 +10,7 @@ import numpy as np
 from utils.io_utils import get_output_path
 
 from utils.losses import BalancedBCELossPytorch
-from utils.comet import init_comet
+#from utils.comet import init_comet
 
 class BaseModelTorch(BaseModel):
 
@@ -18,7 +18,8 @@ class BaseModelTorch(BaseModel):
         super().__init__(params, args)
         self.device = self.get_device()
         self.gpus = args.gpu_ids if args.use_gpu and torch.cuda.is_available() and args.data_parallel else None
-        self.experiment = experiment if experiment is not None else init_comet(args=vars(args), project_name="tabsurvey_basemodel")
+        args=vars(args)
+        self.experiment = experiment #if ((experiment is not None) or not args.get("api_key")) else init_comet(args=vars(args), project_name="tabsurvey_basemodel")
 
     def to_device(self):
         if self.args.data_parallel:
