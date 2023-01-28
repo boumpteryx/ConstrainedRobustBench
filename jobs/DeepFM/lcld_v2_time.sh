@@ -1,11 +1,11 @@
 #!/bin/bash -l
 
 #SBATCH --mail-user=salah.ghamizi@uni.lu
-#SBATCH -J "DeepFM_wids"
+#SBATCH -J "DeepFM_lcld_v2_time"
 #SBATCH -N 1
 #SBATCH --ntasks-per-node=2
 #SBATCH -p batch
-#SBATCH --time=10:00:00
+#SBATCH --time=1:00:00
 #SBATCH --mail-type=end,fail
 
 print_error_and_exit() { echo "***ERROR*** $*"; exit 1; }
@@ -22,4 +22,4 @@ module load lang/Python/3.8.6-GCCcore-10.2.0
 pip install --upgrade pip setuptools wheel config-utils configutils
 pip install -r requirements.txt
 pip install -e git+https://github.com/serval-uni-lu/constrained-attacks.git@ee7acd54f96b974157c55bbf551d4089a9a7a4e2
-python autoattack/examples/eval.py --config config/wids.yml --norm L2 --use_constraints 0 --model_name DeepFM
+python autoattack/examples/eval.py --verbose 1 --config config/lcld_v2_time.yml --norm L2 --use_constraints 0 --model_name DeepFM
