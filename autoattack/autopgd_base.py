@@ -283,7 +283,8 @@ class APGDAttack:
                 with torch.enable_grad():
                     logits = self.model(x_adv) if callable(self.model) else self.model.predict_torch(x_adv)
                     y = y if isinstance(criterion_indiv, nn.CrossEntropyLoss) else y.float()
-                    loss_indiv = criterion_indiv(logits.squeeze(), y)
+                    #print("=> ",logits.shape,logits.squeeze().shape, y.shape)
+                    loss_indiv = criterion_indiv(logits, y)
 
                     if self.constraints != None and self.loss in ["ce-constrained", "ce-targeted-constrained", "dlr-constrained", "dlr-targeted-constrained"]:
                         constraints_loss = self.constraints_loss(x)
@@ -419,7 +420,7 @@ class APGDAttack:
                     with torch.enable_grad():
                         logits = self.model(x_adv) if callable(self.model) else self.model.predict_torch(x_adv)
                         y = y if isinstance(criterion_indiv, nn.CrossEntropyLoss) else y.float()
-                        loss_indiv = criterion_indiv(logits.squeeze(), y)
+                        loss_indiv = criterion_indiv(logits, y)
                         loss = loss_indiv.sum()
                     grad_step = torch.autograd.grad(loss, [x_adv])[0].detach()
                     grad += grad_step
