@@ -28,11 +28,12 @@ if __name__ == '__main__':
     parser.add_argument('--data_dir', type=str, default='./data')
     parser.add_argument('--verbose', type=int, default=0)
     parser.add_argument('--norm', type=str, default='Linf')
-    parser.add_argument('--epsilon', type=float, default=8./255.)
+    parser.add_argument('--epsilon', type=float, default=16./255.)
+    parser.add_argument('--epsilon_std', type=int, default=0)
     parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
     parser.add_argument('--n_ex', type=int, default=1000)
     parser.add_argument('--individual', action='store_true')
-    parser.add_argument('--save_dir', type=str, default='./autoattack/examples/results')
+    parser.add_argument('--save_dir', type=str, default='./results')
     parser.add_argument('--batch_size', type=int, default=50)
     parser.add_argument('--log_path', type=str, default='./log_file.txt')
     parser.add_argument('--version', type=str, default='custom')
@@ -40,6 +41,8 @@ if __name__ == '__main__':
     parser.add_argument('--use_constraints', type=int, default=1)
     parser.add_argument('--all_models', type=int, default=0)
     parser.add_argument('--transfer_from', type=str, default=None)
+
+    parser.add_argument('--api_key', type=str, default="")
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     # parser.add('--model_name', required=True, help="Name of the model that should be trained")
@@ -117,8 +120,8 @@ if __name__ == '__main__':
     #mean = mean.reshape(1,-1).astype(np.float32)
     #std = np.sqrt(var.reshape(1,-1).astype(np.float32))
     #args.epsilon = np.mean(std) # budget to be adapted
-    args.epsilon = 4*x_test.std()
-    args.epsilon =  16/255 #(to mimic L2 of 8/255 or 16/255 in images)
+    if args.epsilon_std>0:
+        args.epsilon = args.epsilon_std*x_test.std()
 
     x_test_original = torch.Tensor(x_test)
     y_test = torch.Tensor(y_test)
