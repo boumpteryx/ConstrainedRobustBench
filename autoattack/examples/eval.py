@@ -105,7 +105,7 @@ if __name__ == '__main__':
         splits["train"], splits["test"] = train_index, test_index
     preprocessor.fit(x.iloc[splits["train"]])
     x_unpreprocessed = torch.FloatTensor(np.array(x)[splits["test"]])
-    x = preprocessor.transform(x).astype(np.float32)
+    x = np.array(x)#preprocessor.transform(x).astype(np.float32)
     x_test = x[splits["test"]]
     y_test = y[splits["test"]]
     x_train_original = x[splits["train"]]
@@ -157,6 +157,9 @@ if __name__ == '__main__':
         # y_test = torch.cat(l, 0)
         if args.version == 'transfer':
             adversary.attacks_to_run = ['transfer']
+
+        if args.version == 'all':
+            adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] if args.use_constraints else ['apgd-ce', 'fab','moeva2']
 
         # example of custom version
         if args.version == 'custom':
