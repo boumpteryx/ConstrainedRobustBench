@@ -485,8 +485,8 @@ class TabTransformerModel(nn.Module):
         if x_categ is not None:
             assert x_categ.shape[-1] == self.num_categories, f'you must pass in {self.num_categories} ' \
                                                              f'values for your categories input'
-            x_categ += self.categories_offset
-            x = self.transformer(x_categ)
+            #x_categ += self.categories_offset
+            x = self.transformer(x_categ+self.categories_offset)
             flat_categ = x.flatten(1)
 
         assert x_cont.shape[1] == self.num_continuous, f'you must pass in {self.num_continuous} ' \
