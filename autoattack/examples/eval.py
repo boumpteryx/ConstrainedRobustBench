@@ -5,7 +5,7 @@ import sys
 import numpy as np
 
 from constrained_attacks import datasets
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, StratifiedKFold
 
 sys.path.insert(0,'.')
@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
 
     for one_model in all_models:
-        model, x_train, x_test = init_model(one_model, args, preprocessor, x_train_original, x_test_original, y_train, y_test)
+        model, x_train, x_test, scaler = init_model(one_model, args, preprocessor, x_train_original, x_test_original, y_train, y_test)
         min_, max_ = x_train.min(), x_train.max()
         # create save dir
         if not os.path.exists(args.save_dir):
@@ -149,7 +149,7 @@ if __name__ == '__main__':
         adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
                                version=args.version, verbose=args.verbose,
-                               fun_distance_preprocess=lambda x: MinMaxScaler().fit_transform(preprocessor.transform(x)))
+                               fun_distance_preprocess=lambda x: scaler.transform(x))
 
         # l = [x for (x, y) in test_loader]
         # x_test = torch.cat(l, 0)

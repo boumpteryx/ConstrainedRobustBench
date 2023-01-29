@@ -3,15 +3,21 @@ import numpy as np
 from pipeline.pytorch import Net, Linear
 from models.basemodel_torch import BaseModelTorch
 
+from sklearn.preprocessing import MinMaxScaler
+
 from tqdm import tqdm
 
 class Denormalize(torch.nn.Module):
-    def __init__(self, min, max):
+    def __init__(self, min=0, max=1,scaler=None):
         super(Denormalize, self).__init__()
         self.minval = min
         self.maxval = max
+        self.scaler = scaler
 
     def forward(self, input):
+        if self.scaler is not None:
+            return self.scaler.inverse_transform(input)
+
         x = input*(self.maxval-self.minval) + self.minval
         return x
 
@@ -55,6 +61,7 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
     mean, std = preprocessor.mean_, preprocessor.scale_
     x_train_normalized = x_train
     x_test_normalized = x_test
+    scaler = None
 
     args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best.pt'
 
@@ -138,14 +145,14 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
                 model.model.eval()
 
         if x_test.max()>1 or x_train.max()>1:
-            min_ = x_train.min()
-            max_ = x_train.max()
+
+            scaler = MinMaxScaler().fit(x_train)
             model.model = torch.nn.Sequential(
-                Denormalize(min=min_,max=max_),
+                Denormalize(scaler=scaler),
                 model.model
             )
-            x_test_normalized = ((x_test - min_) / (max_ - min_))
-            x_train_normalized = ((x_train - min_) / (max_ - min_))
+            x_test_normalized =  torch.Tensor(scaler.transform(x_test ))
+            x_train_normalized =  torch.Tensor(scaler.transform(x_train ))
 
 
-    return model, x_train_normalized, x_test_normalized
+    return model, x_train_normalized, x_test_normalized, scaler
