@@ -156,13 +156,13 @@ class TabTransformer(BaseModelTorch):
     def predict_helper(self, X_normalized, keep_grad=False):
         self.model.eval()
 
-        if isinstance(self.model, torch.nn.Sequential):
-            X = self.model[0](X_normalized) #denormalization layer between 0 and 1
+        if isinstance(self.model, torch.nn.Sequential) and X_normalized.max()<=1:
+            X = self.model[0](X_normalized) #set back the features to original shape and ignore denormalization layer between 0 and 1
             model = self.model[1]
 
         else:
             X = X_normalized
-            model = self.model
+            model = self.model[1]
 
         if keep_grad:
             x_categ = X[:, self.args.cat_idx].int().to(self.device) if self.args.cat_idx else None
