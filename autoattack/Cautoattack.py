@@ -64,7 +64,7 @@ class AutoAttack():
                                      norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1,
                                      verbose=0)
             else:
-                self.model.model = self.model.model[1] # Remove denormalization as MoeVa is working on features unscaled
+                #self.model.model = self.model.model[1] # Remove denormalization as MoeVa is working on features unscaled
                 self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1, verbose=0)
 
         else:
