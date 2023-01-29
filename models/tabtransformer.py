@@ -153,12 +153,16 @@ class TabTransformer(BaseModelTorch):
         self.load_model(filename_extension="best", directory="tmp")
         return loss_history, val_loss_history
 
-    def predict_helper(self, X, keep_grad=False):
+    def predict_helper(self, X_normalized, keep_grad=False):
         self.model.eval()
 
         if isinstance(self.model, torch.nn.Sequential):
-            X = self.model[0](X) #denormalization layer
+            X = self.model[0](X_normalized) #denormalization layer between 0 and 1
             model = self.model[1]
+
+        else:
+            X = X_normalized
+            model = self.model
 
         if keep_grad:
             x_categ = X[:, self.args.cat_idx].int().to(self.device) if self.args.cat_idx else None
