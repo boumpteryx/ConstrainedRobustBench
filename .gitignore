@@ -1,5 +1,6 @@
 *m_best.pt
 *.json
+*.pyc
 *.gz
 pipeline/augmented_datasets/url/*
 pipeline/augmented_datasets/malware/*
