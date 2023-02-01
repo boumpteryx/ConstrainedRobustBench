@@ -369,6 +369,12 @@ class Transformer(nn.Module):
             ]))
 
     def forward(self, x):
+
+        max_shapes = x.max(1)[0]
+        if any(max_shapes >= self.embeds.num_embeddings):
+            print("error embedding", max_shapes)
+            x = torch.clamp(x,0, self.embeds.num_embeddings-1)
+
         x = self.embeds(x)
 
         for attn, ff in self.layers:
