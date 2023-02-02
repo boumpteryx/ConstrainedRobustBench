@@ -120,6 +120,13 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
         parameters = ast.literal_eval(open(param_path).read())
         print("models' parameters : ", parameters)
         model = str2model(one_model)(parameters, args)
+        if one_model == "VIME":
+            filename_self = 'trained_models/' + one_model + '/' + args.dataset + '/m_best_self.pt'
+            state_dict = torch.load(filename_self, map_location=torch.device('cpu'))
+            model.model_self.load_state_dict(state_dict)
+            filename_semi = 'trained_models/' + one_model + '/' + args.dataset + '/m_best_semi.pt'
+            state_dict = torch.load(filename_semi, map_location=torch.device('cpu'))
+            model.model_semi.load_state_dict(state_dict)
         if one_model == "RLN":
             from autoattack.utils_tf2 import ModelAdapter
             X_test, Y_test = np.array(x_test), np.array(y_test)
