@@ -10,8 +10,8 @@ from tqdm import tqdm
 class Denormalize(torch.nn.Module):
     def __init__(self, min=0, max=1,scaler=None):
         super(Denormalize, self).__init__()
-        self.minval = min
-        self.maxval = max
+        self.minval = min #torch.Tensor(min)
+        self.maxval = max #torch.Tensor(max)
         self.scaler = scaler
 
     def forward(self, input):
@@ -19,7 +19,7 @@ class Denormalize(torch.nn.Module):
             return self.scaler.inverse_transform(input)
 
         x = input*(self.maxval-self.minval) + self.minval
-        return x
+        return x.to(input.dtype)
 
 class Normalize(torch.nn.Module):
     def __init__(self, meanl, stdl):
@@ -118,7 +118,7 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
         import ast
         param_path = 'trained_models/' + one_model + '/' + args.dataset + '/parameters.json'
         parameters = ast.literal_eval(open(param_path).read())
-        print("parameters : ", parameters)
+        print("models' parameters : ", parameters)
         model = str2model(one_model)(parameters, args)
         if one_model == "RLN":
             from autoattack.utils_tf2 import ModelAdapter
@@ -146,13 +146,20 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
 
         if x_test.max()>1 or x_train.max()>1:
 
+            small_eps = 1e-10
+
+            ##TODO: Extend to per feature min and max
+            min_ = x_train.min()
+            max_ = x_train.max()
+
             scaler = MinMaxScaler().fit(x_train)
             model.model = torch.nn.Sequential(
-                Denormalize(scaler=scaler),
+                Denormalize(min=min_,max=max_),
                 model.model
             )
-            x_test_normalized =  torch.Tensor(scaler.transform(x_test ))
-            x_train_normalized =  torch.Tensor(scaler.transform(x_train ))
+            x_test_normalized = ((x_test - min_) / (max_ - min_+small_eps))
+            x_train_normalized = ((x_train - min_) / (max_ - min_+small_eps))
+
 
 
     return model, x_train_normalized, x_test_normalized, scaler
