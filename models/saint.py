@@ -184,14 +184,23 @@ class SAINT(BaseModelTorch):
         self.load_model(filename_extension="best", directory="tmp")
         return loss_history, val_loss_history
 
-    def predict_helper(self, X):
-        X = {'data': X, 'mask': np.ones_like(X)}
+    def predict_helper(self, X, keep_grad=False):
+
+        if isinstance(self.model, torch.nn.Sequential) and X.max()<=1:
+            X = self.model[0](X) #set back the features to original shape and ignore denormalization layer between 0 and 1
+            model = self.model[1]
+
+        else:
+            model = self.model[1]
+
+        X = {'data': X, 'mask': np.ones_like(X)} if keep_grad and isinstance(X, np.ndarray) else {'data': X.numpy(), 'mask': np.ones_like(X)}
         y = {'data': np.ones((X['data'].shape[0], 1))}
+
 
         test_ds = DataSetCatCon(X, y, self.args.cat_idx, self.args.objective)
         testloader = DataLoader(test_ds, batch_size=self.args.val_batch_size, shuffle=False, num_workers=4)
 
-        self.model.eval()
+        model.eval()
 
         predictions = []
 
@@ -202,10 +211,10 @@ class SAINT(BaseModelTorch):
                 x_categ, x_cont = x_categ.to(self.device), x_cont.to(self.device)
                 cat_mask, con_mask = cat_mask.to(self.device), con_mask.to(self.device)
 
-                _, x_categ_enc, x_cont_enc = embed_data_mask(x_categ, x_cont, cat_mask, con_mask, self.model)
-                reps = self.model.transformer(x_categ_enc, x_cont_enc)
+                _, x_categ_enc, x_cont_enc = embed_data_mask(x_categ, x_cont, cat_mask, con_mask, model)
+                reps = model.transformer(x_categ_enc, x_cont_enc)
                 y_reps = reps[:, 0, :]
-                y_outs = self.model.mlpfory(y_reps)
+                y_outs = model.mlpfory(y_reps)
 
                 if self.args.objective == "binary":
                     y_outs = torch.sigmoid(y_outs)

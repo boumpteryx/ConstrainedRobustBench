@@ -109,8 +109,8 @@ class AutoAttack():
     def run_standard_evaluation(self, x_orig, y_orig, bs=250, return_labels=False, x_unscaled=None,
                                 min_ = None, max_ =None):
         if self.verbose:
-            print('using {} version including {}'.format(self.version,
-                ', '.join(self.attacks_to_run)))
+            print('using {} version including {} with epsilon {}'.format(self.version,
+                ', '.join(self.attacks_to_run),self.epsilon))
 
         # checks on type of defense
         """if self.version != 'rand':

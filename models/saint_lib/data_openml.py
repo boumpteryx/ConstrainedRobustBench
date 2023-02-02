@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from torch.utils.data import Dataset
-
+import torch
 
 def data_split(X, y, nan_mask): # indices
     x_d = {
@@ -28,8 +28,8 @@ def data_prep(X, y):
 class DataSetCatCon(Dataset):
     def __init__(self, X, Y, cat_cols, task='regression', continuous_mean_std=None):
 
-        X_mask = X['mask'].copy()
-        X = X['data'].copy()
+        X_mask = X['mask'].copy() if isinstance(X['mask'], np.ndarray) else torch.clone(X['mask'])
+        X =  X['data'].copy() if isinstance(X['data'], np.ndarray) else torch.clone(X['data'])
 
         # Added this to handle data without categorical features
         if cat_cols is not None:
