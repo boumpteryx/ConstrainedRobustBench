@@ -14,3 +14,14 @@ pipeline/wids_metadata.csv
 /trained_models/*
 /.idea/*
 /constrained-attacks/*
+
+__pycache/
+
+.idea/
+.ipynb_checkpoints/
+
+catboost_info/
+logs/
+output/
+
+*.db

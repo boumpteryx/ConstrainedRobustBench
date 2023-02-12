@@ -121,10 +121,10 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
         print("models' parameters : ", parameters)
         model = str2model(one_model)(parameters, args)
         if one_model == "VIME":
-            filename_self = 'trained_models/' + one_model + '/' + args.dataset + '/m_best_self.pt'
+            filename_self = 'trained_models/' + one_model + '/' + args.dataset + '/m_self_2.pt'
             state_dict = torch.load(filename_self, map_location=torch.device('cpu'))
             model.model_self.load_state_dict(state_dict)
-            filename_semi = 'trained_models/' + one_model + '/' + args.dataset + '/m_best_semi.pt'
+            filename_semi = 'trained_models/' + one_model + '/' + args.dataset + '/m_semi_2.pt'
             state_dict = torch.load(filename_semi, map_location=torch.device('cpu'))
             model.model_semi.load_state_dict(state_dict)
         if one_model == "RLN":

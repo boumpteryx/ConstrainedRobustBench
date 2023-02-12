@@ -1,8 +1,0 @@
-
-number of outputs not respecting constraints =  0
-number of outputs not respecting constraints =  0
-15/15 [==============================] - 0s 3ms/step
-moeva2 - 2/2 - 274 out of 451 successfully perturbed
-robust accuracy after MOEVA2: 38.30% (total time 14323.9 s)
-max L2 perturbation: 10480276.00000, nan in tensor: 0, max: 10480281.00000, min: -3.00000
-robust accuracy: 38.30%
