@@ -106,7 +106,8 @@ class TabTransformer(BaseModelTorch):
 
                 loss = loss_func(out, batch_y.to(self.device))
                 loss_history.append(loss.item())
-                self.experiment.log_metric("train_loss",loss.item())
+                if self.experiment is not None:
+                    self.experiment.log_metric("train_loss",loss.item())
 
                 optimizer.zero_grad()
                 loss.backward()

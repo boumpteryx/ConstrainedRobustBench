@@ -113,7 +113,7 @@ class Objective(object):
 
 def main(args):
     print("Start hyperparameter optimization")
-    X, y = load_data(args, args.scale, args.one_hot_encode)
+    X, y, scaler, encoder = load_data(args, args.scale, args.one_hot_encode)
 
     model_name = str2model(args.model_name)
 
@@ -149,7 +149,7 @@ def main(args):
 
 def main_once(args):
     print("Train model with given hyperparameters")
-    X, y = load_data(args)
+    X, y, scaler, encoder = load_data(args)
 
     model_name = str2model(args.model_name)
 

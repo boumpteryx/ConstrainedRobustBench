@@ -136,6 +136,9 @@ def load_data(args, scale=0, one_hot_encode=0):
     args.cat_dims = []
 
     # Preprocess data
+    scaler = None
+    encoder = None
+
     for i in range(args.num_features):
         if args.cat_idx and i in args.cat_idx:
             le = LabelEncoder()
@@ -154,10 +157,10 @@ def load_data(args, scale=0, one_hot_encode=0):
         X[:, num_idx] = scaler.fit_transform(X[:, num_idx])
 
     if one_hot_encode:
-        ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
-        new_x1 = None if args.cat_idx is None else ohe.fit_transform(X[:, args.cat_idx].squeeze())
+        encoder = OneHotEncoder(sparse=False, handle_unknown='ignore')
+        new_x1 = None if args.cat_idx is None else encoder.fit_transform(X[:, args.cat_idx].squeeze())
         new_x2 = X[:, num_idx].squeeze()
         X = new_x2 if new_x1 is None else np.concatenate([new_x1, new_x2], axis=1)
         print("New Shape:", X.shape)
 
-    return X, y
+    return X, y, scaler, encoder
