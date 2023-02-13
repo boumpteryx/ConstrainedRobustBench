@@ -22,7 +22,7 @@ seed: 221 # Don't change
 # Preprocessing parameters
 scale: 1
 target_encode: True
-one_hot_encode: False
+one_hot_encode: True
 
 # Training parameters
 batch_size: 128
