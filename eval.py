@@ -91,7 +91,7 @@ if __name__ == '__main__':
         all_models = [args.model_name]
     # load_data
     x_train_original, y_train, dataset_test, scaler_train, encoder_train  = load_data(args, scale=0, one_hot_encode=args.one_hot_encode, split="train-val")
-    x_test, y_test, dataset_test, scaler_test, encoder_test = load_data(args, scale=0,
+    x_test, y_test, dataset_test, scaler_test, encoder_test = load_data(args, scale=args.scale,
                                                                                 one_hot_encode=args.one_hot_encode,
                                                                                 split="test")
 
@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
 
     for one_model in all_models:
-        model, x_train, x_test, scaler = init_model(one_model, args, preprocessor, x_train_original, x_test_original, y_train, y_test)
+        model, x_train, x_test, scaler = init_model(one_model, args, scaler_train, x_train_original, x_test_original, y_train, y_test)
         min_, max_ = x_train.min(), x_train.max()
         # create save dir
         if not os.path.exists(args.save_dir):
@@ -114,22 +114,21 @@ if __name__ == '__main__':
         # load attack
         from autoattack import AutoAttack
 
-        constraints = dataset.get_constraints()
+        constraints = dataset_test.get_constraints()
         if not args.use_constraints:
             a = LessEqualConstraint(Constant(float(constraints.lower_bounds[0])-1),Feature(0))
             b = LessEqualConstraint(Constant(float(constraints.lower_bounds[0])-1),Feature(0))
             constraints.relation_constraints = [(a), (b)]
             #constraints = AndConstraint(operands =[(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))]) #Constraints([],[],[],[], [(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))], []) # AndConstraint(operands =[(Constant(0) <= Constant(1))]) #
         # constraints = None
+
+        fun_distance_preprocess = lambda x: (scaler_train.inverse_transform(encoder_train.inverse_transform()),
+                                             scaler_train, encoder_train)
         adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
                                version=args.version, verbose=args.verbose,
-                               fun_distance_preprocess=lambda x: scaler.transform(x))
+                               fun_distance_preprocess=lambda x: fun_distance_preprocess)
 
-        # l = [x for (x, y) in test_loader]
-        # x_test = torch.cat(l, 0)
-        # l = [y for (x, y) in test_loader]
-        # y_test = torch.cat(l, 0)
         if args.version == 'transfer':
             adversary.attacks_to_run = ['transfer']
 
