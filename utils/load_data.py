@@ -155,9 +155,9 @@ def load_data(args, scale=0, one_hot_encode=0):
 
     if one_hot_encode:
         ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
-        new_x1 = ohe.fit_transform(X[:, args.cat_idx])
-        new_x2 = X[:, num_idx]
-        X = np.concatenate([new_x1, new_x2], axis=1)
+        new_x1 = None if args.cat_idx is None else ohe.fit_transform(X[:, args.cat_idx].squeeze())
+        new_x2 = X[:, num_idx].squeeze()
+        X = new_x2 if new_x1 is None else np.concatenate([new_x1, new_x2], axis=1)
         print("New Shape:", X.shape)
 
     return X, y
