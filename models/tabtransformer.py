@@ -135,7 +135,8 @@ class TabTransformer(BaseModelTorch):
                     val_dim += 1
             val_loss /= val_dim
             val_loss_history.append(val_loss)
-            self.experiment.log_metric("validation_loss",val_loss)
+            if self.experiment is not None:
+                self.experiment.log_metric("validation_loss",val_loss)
 
             print("Epoch %d: Val Loss %.5f" % (epoch, val_loss))
 
