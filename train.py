@@ -17,7 +17,7 @@ from sklearn.model_selection import KFold, StratifiedKFold  # , train_test_split
 from utils.comet import init_comet
 
 
-def cross_validation(model, X, y, args, save_model=False):
+def cross_validation(model, X, y, args, save_model=False, dataset=None):
     # Record some statistics and metrics
     sc = get_scorer(args)
     train_timer = Timer()
@@ -113,7 +113,7 @@ class Objective(object):
 
 def main(args):
     print("Start hyperparameter optimization")
-    X, y, scaler, encoder = load_data(args, args.scale, args.one_hot_encode)
+    X, y, dataset, scaler, encoder  = load_data(args, args.scale, args.one_hot_encode, "train-val")
 
     model_name = str2model(args.model_name)
 
@@ -149,7 +149,7 @@ def main(args):
 
 def main_once(args):
     print("Train model with given hyperparameters")
-    X, y, scaler, encoder = load_data(args)
+    X, y, dataset, scaler, encoder  = load_data(args)
 
     model_name = str2model(args.model_name)
 

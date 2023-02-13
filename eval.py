@@ -1,4 +1,4 @@
-import argparse
+import torch
 import os
 import sys
 
@@ -6,17 +6,16 @@ import numpy as np
 
 from utils.load_data import load_data
 
-from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, StratifiedKFold
 
-sys.path.insert(0,'.')
+sys.path.insert(0, 'autoattack/examples')
 from constrained_attacks.constraints.relation_constraint import Constant
 from constrained_attacks.constraints.relation_constraint import LessEqualConstraint, Feature
 
 from utils.models import init_model
 
-sys.path.insert(0,'..')
+sys.path.insert(0, 'autoattack')
 
 from resnet import *
 
@@ -91,31 +90,11 @@ if __name__ == '__main__':
     elif not args.all_models:
         all_models = [args.model_name]
     # load_data
-    dataset = load_data(args.dataset, 0, args.one_hot_encode)
-    x, y = dataset.get_x_y()
-    preprocessor = StandardScaler()  # dataset.get_preprocessor()
-    # splits = dataset.get_splits()
-    kf = StratifiedKFold(n_splits=args.num_splits, shuffle=args.shuffle, random_state=args.seed)
-    splits = {}
-    for i, (train_index, test_index) in enumerate(kf.split(x, y)):
-        splits["train"], splits["test"] = train_index, test_index
-    preprocessor.fit(x.iloc[splits["train"]])
-    x_unpreprocessed = torch.FloatTensor(np.array(x)[splits["test"]])
-    x = np.array(x)#preprocessor.transform(x).astype(np.float32)
-    x_test = x[splits["test"]]
-    y_test = y[splits["test"]]
-    x_train_original = x[splits["train"]]
-    y_train = y[splits["train"]]
-    if args.dataset == "ctu_13_neris":
-        _, x_test, _, y_test = train_test_split(
-            x_test, y_test, test_size=args.n_ex, random_state=42, shuffle=True, stratify=y_test
-        )
+    x_train_original, y_train, dataset_test, scaler_train, encoder_train  = load_data(args, scale=0, one_hot_encode=args.one_hot_encode, split="train-val")
+    x_test, y_test, dataset_test, scaler_test, encoder_test = load_data(args, scale=0,
+                                                                                one_hot_encode=args.one_hot_encode,
+                                                                                split="test")
 
-
-    #mean, var = preprocessor.mean_, preprocessor.var_
-    #mean = mean.reshape(1,-1).astype(np.float32)
-    #std = np.sqrt(var.reshape(1,-1).astype(np.float32))
-    #args.epsilon = np.mean(std) # budget to be adapted
     if args.epsilon_std>0:
         args.epsilon = args.epsilon_std*x_test.std()
 
@@ -198,11 +177,3 @@ if __name__ == '__main__':
 
                 torch.save(adv_complete, '{}/{}_{}_individual_1_{}_eps_{:.5f}_plus_{}_cheap_{}_{}_{}.pth'.format(
                     args.save_dir, 'aa', args.version, args.n_ex, args.epsilon, args.model_name, args.use_constraints))
-
-
-    # load data
-    # transform_list = [transforms.ToTensor()]
-    # transform_chain = transforms.Compose(transform_list)
-    # item = datasets.CIFAR10(root=args.data_dir, train=False, transform=transform_chain, download=True)
-    # test_loader = data.DataLoader(item, batch_size=1000, shuffle=False, num_workers=0)
-

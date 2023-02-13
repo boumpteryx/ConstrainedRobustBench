@@ -15,8 +15,9 @@ def discretize_colum(data_clm, num_values=10):
     return q
 
 
-def load_data(args, scale=0, one_hot_encode=0):
+def load_data(args, scale=0, one_hot_encode=0, split="train"):
     print("Loading dataset " + args.dataset + "...")
+    dataset = None
 
     if args.dataset == "CaliforniaHousing":  # Regression dataset
         X, y = sklearn.datasets.fetch_california_housing(return_X_y=True)
@@ -108,13 +109,11 @@ def load_data(args, scale=0, one_hot_encode=0):
         y = df[label_col].to_numpy()
 
     elif args.dataset in ["url", "malware", "ctu_13_neris", "lcld_v2_time", "wids"]:
-        X, y = datasets.load_dataset(args.dataset).get_x_y()
-        X, y = np.array(X), np.array(y)
-
-    elif args.dataset in []:
-        import random
-        X, y = pd.read_csv(args.dataset)[:-1], pd.read_csv(args.dataset)[-1]
-        X, y = random.shuffle(X), random.shuffle(y)
+        dataset = datasets.load_dataset(args.dataset)
+        splits = dataset.get_splits()
+        index = np.concatenate([splits["train"],splits["val"]]) if "train-val" in split else splits["train"] if "train" in split else splits["val"] if "val" in split else splits["test"]
+        X, y = dataset.get_x_y()
+        X, y = np.array(X)[index], np.array(y)[index]
 
     else:
         raise AttributeError("Dataset \"" + args.dataset + "\" not available")
@@ -163,4 +162,4 @@ def load_data(args, scale=0, one_hot_encode=0):
         X = new_x2 if new_x1 is None else np.concatenate([new_x1, new_x2], axis=1)
         print("New Shape:", X.shape)
 
-    return X, y, scaler, encoder
+    return X, y, dataset, scaler, encoder
