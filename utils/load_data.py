@@ -15,7 +15,7 @@ def discretize_colum(data_clm, num_values=10):
     return q
 
 
-def load_data(args):
+def load_data(args, scale=0, one_hot_encode=0):
     print("Loading dataset " + args.dataset + "...")
 
     if args.dataset == "CaliforniaHousing":  # Regression dataset
@@ -148,12 +148,12 @@ def load_data(args):
         else:
             num_idx.append(i)
 
-    if args.scale:
+    if scale==1:
         print("Scaling the data...")
         scaler = StandardScaler()
         X[:, num_idx] = scaler.fit_transform(X[:, num_idx])
 
-    if args.one_hot_encode:
+    if one_hot_encode:
         ohe = OneHotEncoder(sparse=False, handle_unknown='ignore')
         new_x1 = ohe.fit_transform(X[:, args.cat_idx])
         new_x2 = X[:, num_idx]

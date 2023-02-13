@@ -113,7 +113,7 @@ class Objective(object):
 
 def main(args):
     print("Start hyperparameter optimization")
-    X, y = load_data(args)
+    X, y = load_data(args, args.scale, args.one_hot_encode)
 
     model_name = str2model(args.model_name)
 
@@ -160,7 +160,7 @@ def main_once(args):
     print(sc.get_results())
     print(time)
 
-all_models = ["CatBoost"] # "LinearModel", "DeepFM", "RLN", , "LinearModel", "KNN", "DecisionTree", "RandomForest", "XGBoost", "LightGBM", "ModelTree",
+all_models = ["DeepFM"] # "LinearModel", "DeepFM", "RLN", , "LinearModel", "KNN", "DecisionTree", "RandomForest", "XGBoost", "LightGBM", "ModelTree",
                # "MLP", "TabNet", "VIME", ,"DeepGBM", "STG", "NAM", "DANet", "NODE", "DNFNet", "CatBoost"
 #                "SAINT",  "VIME", "TabTransformer"
 

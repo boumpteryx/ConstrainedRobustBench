@@ -21,7 +21,7 @@ shuffle: True
 seed: 221
 
 # Preprocessing parameters
-scale: True
+scale: 1
 target_encode: False
 
 # Training parameters

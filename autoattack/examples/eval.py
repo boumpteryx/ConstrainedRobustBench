@@ -4,6 +4,8 @@ import sys
 
 import numpy as np
 
+from utils.load_data import load_data
+
 from constrained_attacks import datasets
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, StratifiedKFold
@@ -83,19 +85,13 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    my_datasets = ["lcld_v2_time", "ctu_13_neris", "url", "malware"]
-    # feature_number = [28,756,63,24222]
-    my_models = ['./tests/resources/pytorch_models/lcld_v2_time_torch.pth',
-                 './tests/resources/pytorch_models/ctu_13_neris_test_torch.pth',
-                 './tests/resources/pytorch_models/url_test_torch.pth',
-                 './tests/resources/pytorch_models/malware_test_torch.pth']
     if args.all_models:
         all_models = ["DeepFM","TabTransformer","Linear","TORCHRLN","VIME", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
         # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
     elif not args.all_models:
         all_models = [args.model_name]
     # load_data
-    dataset = datasets.load_dataset(args.dataset)
+    dataset = load_data(args.dataset, 0, args.one_hot_encode)
     x, y = dataset.get_x_y()
     preprocessor = StandardScaler()  # dataset.get_preprocessor()
     # splits = dataset.get_splits()

@@ -151,22 +151,6 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
                 model.model.to(device)
                 model.model.eval()
 
-        if x_test.max()>1 or x_train.max()>1:
-
-            small_eps = 1e-10
-
-            ##TODO: Extend to per feature min and max
-            min_ = x_train.min()
-            max_ = x_train.max()
-
-            scaler = MinMaxScaler().fit(x_train)
-            model.model = torch.nn.Sequential(
-                Denormalize(min=min_,max=max_),
-                model.model
-            )
-            x_test_normalized = ((x_test - min_) / (max_ - min_+small_eps))
-            x_train_normalized = ((x_train - min_) / (max_ - min_+small_eps))
-
 
 
     return model, x_train_normalized, x_test_normalized, scaler

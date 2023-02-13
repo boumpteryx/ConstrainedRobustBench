@@ -175,7 +175,7 @@ def main(args):
         args.scale = False
 
     # Load dataset (currently only tested for the Adult data set)
-    X, y = load_data(args)
+    X, y = load_data(args, args.scale, args.one_hot_encode)
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.10, random_state=args.seed)
 
     # Create the model

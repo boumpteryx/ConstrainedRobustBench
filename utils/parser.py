@@ -33,7 +33,7 @@ def get_parser():
     parser.add('--shuffle', action="store_true", help="Shuffle data during cross-validation")
     parser.add('--seed', type=int, default=123, help="Seed for KFold initialization.")
 
-    parser.add('--scale', action="store_true", help="Normalize input data.")
+    parser.add('--scale', type=int, default=1, help="Normalize input data.")
     parser.add('--target_encode', action="store_true", help="Encode the targets that they start at 0. (0, 1, 2,...)")
     parser.add('--one_hot_encode', action="store_true", help="OneHotEncode the categorical features")
 

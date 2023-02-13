@@ -5,7 +5,7 @@ from utils.parser import get_given_parameters_parser
 
 def get_size(args):
     # print("Calculating model size...")
-    X, y = load_data(args)
+    X, y = load_data(args, args.scale, args.one_hot_encode)
 
     # Some models need to be fitted for one step before the size can be calculated
     args.epochs = 1
