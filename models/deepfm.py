@@ -100,11 +100,12 @@ class DeepFM(BaseModelTorch):
                                                         early_stopping=True,
                                                         patience=self.args.early_stopping_rounds)
 
-        for l in loss_history:
-            self.experiment.log_metric("train_loss", l)
+        if self.experiment is not None:
+            for l in loss_history:
+                self.experiment.log_metric("train_loss", l)
 
-        for l in val_loss_history:
-            self.experiment.log_metric("validation_loss", l)
+            for l in val_loss_history:
+                self.experiment.log_metric("validation_loss", l)
 
         return loss_history, val_loss_history
 

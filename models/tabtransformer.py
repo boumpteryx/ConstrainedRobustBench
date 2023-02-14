@@ -164,7 +164,10 @@ class TabTransformer(BaseModelTorch):
 
         else:
             X = X_normalized
-            model = self.model[1]
+            if isinstance(self.model, torch.nn.Sequential):
+                model = self.model[1]
+            else:
+                model = self.model
 
         if keep_grad:
             x_categ = X[:, self.args.cat_idx].int().to(self.device) if self.args.cat_idx else None
