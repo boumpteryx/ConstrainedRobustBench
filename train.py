@@ -149,7 +149,7 @@ def main(args):
 
 def main_once(args):
     print("Train model with given hyperparameters")
-    X, y, dataset, scaler, encoder  = load_data(args)
+    X, y, dataset, scaler, encoder  = load_data(args, args.scale, args.one_hot_encode, "train-val")
 
     model_name = str2model(args.model_name)
 
@@ -160,7 +160,7 @@ def main_once(args):
     print(sc.get_results())
     print(time)
 
-all_models = ["DeepFM"] # "LinearModel", "DeepFM", "RLN", , "LinearModel", "KNN", "DecisionTree", "RandomForest", "XGBoost", "LightGBM", "ModelTree",
+all_models = [] # "LinearModel", "DeepFM", "RLN", , "LinearModel", "KNN", "DecisionTree", "RandomForest", "XGBoost", "LightGBM", "ModelTree",
                # "MLP", "TabNet", "VIME", ,"DeepGBM", "STG", "NAM", "DANet", "NODE", "DNFNet", "CatBoost"
 #                "SAINT",  "VIME", "TabTransformer"
 
