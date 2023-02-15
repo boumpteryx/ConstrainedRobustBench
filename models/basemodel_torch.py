@@ -92,7 +92,8 @@ class BaseModelTorch(BaseModel):
 
             val_loss /= val_dim
             val_loss_history.append(val_loss.item())
-            self.experiment.log_metric("validation_loss",val_loss.item())
+            if self.experiment is not None:
+                self.experiment.log_metric("validation_loss",val_loss.item())
 
             print("Epoch %d, Val Loss: %.5f" % (epoch, val_loss))
 
@@ -120,7 +121,8 @@ class BaseModelTorch(BaseModel):
 
         loss = loss_func(out, batch_y.to(self.device))
         loss_history.append(loss.item())
-        self.experiment.log_metric("train_loss",loss.item())
+        if self.experiment is not None:
+            self.experiment.log_metric("train_loss",loss.item())
 
         optimizer.zero_grad()
         loss.backward()

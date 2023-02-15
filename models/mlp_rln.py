@@ -153,4 +153,4 @@ class RLNCallback(object):
         self._prev_regularization = regularization
 
     def _update_values(self):
-        self._weights = DataFrame(torch.t(self._layer.weight.detach()))
+        self._weights = DataFrame(torch.t(self._layer.weight.cpu().detach()))
