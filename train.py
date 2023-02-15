@@ -97,8 +97,8 @@ class Objective(object):
         trial_params = self.model_name.define_trial_parameters(trial, self.args)
 
         # Create model
-        args = {**vars(self.args), **trial_params}
-
+        self.args.num_features = self.X.shape[1]
+        args = {**vars(self.args), **trial_params, "trial":trial_params}
         experiment = init_comet(args=args, project_name="tabsurvey_train")
         model = self.model_name(trial_params, self.args, experiment)
 

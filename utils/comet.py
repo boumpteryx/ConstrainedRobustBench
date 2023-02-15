@@ -5,7 +5,7 @@ def init_comet(args, project_name="train_tab", api_key=""):
     api_key = args.get("api_key", api_key)
     if project_name=="" or project_name==None or not api_key:
         return None
-
+    print("launching a new experiment")
     timestamp = time.time()
     args["timestamp"] = timestamp
     workspace = args.get("workspace", "yamizi")
