@@ -1,5 +1,5 @@
 import logging
-import sys
+import sys, os
 
 import optuna
 import torch
@@ -15,6 +15,8 @@ from utils.parser import get_parser, get_given_parameters_parser
 from sklearn.model_selection import KFold, StratifiedKFold  # , train_test_split
 
 from utils.comet import init_comet
+
+sys.path.append(os.path.join(os.path.dirname(__file__),"src/constrained-attacks"))
 
 
 def cross_validation(model, X, y, args, save_model=False, dataset=None):

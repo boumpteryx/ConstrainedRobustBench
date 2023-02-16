@@ -26,8 +26,8 @@ class TORCHRLN(BaseModelTorch):
         self.to_device()
 
 
-
-        self.rln_callback = RLNCallback(self.model.module.layers[0], norm=self.params["norm"],
+        layer = self.model.module.layers[0] if hasattr(self.model, "module") else self.model.layers[0]
+        self.rln_callback = RLNCallback(layer, norm=self.params["norm"],
                                   avg_reg=self.params["theta"], learning_rate=lr)
 
     def fit(self, X, y, X_val=None, y_val=None):
