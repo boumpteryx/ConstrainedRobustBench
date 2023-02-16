@@ -99,6 +99,7 @@ class Objective(object):
         trial_params = self.model_name.define_trial_parameters(trial, self.args)
 
         # Create model
+        self.args.num_dense_features = self.args.num_features - len(self.args.cat_idx) if self.args.cat_idx is not None else self.args.num_features
         self.args.num_features = self.X.shape[1]
         args = {**vars(self.args), **trial_params, "trial":trial_params}
         experiment = init_comet(args=args, project_name="tabsurvey_train")
@@ -130,7 +131,7 @@ def main(args):
     
     n_completed = len(study.get_trials(states=(TrialState.COMPLETE,)))
     n_to_finish = args.n_trials
-    print(f"{n_completed} already completed")
+    print(f"{n_completed}/{n_to_finish} already completed")
     if n_completed < n_to_finish:
         study.optimize(
             Objective(args, model_name, X, y), 

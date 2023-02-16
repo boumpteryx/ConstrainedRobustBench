@@ -1,6 +1,8 @@
 import sklearn.datasets
 from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
 
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__),"../src/constrained-attacks"))
 from constrained_attacks import datasets
 
 import numpy as np

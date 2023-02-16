@@ -54,8 +54,14 @@ class DeepFM(BaseModelTorch):
             sys.exit()
 
         if args.cat_idx:
-            dense_features = list(set(range(args.num_features)) - set(args.cat_idx))
-            fixlen_feature_columns = [SparseFeat(str(feat), args.cat_dims[idx])
+            if hasattr(args,"num_dense_features") and args.num_dense_features>0 and args.num_dense_features+len(args.cat_idx) < args.num_features:
+                ### i.e. we have one hot encoded the features, using binary sparse
+                dense_features = list(range(args.num_features-args.num_dense_features, args.num_features))
+                binary_featues = list(range(0, args.num_dense_features))
+                fixlen_feature_columns =[SparseFeat(str(feat), 2)  for feat in binary_featues] + [DenseFeat(str(feat), 1, ) for feat in dense_features]
+            else:
+                dense_features = list(set(range(args.num_features)) - set(args.cat_idx))
+                fixlen_feature_columns = [SparseFeat(str(feat), args.cat_dims[idx])
                                       for idx, feat in enumerate(args.cat_idx)] + \
                                      [DenseFeat(str(feat), 1, ) for feat in dense_features]
 
@@ -78,7 +84,7 @@ class DeepFM(BaseModelTorch):
 
         if self.args.objective == "binary":
             loss = "binary_crossentropy"
-            loss = BalancedBCELoss(self.dataset)
+            #loss = BalancedBCELoss(self.dataset)
             metric = "binary_crossentropy"
             labels = [0, 1]
         elif self.args.objective == "regression":
