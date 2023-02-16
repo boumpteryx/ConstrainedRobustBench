@@ -2,7 +2,7 @@ import torch
 import numpy as np
 from pipeline.pytorch import Net, Linear
 from models.basemodel_torch import BaseModelTorch
-
+import os, json
 from sklearn.preprocessing import MinMaxScaler
 
 from tqdm import tqdm
@@ -63,7 +63,7 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
     x_test_normalized = x_test
     scaler = None
 
-    args.model = 'trained_models/' + one_model + '/' + args.dataset + '/m_best.pt'
+    args.model =  os.path.join(args.pretrained_folder,one_model,args.dataset,"models",args.model)
 
     print("model = ", one_model, " ; dataset = ", args.dataset)
     print("use_constraint = ", args.use_constraints)
@@ -83,7 +83,6 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
             Normalize(meanl=mean, stdl=std),
             model
         )
-        # model = add_normalization_layer(model=model, mean=mean, std=std)
         model.to(device)
         model.eval()
     elif one_model == "Linear":
@@ -115,16 +114,18 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
     else:
         from models import str2model
         # adapt to type of model being run
-        import ast
-        param_path = 'trained_models/' + one_model + '/' + args.dataset + '/parameters.json'
-        parameters = ast.literal_eval(open(param_path).read())
+        param_path = os.path.join(args.pretrained_folder,one_model,args.dataset)
+        parameters = {}
+        with open(os.path.join(param_path,'results.txt')) as f:
+            contents = f.read()
+            parameters = json.loads(contents.split("Best Parameters: ")[-1].strip().replace("\'", "\""))
         print("models' parameters : ", parameters)
         model = str2model(one_model)(parameters, args)
         if one_model == "VIME":
-            filename_self = 'trained_models/' + one_model + '/' + args.dataset + '/m_self_2.pt'
+            filename_self = os.path.join(param_path, 'models','m_self_2.pt')
             state_dict = torch.load(filename_self, map_location=torch.device('cpu'))
             model.model_self.load_state_dict(state_dict)
-            filename_semi = 'trained_models/' + one_model + '/' + args.dataset + '/m_semi_2.pt'
+            filename_semi = os.path.join(param_path, "models','m_semi_2.pt")
             state_dict = torch.load(filename_semi, map_location=torch.device('cpu'))
             model.model_semi.load_state_dict(state_dict)
         if one_model == "RLN":
@@ -139,10 +140,10 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
                 model = state_dict
             else:
                 from collections import OrderedDict
-                if one_model not in ["DeepFM", "TabTransformer", "TORCHRLN", "SAINT"]:
+                if one_model in ["DeepFM", "TabTransformer", "TORCHRLN", "SAINT"]:
                     new_state_dict = OrderedDict()
                     for k, v in state_dict.items():
-                        name = 'module.' + k[:]  # add `module.`
+                        name = k.replace("module.","")  # remove `module.`
                         new_state_dict[name] = v
                 else:
                     new_state_dict = state_dict

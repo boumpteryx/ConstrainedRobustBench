@@ -31,7 +31,7 @@ if __name__ == '__main__':
     parser.add_argument('--norm', type=str, default='Linf')
     parser.add_argument('--epsilon', type=float, default=16./255.)
     parser.add_argument('--epsilon_std', type=int, default=0)
-    parser.add_argument('--model', type=str, default='./tests/resources/pytorch_models/url_torch.pth')
+    parser.add_argument('--model', type=str, default='m_0.pt')
     parser.add_argument('--n_ex', type=int, default=1000)
     parser.add_argument('--individual', action='store_true')
     parser.add_argument('--save_dir', type=str, default='./results')
@@ -40,13 +40,12 @@ if __name__ == '__main__':
     parser.add_argument('--version', type=str, default='custom')
     parser.add_argument('--model_name', type=str, default='Net',help="Use '#' to use multiple models in an ensemble")
     parser.add_argument('--use_constraints', type=int, default=1)
-    parser.add_argument('--all_models', type=int, default=0)
     parser.add_argument('--transfer_from', type=str, default=None)
 
     parser.add_argument('--api_key', type=str, default="")
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
-    # parser.add('--model_name', required=True, help="Name of the model that should be trained")
+    parser.add('--pretrained_folder', type=str, default="./output", help="Path to the output folder")
     parser.add('--dataset', required=True, help="Name of the dataset that will be used", default='url')
     parser.add('--objective', required=True, type=str, default="binary", choices=["regression", "classification",
                                                                                       "binary"],
@@ -83,14 +82,9 @@ if __name__ == '__main__':
                                                              "automatically, when the load_data function is used.")
 
     args = parser.parse_args()
-
-    if args.all_models:
-        all_models = ["DeepFM","TabTransformer","Linear","TORCHRLN","VIME", "TabTransformer","LinearModel", "TabTransformer", "Net"] # "DeepFM", "TabTransformer", "LinearModel", "VIME", "Net", "RLN",
-        # "TabNet", , "SAINT" , "DANet" , "XGBoost", "CatBoost", "LightGBM", "KNN", "DecisionTree", "RandomForest", "ModelTree",  "DNFNet",  "STG", "NAM",  "MLP",  "NODE", "DeepGBM",
-    elif not args.all_models:
-        all_models = [args.model_name]
+    all_models = args.model_name.split(";")
     # load_data
-    x_train_original, y_train, dataset_test, scaler_train, encoder_train  = load_data(args, scale=0, one_hot_encode=args.one_hot_encode, split="train-val")
+    x_train_original, y_train, dataset_test, scaler_train, encoder_train  = load_data(args, scale=args.scale, one_hot_encode=args.one_hot_encode, split="train-val")
     x_test, y_test, dataset_test, scaler_test, encoder_test = load_data(args, scale=args.scale,
                                                                                 one_hot_encode=args.one_hot_encode,
                                                                                 split="test")
@@ -101,7 +95,6 @@ if __name__ == '__main__':
     x_test_original = torch.Tensor(x_test)
     y_test = torch.Tensor(y_test)
     y_test = y_test.to(torch.long)
-
 
 
     for one_model in all_models:
