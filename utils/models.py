@@ -138,14 +138,9 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
             if one_model == "LinearModelSklearn":
                 model = state_dict
             else:
+                original_dict = model.model.state_dict()
                 from collections import OrderedDict
-                if one_model in ["DeepFM", "TabTransformer", "TORCHRLN", "SAINT"]:
-                    new_state_dict = OrderedDict()
-                    for k, v in state_dict.items():
-                        name = k.replace("module.","")  # remove `module.`
-                        new_state_dict[name] = v
-                else:
-                    new_state_dict = state_dict
+                new_state_dict = OrderedDict(zip(original_dict.keys(), state_dict.values()))
                 model.model.load_state_dict(new_state_dict)
                 device = torch.device('cpu')  # "cpu"
                 model.model.to(device)
