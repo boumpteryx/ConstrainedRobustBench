@@ -120,8 +120,10 @@ class DeepFM(BaseModelTorch):
             if not self.args.cat_idx:
                 X_formatted = torch.cat((torch.zeros(X.shape[0],1),X),1)
             else:
-                X_formatted = X
-            out = self.model(X_formatted)
+                X_formatted = torch.Tensor(X)
+
+            mask = [int(feature) for feature in self.model.feature_index]
+            out = self.model(X_formatted[:,mask])
             return out
         else:
             if isinstance(self.model, torch.nn.Sequential):

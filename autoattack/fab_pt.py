@@ -72,8 +72,8 @@ class FABAttack_PT(FABAttack):
             out =  self.predict.predict_torch(x)
         else:
             out =  self.predict(x)
-        if out.shape[1] == 1:
-            out = torch.concat((1 - out, out), 1)
+            if out.shape[1] == 1:
+                out = torch.concat((1 - out, out), 1)
         return out
 
     def _get_predicted_label(self, x):
