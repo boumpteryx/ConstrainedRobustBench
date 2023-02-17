@@ -58,7 +58,6 @@ class EnsembleModel(BaseModelTorch):
 
 
 def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
-    mean, std = preprocessor.mean_, preprocessor.scale_
     x_train_normalized = x_train
     x_test_normalized = x_test
     scaler = None
@@ -80,7 +79,7 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
         else:
             device = torch.device("cpu")
         model = torch.nn.Sequential(
-            Normalize(meanl=mean, stdl=std),
+            Normalize(meanl=x_test_normalized.mean(), stdl=x_test_normalized.std()),
             model
         )
         model.to(device)
@@ -96,7 +95,7 @@ def init_model(one_model, args, preprocessor, x_train, x_test, y_train, y_test):
         else:
             device = torch.device("cpu")
         model = torch.nn.Sequential(
-            Normalize(meanl=mean, stdl=std),
+            Normalize(meanl=x_test_normalized.mean(), stdl=x_test_normalized.std()),
             model
         )
         # model = add_normalization_layer(model=model, mean=mean, std=std)

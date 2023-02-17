@@ -1,5 +1,5 @@
 import sklearn.datasets
-from sklearn.preprocessing import StandardScaler, LabelEncoder, OneHotEncoder
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder, OneHotEncoder
 
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__),"../src/constrained-attacks"))
@@ -154,7 +154,7 @@ def load_data(args, scale=0, one_hot_encode=0, split="train"):
 
     if scale==1:
         print("Scaling the data...")
-        scaler = StandardScaler()
+        scaler = MinMaxScaler()
         X[:, num_idx] = scaler.fit_transform(X[:, num_idx])
 
     if one_hot_encode:
