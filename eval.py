@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 import os,sys
 sys.path.append(os.path.join(os.path.dirname(__file__),"src/constrained-attacks"))
 
@@ -50,12 +51,22 @@ if __name__ == '__main__':
             #constraints = AndConstraint(operands =[(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))]) #Constraints([],[],[],[], [(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))], []) # AndConstraint(operands =[(Constant(0) <= Constant(1))]) #
         # constraints = None
 
-        fun_distance_preprocess = lambda x: (scaler_train.inverse_transform(encoder_train.inverse_transform()),
-                                             scaler_train, encoder_train)
+        def fun_distance_preprocess(x):
+            nb_features = x.shape[1]
+            x_cat =x[:,0:nb_features-args.num_dense_features]
+            x_num_unscaled = x[:,nb_features-args.num_dense_features:nb_features]
+            x_num_unscaled =scaler_train.inverse_transform(x_num_unscaled)
+            x_cat_unencoded = encoder_train.inverse_transform(x_cat)
+            x_reversed = np.zeros((x.shape[0],x_num_unscaled.shape[1]+x_cat_unencoded.shape[1]))
+            num_index = [a for a in range(x_reversed.shape[1]) if a not in args.cat_idx]
+            x_reversed[:,args.cat_idx] = x_cat_unencoded
+            x_reversed[:,num_index] = x_num_unscaled
+            return torch.Tensor(x_reversed),scaler_train, encoder_train
+
         adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
                                version=args.version, verbose=args.verbose,
-                               fun_distance_preprocess=lambda x: fun_distance_preprocess)
+                               fun_distance_preprocess=fun_distance_preprocess)
 
         if args.version == 'transfer':
             adversary.attacks_to_run = ['transfer']
@@ -69,7 +80,7 @@ if __name__ == '__main__':
             if args.use_constraints:
                 adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             elif not args.use_constraints:
-                adversary.attacks_to_run = ['fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
+                adversary.attacks_to_run = ['apgd-ce','fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
             adversary.apgd.n_restarts = 2
             adversary.fab.n_restarts = 2
 

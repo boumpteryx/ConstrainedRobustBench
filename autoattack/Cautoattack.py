@@ -37,7 +37,7 @@ class AutoAttack():
         self.is_tf_model = is_tf_model
         self.device = device
         self.logger = Logger(log_path)
-        self.fun_distance_preprocess = fun_distance_preprocess
+        self.fun_preprocess = fun_distance_preprocess
 
         self.experiment = init_comet(vars(arguments),project_name="tabsurvey_eval-minmax")
 
@@ -66,11 +66,11 @@ class AutoAttack():
             from constrained_attacks.attacks.moeva.moeva import Moeva2
             if self.arguments.model_name == "Linear" or self.arguments.model_name == "Net":
                 self.moeva2 = Moeva2(classifier_class=self.model, constraints=self.constraints,
-                                     norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1,
+                                     norm=self.norm, fun_distance_preprocess=self.fun_preprocess, n_jobs=1,
                                      verbose=0)
             else:
                 #self.model.model = self.model.model[1] # Remove denormalization as MoeVa is working on features unscaled
-                self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_distance_preprocess, n_jobs=1, verbose=0)
+                self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_preprocess, n_jobs=1, verbose=0)
 
         else:
             from .autopgd_base import APGDAttack
