@@ -1,8 +1,9 @@
 import logging
 import sys, os
-
+import json
 
 from utils.comet import init_comet
+import torch
 import optuna
 from optuna.trial import TrialState
 from optuna._callbacks import MaxTrialsCallback, RetryFailedTrialCallback
@@ -74,10 +75,12 @@ def cross_validation(model, X, y, args, save_model=False, dataset=None):
         save_results_to_file(args, sc.get_results(),
                              train_timer.get_average_time(), test_timer.get_average_time(),
                              model.params)
-    # f = open("output_final/model_" + args.dataset + "_" + args.model_name + "_params.json", "w")
-    # f.write(str(curr_model.params))
-    # f.close()
-    # torch.save(curr_model, "output_final/model_" + args.dataset + "_" + args.model_name + "_final.pt")
+
+        with open(os.path.join("output",args.model_name, args.dataset, 'params.json'), 'w') as f:
+            json.dump(curr_model.params, f)
+
+        torch.save(curr_model, os.path.join("output",args.model_name, args.dataset,"final.pt"))
+
 
     return sc, (train_timer.get_average_time(), test_timer.get_average_time())
 
@@ -101,7 +104,7 @@ class Objective(object):
         self.args.num_dense_features = self.args.num_features - len(self.args.cat_idx) if self.args.cat_idx is not None else self.args.num_features
         self.args.num_features = self.X.shape[1]
         args = {**vars(self.args), **trial_params, "trial":trial_params}
-        experiment = init_comet(args=args, project_name="tabsurvey_train")
+        experiment = init_comet(args=args, project_name="tabsurvey_train_minmax")
         model = self.model_name(trial_params, self.args, experiment)
 
 
