@@ -374,8 +374,8 @@ class AutoAttack():
                 robust_accuracy_dict[attack] = robust_accuracy
 
                 if self.experiment is not None:
-                    self.experiment.log_metric(f"[{attack}] success rate (over {x.shape[0]} batches",
-                                               num_non_robust_batch/ x.shape[0], step=batch_idx)
+                    self.experiment.log_metric(f"[{attack}] success rate",
+                                               torch.sum(false_batch)/ x.shape[0], step=batch_idx)
 
                     self.experiment.log_metric(f"[{attack}] robust_accuracy", robust_accuracy, step=batch_idx)
                     self.experiment.log_metric(f"[{attack}] robust_AUC", robust_AUC, step=batch_idx)
