@@ -9,8 +9,6 @@ import numpy as np
 
 from utils.io_utils import get_output_path
 
-from utils.losses import BalancedBCELossPytorch
-#from utils.comet import init_comet
 
 class BaseModelTorch(BaseModel):
 
