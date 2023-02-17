@@ -90,6 +90,9 @@ if __name__ == '__main__':
 
 
     for one_model in all_models:
+        args.num_dense_features = args.num_features - len(
+            args.cat_idx) if args.cat_idx is not None else args.num_features
+        args.num_features = x_test_original.shape[1]
         model, x_train, x_test, scaler = init_model(one_model, args, scaler_train, x_train_original, x_test_original, y_train, y_test)
         min_, max_ = x_train.min(), x_train.max()
         # create save dir
