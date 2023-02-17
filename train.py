@@ -6,7 +6,7 @@ from utils.comet import init_comet
 import torch
 import optuna
 from optuna.trial import TrialState
-from optuna._callbacks import MaxTrialsCallback, RetryFailedTrialCallback
+from optuna._callbacks import MaxTrialsCallback
 from models import str2model
 from utils.load_data import load_data
 from utils.scorer import get_scorer
@@ -170,7 +170,7 @@ all_models = [] # "LinearModel", "DeepFM", "RLN", , "LinearModel", "KNN", "Decis
 #                "SAINT",  "VIME", "TabTransformer"
 
 if __name__ == "__main__":
-    parser = get_parser()
+    parser = get_parser("train")
     arguments = parser.parse_args()
     print(arguments)
 

@@ -1,9 +1,6 @@
-
 import torch
 import os,sys
 sys.path.append(os.path.join(os.path.dirname(__file__),"src/constrained-attacks"))
-
-import numpy as np
 
 from utils.load_data import load_data
 
@@ -11,69 +8,12 @@ from constrained_attacks.constraints.relation_constraint import Constant
 from constrained_attacks.constraints.relation_constraint import LessEqualConstraint, Feature
 
 from utils.models import init_model
-import configargparse
+from utils.parser import get_parser
 
 if __name__ == '__main__':
-    # parser = argparse.ArgumentParser()
-    parser = configargparse.ArgumentParser(config_file_parser_class=configargparse.YAMLConfigFileParser,
-                                           formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--data_dir', type=str, default='./data')
-    parser.add_argument('--verbose', type=int, default=0)
-    parser.add_argument('--norm', type=str, default='Linf')
-    parser.add_argument('--epsilon', type=float, default=16./255.)
-    parser.add_argument('--epsilon_std', type=int, default=0)
-    parser.add_argument('--model', type=str, default='m_0.pt')
-    parser.add_argument('--n_ex', type=int, default=1000)
-    parser.add_argument('--individual', action='store_true')
-    parser.add_argument('--save_dir', type=str, default='./results')
-    parser.add_argument('--batch_size', type=int, default=50)
-    parser.add_argument('--log_path', type=str, default='./log_file.txt')
-    parser.add_argument('--version', type=str, default='custom')
-    parser.add_argument('--model_name', type=str, default='Net',help="Use '#' to use multiple models in an ensemble")
-    parser.add_argument('--use_constraints', type=int, default=1)
-    parser.add_argument('--transfer_from', type=str, default=None)
-
-    parser.add('--api_key', required=True, help="The COMET ML API key")
-    parser.add('--workspace', required=True, help="The COMET ML workspace")
-
-    parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
-    parser.add('--pretrained_folder', type=str, default="./output", help="Path to the output folder")
-    parser.add('--dataset', required=True, help="Name of the dataset that will be used", default='url')
-    parser.add('--objective', required=True, type=str, default="binary", choices=["regression", "classification",
-                                                                                      "binary"],
-               help="Set the type of the task")
-
-    parser.add('--use_gpu', action="store_true", help="Set to true if GPU is available")
-    parser.add('--gpu_ids', type=int, action="append", help="IDs of the GPUs used when data_parallel is true")
-    parser.add('--data_parallel', action="store_true", help="Distribute the training over multiple GPUs")
-
-    parser.add('--optimize_hyperparameters', action="store_true",
-               help="Search for the best hyperparameters")
-    parser.add('--n_trials', type=int, default=100, help="Number of trials for the hyperparameter optimization")
-    parser.add('--direction', type=str, default="minimize", choices=['minimize', 'maximize'],
-               help="Direction of optimization.")
-
-    parser.add('--num_splits', type=int, default=5, help="Number of splits done for cross validation")
-    parser.add('--shuffle', action="store_true", help="Shuffle data during cross-validation")
-    parser.add('--seed', type=int, default=123, help="Seed for KFold initialization.")
-
-    parser.add('--scale', action="store_true", help="Normalize input data.")
-    parser.add('--target_encode', action="store_true", help="Encode the targets that they start at 0. (0, 1, 2,...)")
-    parser.add('--one_hot_encode', action="store_true", help="OneHotEncode the categorical features")
-
-    # parser.add('--batch_size', type=int, default=128, help="Batch size used for training")
-    parser.add('--val_batch_size', type=int, default=128, help="Batch size used for training and testing")
-    parser.add('--early_stopping_rounds', type=int, default=20, help="Number of rounds before early stopping applies.")
-    parser.add('--epochs', type=int, default=1000, help="Max number of epochs to train.")
-    parser.add('--logging_period', type=int, default=100, help="Number of iteration after which validation is printed.")
-
-    parser.add('--num_features', type=int, required=True, help="Set the total number of features.")
-    parser.add('--num_classes', type=int, default=1, help="Set the number of classes in a classification task.")
-    parser.add('--cat_idx', type=int, action="append", help="Indices of the categorical features")
-    parser.add('--cat_dims', type=int, action="append", help="Cardinality of the categorical features (is set "
-                                                             "automatically, when the load_data function is used.")
-
+    parser = get_parser("eval")
     args = parser.parse_args()
+
     all_models = args.model_name.split(";")
     # load_data
     x_train_original, y_train, dataset_test, scaler_train, encoder_train  = load_data(args, scale=args.scale, one_hot_encode=args.one_hot_encode, split="train-val")
@@ -120,18 +60,21 @@ if __name__ == '__main__':
         if args.version == 'transfer':
             adversary.attacks_to_run = ['transfer']
 
-        if args.version == 'all':
+        elif args.version == 'all':
             adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] if args.use_constraints else ['apgd-ce', 'fab','moeva2']
 
         # example of custom version
-        if args.version == 'custom':
+        elif args.version == 'custom':
             print(args.use_constraints)
             if args.use_constraints:
                 adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             elif not args.use_constraints:
                 adversary.attacks_to_run = ['fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
+            adversary.apgd.n_restarts = 2
+            adversary.fab.n_restarts = 2
 
-                constraints = [Constant(0) <= Constant(1)]
+        else:
+            adversary.attacks_to_run = args.version.split("#")
             adversary.apgd.n_restarts = 2
             adversary.fab.n_restarts = 2
 

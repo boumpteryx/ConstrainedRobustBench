@@ -2,7 +2,7 @@ import configargparse
 import yaml
 
 
-def get_parser():
+def get_parser(config="train"):
     # Use parser that can read YML files
     parser = configargparse.ArgumentParser(config_file_parser_class=configargparse.YAMLConfigFileParser,
                                            formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
@@ -10,27 +10,28 @@ def get_parser():
     parser.add('-config', '--config', required=False, is_config_file_arg=True, help='config file path',
                default="config/adult.yml")  # kddcup99 covertype california_housing adult higgs
 
-    parser.add('--model_name', required=True, help="Name of the model that should be trained")
-    parser.add('--dataset', required=True, help="Name of the dataset that will be used")
-    parser.add('--objective', required=True, type=str, default="regression", choices=["regression", "classification",
-                                                                                      "binary"],
-               help="Set the type of the task")
-
     parser.add('--api_key', required=True, help="The COMET ML API key")
     parser.add('--workspace', required=True, help="The COMET ML workspace")
+    parser.add_argument('--verbose', type=int, default=0)
+
+
+    parser.add('--model_name', required=True, help="Name of the model that should be trained. Use '#' to use multiple models in an ensemble")
+    parser.add('--dataset', required=True, help="Name of the dataset that will be used")
+
+    parser.add('--objective', required=True, type=str, default="regression",
+               choices=["regression", "classification", "binary"], help="Set the type of the task")
+    parser.add('--n_trials', type=int, default=100, help="Number of trials for the hyperparameter optimization")
+    parser.add('--direction', type=str, default="minimize", choices=['minimize', 'maximize'],
+               help="Direction of optimization.")
+    parser.add('--num_splits', type=int, default=5, help="Number of splits done for cross validation")
+    parser.add('--shuffle', action="store_true", help="Shuffle data during cross-validation")
+    parser.add('--early_stopping_rounds', type=int, default=20,
+               help="Number of rounds before early stopping applies.")
 
     parser.add('--use_gpu', action="store_true", help="Set to true if GPU is available")
     parser.add('--gpu_ids', type=int, action="append", help="IDs of the GPUs used when data_parallel is true")
     parser.add('--data_parallel', action="store_true", help="Distribute the training over multiple GPUs")
 
-    parser.add('--optimize_hyperparameters', action="store_true",
-               help="Search for the best hyperparameters")
-    parser.add('--n_trials', type=int, default=100, help="Number of trials for the hyperparameter optimization")
-    parser.add('--direction', type=str, default="minimize", choices=['minimize', 'maximize'],
-               help="Direction of optimization.")
-
-    parser.add('--num_splits', type=int, default=5, help="Number of splits done for cross validation")
-    parser.add('--shuffle', action="store_true", help="Shuffle data during cross-validation")
     parser.add('--seed', type=int, default=123, help="Seed for KFold initialization.")
 
     parser.add('--scale', type=int, default=1, help="Normalize input data.")
@@ -39,15 +40,40 @@ def get_parser():
 
     parser.add('--batch_size', type=int, default=256, help="Batch size used for training")
     parser.add('--val_batch_size', type=int, default=256, help="Batch size used for training and testing")
-    parser.add('--early_stopping_rounds', type=int, default=20, help="Number of rounds before early stopping applies.")
-    parser.add('--epochs', type=int, default=1000, help="Max number of epochs to train.")
-    parser.add('--logging_period', type=int, default=100, help="Number of iteration after which validation is printed.")
 
     parser.add('--num_features', type=int, required=True, help="Set the total number of features.")
     parser.add('--num_classes', type=int, default=1, help="Set the number of classes in a classification task.")
     parser.add('--cat_idx', type=int, action="append", help="Indices of the categorical features")
     parser.add('--cat_dims', type=int, action="append", help="Cardinality of the categorical features (is set "
                                                              "automatically, when the load_data function is used.")
+
+
+    if config=="train":
+        parser.add('--optimize_hyperparameters', action="store_true",
+                   help="Search for the best hyperparameters")
+
+        parser.add('--epochs', type=int, default=1000, help="Max number of epochs to train.")
+
+        parser.add('--logging_period', type=int, default=100,
+                   help="Number of iteration after which validation is printed.")
+
+    elif config == "eval":
+
+        parser.add_argument('--data_dir', type=str, default='./data')
+        parser.add('--pretrained_folder', type=str, default="./output", help="Path to the output folder")
+
+        parser.add_argument('--norm', type=str, default='Linf')
+        parser.add_argument('--epsilon', type=float, default=16. / 255.)
+        parser.add_argument('--epsilon_std', type=int, default=0)
+        parser.add_argument('--model', type=str, default='m_0.pt')
+        parser.add_argument('--n_ex', type=int, default=1000)
+        parser.add_argument('--individual', action='store_true')
+        parser.add_argument('--save_dir', type=str, default='./results')
+        parser.add_argument('--log_path', type=str, default='./log_file.txt')
+        parser.add_argument('--version', type=str, default='custom')
+        parser.add_argument('--use_constraints', type=int, default=1)
+        parser.add_argument('--transfer_from', type=str, default=None)
+
 
     # Todo: Validate the arguments
 
