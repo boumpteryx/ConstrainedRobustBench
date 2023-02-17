@@ -277,7 +277,7 @@ class AutoAttack():
                         self.moeva2.is_targeted = False
                         adv_curr = self.moeva2.generate(x.cpu().numpy(),y.numpy(),x.shape[0])
                         threshold = {"misclassification":np.array([np.inf, np.inf]),"distance":self.epsilon, "constraints": 0.01}
-                        calcul = ObjectiveCalculator(Classifier(self.model),constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_distance_preprocess)
+                        calcul = ObjectiveCalculator(Classifier(self.model),constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_preprocess)
                         adv_curr = calcul.get_successful_attacks(
                             np.array(x.cpu().numpy()),
                             y.numpy(),
@@ -288,17 +288,7 @@ class AutoAttack():
                             return_index_success=False,
                             recompute=True,
                         )
-                        # adv_curr = torch.tensor(adv_curr[:,0,:])
                         adv_curr = torch.tensor(adv_curr)
-                        # remove outputs that do not respect constraints
-                        checker = ConstraintChecker(self.constraints, tolerance=0.01)
-                        check = checker.check_constraints(x, adv_curr, pt=True)
-                        for i in range(len(check)):
-                            counter = 0
-                            if not check[i]:
-                                counter += 1
-                                adv_curr[i] = x[i]
-                        print("number of outputs not respecting constraints = ", counter)
 
 
                     elif attack == 'moeva2-t':
@@ -307,7 +297,7 @@ class AutoAttack():
                         threshold = {"misclassification": np.array([np.inf, np.inf]), "distance": self.epsilon,
                                      "constraints": 0.01}
                         calcul = ObjectiveCalculator(Classifier(self.model), constraints=self.constraints, thresholds=threshold,
-                                                     norm=2, fun_distance_preprocess=self.fun_distance_preprocess)
+                                                     norm=2, fun_distance_preprocess=self.fun_preprocess)
                         adv_curr = calcul.get_successful_attacks(
                             x.cpu().numpy(),
                             y.numpy(),
@@ -319,15 +309,6 @@ class AutoAttack():
                             recompute=True,
                         )
                         adv_curr = torch.tensor(adv_curr)
-                        # remove outputs that do not respect constraints
-                        checker = ConstraintChecker(self.constraints, tolerance=0.01)
-                        check = checker.check_constraints(x, adv_curr, pt=True)
-                        for i in range(len(check)):
-                            counter = 0
-                            if not check[i]:
-                                counter += 1
-                                adv_curr[i] = x[i]
-                        print("number of outputs not respecting constraints = ", counter)
 
                     elif attack == "transfer":
                         if self.transfer_from is not None:
@@ -341,15 +322,14 @@ class AutoAttack():
                     else:
                         raise ValueError('Attack not supported')
 
+                    check_constraints = 1
                     if attack in ['moeva2', 'moeva2-t', 'apgd-t-ce-constrained', 'apgd-t-constrained', 'apgd-ce-constrained', 'apgd-dlr-constrained']:
                         # remove outputs that do not respect constraints
                         checker = ConstraintChecker(self.constraints, tolerance=0.01)
-                        check = checker.check_constraints(x, adv_curr, pt=True)
-                        for i in range(len(check)):
-                            counter = 0
-                            if not check[i]:
-                                counter += 1
-                                adv_curr[i] = x[i]
+                        x_unscaled , _, _ = self.fun_preprocess(x)
+                        adv_unscaled, _, _ = self.fun_preprocess(x)
+                        check_constraints = checker.check_constraints(x_unscaled, adv_unscaled, pt=True)
+                        counter = len(check_constraints) - check_constraints.sum()
                         print("number of outputs not respecting constraints = ", counter)
                         if self.experiment is not None:
                             self.experiment.log_metric(f"[{attack}] Not respecting constraints", counter)
@@ -358,13 +338,12 @@ class AutoAttack():
                     false_batch = ~y.eq(output).to(robust_flags.device)
                     non_robust_lin_idcs = batch_datapoint_idcs[false_batch]
                     robust_flags[non_robust_lin_idcs] = False
-                    # output.to(torch.float)
 
                     x_adv[non_robust_lin_idcs] = adv_curr[false_batch].detach().to(x_adv.device)
                     y_adv[non_robust_lin_idcs] = output[false_batch].detach().to(x_adv.device)
 
                 if self.verbose:
-                    num_non_robust_batch = torch.sum(false_batch)
+                    num_non_robust_batch = torch.sum(false_batch*check_constraints)
                     self.logger.log('{} - {}/{} - {} out of {} successfully perturbed'.format(
                         attack, batch_idx + 1, n_batches, num_non_robust_batch, x.shape[0]))
 
