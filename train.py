@@ -1,8 +1,9 @@
 import logging
 import sys, os
 
+
+from utils.comet import init_comet
 import optuna
-import torch
 from optuna.trial import TrialState
 from optuna._callbacks import MaxTrialsCallback, RetryFailedTrialCallback
 from models import str2model
@@ -13,8 +14,6 @@ from utils.io_utils import save_results_to_file, save_hyperparameters_to_file, s
 from utils.parser import get_parser, get_given_parameters_parser
 
 from sklearn.model_selection import KFold, StratifiedKFold  # , train_test_split
-
-from utils.comet import init_comet
 
 sys.path.append(os.path.join(os.path.dirname(__file__),"src/constrained-attacks"))
 

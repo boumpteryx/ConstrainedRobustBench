@@ -1,26 +1,17 @@
+
 import torch
-import os
-import sys
+import os,sys
+sys.path.append(os.path.join(os.path.dirname(__file__),"src/constrained-attacks"))
 
 import numpy as np
 
 from utils.load_data import load_data
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split, StratifiedKFold
-
-sys.path.insert(0, 'autoattack/examples')
 from constrained_attacks.constraints.relation_constraint import Constant
 from constrained_attacks.constraints.relation_constraint import LessEqualConstraint, Feature
 
 from utils.models import init_model
-
-sys.path.insert(0, 'autoattack')
-
-from resnet import *
-
 import configargparse
-import yaml
 
 if __name__ == '__main__':
     # parser = argparse.ArgumentParser()
@@ -42,7 +33,8 @@ if __name__ == '__main__':
     parser.add_argument('--use_constraints', type=int, default=1)
     parser.add_argument('--transfer_from', type=str, default=None)
 
-    parser.add_argument('--api_key', type=str, default="")
+    parser.add('--api_key', required=True, help="The COMET ML API key")
+    parser.add('--workspace', required=True, help="The COMET ML workspace")
 
     parser.add('--config', type=str,  is_config_file_arg=True, default='config/url.yml')
     parser.add('--pretrained_folder', type=str, default="./output", help="Path to the output folder")
@@ -135,7 +127,6 @@ if __name__ == '__main__':
                 adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             elif not args.use_constraints:
                 adversary.attacks_to_run = ['apgd-ce', 'fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
-                adversary.attacks_to_run = ['moeva2']
 
                 constraints = [Constant(0) <= Constant(1)]
             adversary.apgd.n_restarts = 2
@@ -152,7 +143,7 @@ if __name__ == '__main__':
                 adv_complete, y_adv_complete = adversary.run_standard_evaluation(x_test_l, y_test_l,
                                                                  bs=args.batch_size,
                                                                  return_labels=True,
-                                                                 x_unscaled=x_unpreprocessed[:args.n_ex],
+                                                                 x_unscaled=None,
                                                                  min_ = min_, max_ =max_             )
 
                 torch.save({'adv_complete': adv_complete}, '{}/{}_{}_dataset_{}_norm_{}_1_{}_eps_{:.5f}_{}_constraints_{}.pth'.format(

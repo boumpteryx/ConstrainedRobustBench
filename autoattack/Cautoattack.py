@@ -2,6 +2,9 @@ import math
 import time
 
 import numpy as np
+
+from utils.comet import init_comet
+
 import torch
 from constrained_attacks.objective_calculator.cache_objective_calculator import ObjectiveCalculator
 from tqdm import tqdm
@@ -35,6 +38,8 @@ class AutoAttack():
         self.device = device
         self.logger = Logger(log_path)
         self.fun_distance_preprocess = fun_distance_preprocess
+
+        self.experiment = init_comet(vars(arguments),project_name="tabsurvey_eval")
 
         if version in ['standard', 'plus', 'rand'] and attacks_to_run != []:
             raise ValueError("attacks_to_run will be overridden unless you use version='custom'")
@@ -155,6 +160,11 @@ class AutoAttack():
                 self.logger.log('initial AUC: {:.2%}'.format(robust_AUC))
                 self.logger.log('initial MCC: {:.2%}'.format(robust_MCC))
 
+            if self.experiment is not None:
+                self.experiment.log_metric("initial Accuracy", robust_accuracy)
+                self.experiment.log_metric("initial AUC", robust_AUC)
+                self.experiment.log_metric("initial MCC", robust_MCC)
+
             x_adv = x_orig.clone().detach()
             startt = time.time()
             for attack in self.attacks_to_run:
@@ -265,12 +275,12 @@ class AutoAttack():
 
                     elif attack == 'moeva2':
                         self.moeva2.is_targeted = False
-                        adv_curr = self.moeva2.generate(np.array(x_unscaled_usable.numpy()),np.array(y.numpy()),x.shape[0])
+                        adv_curr = self.moeva2.generate(x.cpu().numpy(),y.numpy(),x.shape[0])
                         threshold = {"misclassification":np.array([np.inf, np.inf]),"distance":self.epsilon, "constraints": 0.01}
                         calcul = ObjectiveCalculator(Classifier(self.model),constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_distance_preprocess)
                         adv_curr = calcul.get_successful_attacks(
-                            np.array(x_unscaled_usable.numpy()),
-                            np.array(y.numpy()),
+                            np.array(x.cpu().numpy()),
+                            y.numpy(),
                             adv_curr,
                             preferred_metrics="misclassification",
                             order="asc",
@@ -293,14 +303,14 @@ class AutoAttack():
 
                     elif attack == 'moeva2-t':
                         self.moeva2.is_targeted = True # useless for now
-                        adv_curr = self.moeva2.generate(np.array(x_unscaled.numpy()),np.array(y.numpy()),x.shape[0])
+                        adv_curr = self.moeva2.generate(x.cpu().numpy(),y.numpy(),x.shape[0])
                         threshold = {"misclassification": np.array([np.inf, np.inf]), "distance": self.epsilon,
                                      "constraints": 0.01}
                         calcul = ObjectiveCalculator(Classifier(self.model), constraints=self.constraints, thresholds=threshold,
                                                      norm=2, fun_distance_preprocess=self.fun_distance_preprocess)
                         adv_curr = calcul.get_successful_attacks(
-                            np.array(x_unscaled_usable.numpy()),
-                            np.array(y.numpy()),
+                            x.cpu().numpy(),
+                            y.numpy(),
                             adv_curr,
                             preferred_metrics="misclassification",
                             order="asc",
@@ -341,6 +351,8 @@ class AutoAttack():
                                 counter += 1
                                 adv_curr[i] = x[i]
                         print("number of outputs not respecting constraints = ", counter)
+                        if self.experiment is not None:
+                            self.experiment.log_metric(f"[{attack}] Not respecting constraints", counter)
 
                     output = self.get_logits(adv_curr).max(dim=1)[1]
                     false_batch = ~y.eq(output).to(robust_flags.device)
@@ -360,6 +372,15 @@ class AutoAttack():
                 robust_AUC = roc_auc_score(y_orig, y_adv)
                 robust_MCC = matthews_corrcoef(y_orig, y_adv)
                 robust_accuracy_dict[attack] = robust_accuracy
+
+                if self.experiment is not None:
+                    self.experiment.log_metric(f"[{attack}] success rate (over {x.shape[0]} batches",
+                                               num_non_robust_batch/ x.shape[0], step=batch_idx)
+
+                    self.experiment.log_metric(f"[{attack}] robust_accuracy", robust_accuracy, step=batch_idx)
+                    self.experiment.log_metric(f"[{attack}] robust_AUC", robust_AUC, step=batch_idx)
+                    self.experiment.log_metric(f"[{attack}] robust_MCC", robust_MCC, step=batch_idx)
+
                 if self.verbose:
                     self.logger.log('robust accuracy after {}: {:.2%} (total time {:.1f} s)'.format(
                         attack.upper(), robust_accuracy, time.time() - startt))

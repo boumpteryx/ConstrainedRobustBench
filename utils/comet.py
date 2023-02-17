@@ -19,6 +19,7 @@ def init_comet(args, project_name="train_tab", api_key=""):
                             parse_args=False, display_summary=False, disabled=False)
 
     experiment.set_name(experiment_name)
+    args["api_key"] = ""
     experiment.log_parameters(args)
 
     return experiment
