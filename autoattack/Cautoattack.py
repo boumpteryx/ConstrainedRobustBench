@@ -39,7 +39,7 @@ class AutoAttack():
         self.logger = Logger(log_path)
         self.fun_distance_preprocess = fun_distance_preprocess
 
-        self.experiment = init_comet(vars(arguments),project_name="tabsurvey_eval")
+        self.experiment = init_comet(vars(arguments),project_name="tabsurvey_eval-minmax")
 
         if version in ['standard', 'plus', 'rand'] and attacks_to_run != []:
             raise ValueError("attacks_to_run will be overridden unless you use version='custom'")
@@ -161,7 +161,7 @@ class AutoAttack():
                 self.logger.log('initial MCC: {:.2%}'.format(robust_MCC))
 
             if self.experiment is not None:
-                self.experiment.log_metric("initial Accuracy", robust_accuracy)
+                self.experiment.log_metric("initial accuracy", robust_accuracy)
                 self.experiment.log_metric("initial AUC", robust_AUC)
                 self.experiment.log_metric("initial MCC", robust_MCC)
 

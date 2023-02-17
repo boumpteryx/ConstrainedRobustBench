@@ -129,7 +129,7 @@ if __name__ == '__main__':
             if args.use_constraints:
                 adversary.attacks_to_run = ['apgd-ce-constrained', 'fab-constrained','moeva2'] # 'apgd-t-ce-constrained', 'fab-constrained',
             elif not args.use_constraints:
-                adversary.attacks_to_run = ['apgd-ce', 'fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
+                adversary.attacks_to_run = ['fab','moeva2']  # 'apgd-t-ce-constrained', 'fab-constrained',
 
                 constraints = [Constant(0) <= Constant(1)]
             adversary.apgd.n_restarts = 2
