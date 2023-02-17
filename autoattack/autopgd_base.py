@@ -15,7 +15,7 @@ import random
 from autoattack.other_utils import L0_norm, L1_norm, L2_norm
 from autoattack.checks import check_zero_gradients
 
-from constraints.constraints_executor import PytorchConstraintsExecutor
+from constrained_attacks.constraints.constraints_executor import PytorchConstraintsExecutor
 from constrained_attacks.constraints.relation_constraint import AndConstraint
 from constrained_attacks.constraints.constraints import Constraints
 
@@ -124,6 +124,7 @@ class APGDAttack:
         use_largereps=False,
         is_tf_model=False,
         logger=None,
+        fun_preprocess=None
     ):
         """
         AutoPGD implementation in PyTorch
@@ -152,6 +153,7 @@ class APGDAttack:
         self.y_target = None
         self.logger = logger
         self.constraints = constraints
+        self.fun_preprocess = fun_preprocess
 
         assert self.norm in ["Linf", "L2", "L1"]
         assert not self.eps is None
@@ -198,11 +200,14 @@ class APGDAttack:
     def constraints_loss(self, x):
         if self.constraints is None:
             return 0
+
+        x_inversed, _, _ = self.fun_preprocess(x)
         executor = PytorchConstraintsExecutor(
             AndConstraint(self.constraints.relation_constraints),
             feature_names=self.constraints.feature_names,
         )
-        return executor.execute(x)
+        loss = executor.execute(x_inversed)
+        return torch.nan_to_num(loss,0)
 
     def dlr_loss(self, x, y):
         x_sorted, ind_sorted = x.sort(dim=1)
@@ -421,7 +426,12 @@ class APGDAttack:
                         logits = self.model(x_adv) if callable(self.model) else self.model.predict_torch(x_adv)
                         y = y if isinstance(criterion_indiv, nn.CrossEntropyLoss) else y.float()
                         loss_indiv = criterion_indiv(logits, y)
-                        loss = loss_indiv.sum()
+                        if self.constraints != None and self.loss in ["ce-constrained", "ce-targeted-constrained",
+                                                                      "dlr-constrained", "dlr-targeted-constrained"]:
+                            constraints_loss = self.constraints_loss(x)
+                            loss = loss_indiv.sum() + constraints_loss.sum()
+                        else:
+                            loss = loss_indiv.sum()
                     grad_step = torch.autograd.grad(loss, [x_adv])[0].detach()
                     grad += grad_step
 

@@ -12,7 +12,7 @@ from tqdm import tqdm
 from autoattack.other_utils import Logger
 from autoattack import checks
 from constrained_attacks.classifier.classifier import Classifier
-from constraints.constraints_checker import ConstraintChecker
+from constrained_attacks.constraints.constraints_checker import ConstraintChecker
 
 
 class AutoAttack():
@@ -48,7 +48,7 @@ class AutoAttack():
             from .autopgd_base import APGDAttack
             self.apgd = APGDAttack(self.model, constraints=self.constraints, n_restarts=5, n_iter=100, verbose=self.verbose,#self.verbose,
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed,
-                device=self.device, logger=self.logger)
+                device=self.device, logger=self.logger, fun_preprocess=fun_distance_preprocess)
 
             from .fab_pt import FABAttack_PT
             self.fab = FABAttack_PT(self.model, self.constraints, n_restarts=5, n_iter=100, eps=self.epsilon, seed=self.seed,
