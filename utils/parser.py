@@ -63,7 +63,8 @@ def get_parser(config="train"):
         parser.add('--pretrained_folder', type=str, default="./output", help="Path to the output folder")
 
         parser.add_argument('--norm', type=str, default='Linf')
-        parser.add_argument('--epsilon', type=float, default=16. / 255.)
+        parser.add_argument('--epsilon', type=float, default=32. / 255.)
+        parser.add_argument('--constraint_tolerance', type=float, default=0.01)
         parser.add_argument('--epsilon_std', type=int, default=0)
         parser.add_argument('--model', type=str, default='m_0.pt')
         parser.add_argument('--n_ex', type=int, default=1000)

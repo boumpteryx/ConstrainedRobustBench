@@ -325,7 +325,7 @@ class AutoAttack():
                     check_constraints = 1
                     if attack in ['moeva2', 'moeva2-t', 'apgd-t-ce-constrained', 'apgd-t-constrained', 'apgd-ce-constrained', 'apgd-dlr-constrained']:
                         # remove outputs that do not respect constraints
-                        checker = ConstraintChecker(self.constraints, tolerance=0.01)
+                        checker = ConstraintChecker(self.constraints, tolerance=self.arguments.constraint_tolerance)
                         x_unscaled , _, _ = self.fun_preprocess(x)
                         adv_unscaled, _, _ = self.fun_preprocess(x)
                         check_constraints = checker.check_constraints(x_unscaled, adv_unscaled, pt=True)
