@@ -51,17 +51,41 @@ if __name__ == '__main__':
             #constraints = AndConstraint(operands =[(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))]) #Constraints([],[],[],[], [(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))], []) # AndConstraint(operands =[(Constant(0) <= Constant(1))]) #
         # constraints = None
 
+        def softargmax(x, dim=-1):
+            # crude: assumes max value is unique
+            beta = 100.0
+            xx = beta * x
+            sm = torch.nn.functional.softmax(xx, dim=dim)
+            indices = torch.arange(x.shape[dim])
+            y = torch.mul(indices, sm)
+            result = torch.sum(y, dim)
+            return result
+
         def fun_distance_preprocess(x):
             nb_features = x.shape[1]
-            x_cat =x[:,0:nb_features-args.num_dense_features]
-            x_num_unscaled = x[:,nb_features-args.num_dense_features:nb_features]
-            x_num_unscaled =scaler_train.inverse_transform(x_num_unscaled)
-            x_cat_unencoded = encoder_train.inverse_transform(x_cat)
-            x_reversed = np.zeros((x.shape[0],x_num_unscaled.shape[1]+x_cat_unencoded.shape[1]))
+            x_cat = x[:, 0:nb_features - args.num_dense_features]
+            x_num_unscaled = x[:, nb_features - args.num_dense_features:nb_features]
+
+            if isinstance(x,torch.Tensor):
+                ## process as tensor to preserve gradient
+                print()
+                x_num_unscaled = x_num_unscaled * (torch.Tensor(scaler_train.data_max_) - torch.Tensor(scaler_train.data_min_)) + torch.Tensor(scaler_train.data_min_)
+                x_cat_encoded = torch.split(x_cat, [len(a) for a in encoder_train.categories_], 1)
+                #x_cat_argmax = [a.argmax(1) for a in x_cat_encoded]
+                x_cat_softmax = [softargmax(a, 1) for a in x_cat_encoded]
+                x_cat_unencoded = torch.stack(x_cat_softmax).swapaxes(0, 1)
+                x_reversed = torch.zeros((x.shape[0], x_num_unscaled.shape[1] + x_cat_unencoded.shape[1]))
+            else:
+                ## process as numpy
+                x_num_unscaled =scaler_train.inverse_transform(x_num_unscaled)
+                x_cat_unencoded = encoder_train.inverse_transform(x_cat)
+                x_reversed = np.zeros((x.shape[0],x_num_unscaled.shape[1]+x_cat_unencoded.shape[1]))
+
             num_index = [a for a in range(x_reversed.shape[1]) if a not in args.cat_idx]
             x_reversed[:,args.cat_idx] = x_cat_unencoded
             x_reversed[:,num_index] = x_num_unscaled
-            return torch.Tensor(x_reversed),scaler_train, encoder_train
+
+            return x_reversed,scaler_train, encoder_train
 
         adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
