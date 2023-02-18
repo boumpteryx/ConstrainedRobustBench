@@ -68,7 +68,6 @@ if __name__ == '__main__':
 
             if isinstance(x,torch.Tensor):
                 ## process as tensor to preserve gradient
-                print()
                 x_num_unscaled = x_num_unscaled * (torch.Tensor(scaler_train.data_max_) - torch.Tensor(scaler_train.data_min_)) + torch.Tensor(scaler_train.data_min_)
                 x_cat_encoded = torch.split(x_cat, [len(a) for a in encoder_train.categories_], 1)
                 #x_cat_argmax = [a.argmax(1) for a in x_cat_encoded]
