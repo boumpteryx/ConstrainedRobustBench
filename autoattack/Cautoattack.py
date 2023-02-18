@@ -328,6 +328,11 @@ class AutoAttack():
                         checker = ConstraintChecker(self.constraints, tolerance=self.arguments.constraint_tolerance)
                         x_unscaled , _, _ = self.fun_preprocess(x)
                         adv_unscaled, _, _ = self.fun_preprocess(x)
+
+                        #to balance the softargmax
+                        x_unscaled[x_unscaled < 1e-20] = 0
+                        adv_unscaled[adv_unscaled < 1e-20] = 0
+
                         check_constraints = checker.check_constraints(x_unscaled, adv_unscaled, pt=True)
                         counter = len(check_constraints) - check_constraints.sum()
                         print("number of outputs not respecting constraints = ", counter)
