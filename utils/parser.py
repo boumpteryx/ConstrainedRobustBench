@@ -36,7 +36,7 @@ def get_parser(config="train"):
 
     parser.add('--scale', type=int, default=1, help="Normalize input data.")
     parser.add('--target_encode', action="store_true", help="Encode the targets that they start at 0. (0, 1, 2,...)")
-    parser.add('--one_hot_encode', action="store_true", help="OneHotEncode the categorical features")
+    parser.add('--one_hot_encode',  type=int, default=1, help="OneHotEncode the categorical features")
 
     parser.add('--batch_size', type=int, default=256, help="Batch size used for training")
     parser.add('--val_batch_size', type=int, default=256, help="Batch size used for training and testing")
