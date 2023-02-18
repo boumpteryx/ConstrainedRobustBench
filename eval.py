@@ -20,7 +20,49 @@ if __name__ == '__main__':
     x_train_original, y_train, dataset_test, scaler_train, encoder_train  = load_data(args, scale=args.scale, one_hot_encode=args.one_hot_encode, split="train-val")
     x_test, y_test, dataset_test, scaler_test, encoder_test = load_data(args, scale=args.scale,
                                                                                 one_hot_encode=args.one_hot_encode,
-                                                                                split="test")
+                                                                                split="test", reuse_scaler=scaler_train,
+                                                                                reuse_encoder=encoder_train)
+    args.num_dense_features = args.num_features - len(
+        args.cat_idx) if args.cat_idx is not None else args.num_features
+    args.num_features = x_test.shape[1]
+
+    def softargmax(x, dim=-1):
+        # crude: assumes max value is unique
+        beta = 100.0
+        xx = beta * x
+        sm = torch.nn.functional.softmax(xx, dim=dim)
+        indices = torch.arange(x.shape[dim])
+        y = torch.mul(indices, sm)
+        result = torch.sum(y, dim)
+        return result
+
+
+    def fun_distance_preprocess(x):
+        nb_features = x.shape[1]
+        x_cat = x[:, 0:nb_features - args.num_dense_features]
+        x_num_unscaled = x[:, nb_features - args.num_dense_features:nb_features]
+
+        if isinstance(x, torch.Tensor):
+            ## process as tensor to preserve gradient
+            x_num_unscaled = x_num_unscaled * (
+                        torch.Tensor(scaler_train.data_max_) - torch.Tensor(scaler_train.data_min_)) + torch.Tensor(
+                scaler_train.data_min_)
+            x_cat_encoded = torch.split(x_cat, [len(a) for a in encoder_train.categories_], 1)
+            # x_cat_argmax = [a.argmax(1) for a in x_cat_encoded]
+            x_cat_softmax = [softargmax(a, 1) for a in x_cat_encoded]
+            x_cat_unencoded = torch.stack(x_cat_softmax).swapaxes(0, 1)
+            x_reversed = torch.zeros((x.shape[0], x_num_unscaled.shape[1] + x_cat_unencoded.shape[1]))
+        else:
+            ## process as numpy
+            x_num_unscaled = scaler_train.inverse_transform(x_num_unscaled)
+            x_cat_unencoded = encoder_train.inverse_transform(x_cat)
+            x_reversed = np.zeros((x.shape[0], x_num_unscaled.shape[1] + x_cat_unencoded.shape[1]))
+
+        num_index = [a for a in range(x_reversed.shape[1]) if a not in args.cat_idx]
+        x_reversed[:, args.cat_idx] = x_cat_unencoded
+        x_reversed[:, num_index] = x_num_unscaled
+
+        return x_reversed, scaler_train, encoder_train
 
     if args.epsilon_std>0:
         args.epsilon = args.epsilon_std*x_test.std()
@@ -29,11 +71,23 @@ if __name__ == '__main__':
     y_test = torch.Tensor(y_test)
     y_test = y_test.to(torch.long)
 
+    constraints = dataset_test.get_constraints()
+    if not args.use_constraints:
+        a = LessEqualConstraint(Constant(float(constraints.lower_bounds[0]) - 1), Feature(0))
+        b = LessEqualConstraint(Constant(float(constraints.lower_bounds[0]) - 1), Feature(0))
+        constraints.relation_constraints = [(a), (b)]
+
+    from constrained_attacks.constraints.constraints_checker import ConstraintChecker
+
+    ## sanity check that the original inputs satisfy the constraints
+    checker = ConstraintChecker(constraints, tolerance=args.constraint_tolerance)
+    x_test2, _, _ = fun_distance_preprocess(x_test[:args.n_ex])
+    check_constraints = checker.check_constraints(x_test2, x_test2, pt=True)
+    counter = len(check_constraints) - check_constraints.sum()
+    print("number of initial inputs not respecting constraints {}/{}".format(counter,len(check_constraints)))
 
     for one_model in all_models:
-        args.num_dense_features = args.num_features - len(
-            args.cat_idx) if args.cat_idx is not None else args.num_features
-        args.num_features = x_test_original.shape[1]
+
         model, x_train, x_test, scaler = init_model(one_model, args, scaler_train, x_train_original, x_test_original, y_train, y_test)
         min_, max_ = x_train.min(), x_train.max()
         # create save dir
@@ -43,48 +97,6 @@ if __name__ == '__main__':
         # load attack
         from autoattack import AutoAttack
 
-        constraints = dataset_test.get_constraints()
-        if not args.use_constraints:
-            a = LessEqualConstraint(Constant(float(constraints.lower_bounds[0])-1),Feature(0))
-            b = LessEqualConstraint(Constant(float(constraints.lower_bounds[0])-1),Feature(0))
-            constraints.relation_constraints = [(a), (b)]
-            #constraints = AndConstraint(operands =[(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))]) #Constraints([],[],[],[], [(Constant(0) <= Constant(1)), (Constant(0) <= Constant(1))], []) # AndConstraint(operands =[(Constant(0) <= Constant(1))]) #
-        # constraints = None
-
-        def softargmax(x, dim=-1):
-            # crude: assumes max value is unique
-            beta = 100.0
-            xx = beta * x
-            sm = torch.nn.functional.softmax(xx, dim=dim)
-            indices = torch.arange(x.shape[dim])
-            y = torch.mul(indices, sm)
-            result = torch.sum(y, dim)
-            return result
-
-        def fun_distance_preprocess(x):
-            nb_features = x.shape[1]
-            x_cat = x[:, 0:nb_features - args.num_dense_features]
-            x_num_unscaled = x[:, nb_features - args.num_dense_features:nb_features]
-
-            if isinstance(x,torch.Tensor):
-                ## process as tensor to preserve gradient
-                x_num_unscaled = x_num_unscaled * (torch.Tensor(scaler_train.data_max_) - torch.Tensor(scaler_train.data_min_)) + torch.Tensor(scaler_train.data_min_)
-                x_cat_encoded = torch.split(x_cat, [len(a) for a in encoder_train.categories_], 1)
-                #x_cat_argmax = [a.argmax(1) for a in x_cat_encoded]
-                x_cat_softmax = [softargmax(a, 1) for a in x_cat_encoded]
-                x_cat_unencoded = torch.stack(x_cat_softmax).swapaxes(0, 1)
-                x_reversed = torch.zeros((x.shape[0], x_num_unscaled.shape[1] + x_cat_unencoded.shape[1]))
-            else:
-                ## process as numpy
-                x_num_unscaled =scaler_train.inverse_transform(x_num_unscaled)
-                x_cat_unencoded = encoder_train.inverse_transform(x_cat)
-                x_reversed = np.zeros((x.shape[0],x_num_unscaled.shape[1]+x_cat_unencoded.shape[1]))
-
-            num_index = [a for a in range(x_reversed.shape[1]) if a not in args.cat_idx]
-            x_reversed[:,args.cat_idx] = x_cat_unencoded
-            x_reversed[:,num_index] = x_num_unscaled
-
-            return x_reversed,scaler_train, encoder_train
 
         adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,

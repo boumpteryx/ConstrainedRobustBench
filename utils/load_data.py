@@ -17,7 +17,7 @@ def discretize_colum(data_clm, num_values=10):
     return q
 
 
-def load_data(args, scale=0, one_hot_encode=0, split="train"):
+def load_data(args, scale=0, one_hot_encode=0, split="train", reuse_encoder=None, reuse_scaler=None):
     print("Loading dataset " + args.dataset + "...")
     dataset = None
 
@@ -154,12 +154,22 @@ def load_data(args, scale=0, one_hot_encode=0, split="train"):
 
     if scale==1:
         print("Scaling the data...")
-        scaler = MinMaxScaler()
-        X[:, num_idx] = scaler.fit_transform(X[:, num_idx])
+        if reuse_scaler:
+            scaler = reuse_scaler
+        else:
+            scaler = MinMaxScaler()
+            scaler.fit(X[:, num_idx])
+
+        X[:, num_idx] = scaler.transform(X[:, num_idx])
 
     if one_hot_encode:
-        encoder = OneHotEncoder(sparse=False, handle_unknown='ignore')
-        new_x1 = None if args.cat_idx is None else encoder.fit_transform(X[:, args.cat_idx].squeeze())
+        if reuse_encoder:
+            encoder = reuse_encoder
+        else:
+            encoder = OneHotEncoder(sparse=False, handle_unknown='ignore')
+            encoder.fit(X[:, args.cat_idx].squeeze())
+
+        new_x1 = None if args.cat_idx is None else encoder.transform(X[:, args.cat_idx].squeeze())
         new_x2 = X[:, num_idx].squeeze()
         X = new_x2 if new_x1 is None else np.concatenate([new_x1, new_x2], axis=1)
         print("New Shape:", X.shape)

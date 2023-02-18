@@ -335,7 +335,7 @@ class AutoAttack():
 
                         check_constraints = checker.check_constraints(x_unscaled, adv_unscaled, pt=True)
                         counter = len(check_constraints) - check_constraints.sum()
-                        print("number of outputs not respecting constraints = ", counter)
+                        print("number of initial inputs not respecting constraints {}/{}".format(counter,len(check_constraints)))
                         if self.experiment is not None:
                             self.experiment.log_metric(f"[{attack}] Not respecting constraints", counter)
 
