@@ -188,8 +188,6 @@ class AutoAttack():
                     if len(batch_datapoint_idcs.shape) > 1:
                         batch_datapoint_idcs.squeeze_(-1)
                     x = x_orig[batch_datapoint_idcs, :].clone().to(self.device)
-                    if x_unscaled is not None:
-                        x_unscaled_usable = x_unscaled[batch_datapoint_idcs, :].clone().to(self.device)
                     y = y_orig[batch_datapoint_idcs].clone().to(self.device)
 
                     # make sure that x is a 4d tensor even if there is only a single datapoint left
@@ -337,7 +335,8 @@ class AutoAttack():
                         counter = len(check_constraints) - check_constraints.sum()
                         print("number of initial inputs not respecting constraints {}/{}".format(counter,len(check_constraints)))
                         if self.experiment is not None:
-                            self.experiment.log_metric(f"[{attack}] Not respecting constraints", counter)
+                            self.experiment.log_metric(f"[{attack}] # not respecting constraints", counter)
+                            self.experiment.log_metric(f"[{attack}] % not respecting constraints", counter/len(check_constraints))
 
                     output = self.get_logits(adv_curr).max(dim=1)[1]
                     false_batch = ~y.eq(output).to(robust_flags.device)
@@ -359,7 +358,7 @@ class AutoAttack():
 
                 if self.experiment is not None:
                     self.experiment.log_metric(f"[{attack}] success rate",
-                                               torch.sum(false_batch)/ x.shape[0], step=batch_idx)
+                                               torch.sum(false_batch*check_constraints)/ x.shape[0], step=batch_idx)
 
                     self.experiment.log_metric(f"[{attack}] robust_accuracy", robust_accuracy, step=batch_idx)
                     self.experiment.log_metric(f"[{attack}] robust_AUC", robust_AUC, step=batch_idx)
