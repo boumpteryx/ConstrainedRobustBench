@@ -22,6 +22,12 @@ if __name__ == '__main__':
                                                                                 one_hot_encode=args.one_hot_encode,
                                                                                 split="test", reuse_scaler=scaler_train,
                                                                                 reuse_encoder=encoder_train)
+
+    x_test_raw, _, _, _, _ = load_data(args, scale=0,
+                                                                        one_hot_encode=0,
+                                                                        split="test", reuse_scaler=scaler_train,
+                                                                        reuse_encoder=encoder_train)
+
     args.num_dense_features = args.num_features - len(
         args.cat_idx) if args.cat_idx is not None else args.num_features
     args.num_features = x_test.shape[1]
@@ -96,6 +102,9 @@ if __name__ == '__main__':
     ## sanity check that the original inputs satisfy the constraints
     checker = ConstraintChecker(constraints, tolerance=args.constraint_tolerance)
     x_test2, _, _ = fun_preprocess_to_problem(x_test[:args.n_ex])
+    check_processing = x_test_raw[:args.n_ex] == x_test2
+    correct_processing = (x_test_raw[:args.n_ex] - x_test2) < args.constraint_tolerance
+    print("Initial inputs features different after scaling & encoding {}%".format(100-correct_processing.mean()*100))
     check_constraints = checker.check_constraints(x_test2, x_test2, pt=True)
     counter = len(check_constraints) - check_constraints.sum()
     print("number of initial inputs not respecting constraints {}/{}".format(counter,len(check_constraints)))
