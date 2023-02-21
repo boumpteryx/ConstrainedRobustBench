@@ -37,7 +37,21 @@ if __name__ == '__main__':
         return result
 
 
-    def fun_distance_preprocess(x):
+    def fun_preprocess_to_feature(x):
+        scaler = scaler_train
+        encoder = encoder_train
+        nb_features = x.shape[1]
+
+        num_idx = [a for a in range(nb_features) if a not in args.cat_idx]
+        x[:, num_idx] = scaler.transform(x[:, num_idx])
+        new_x1 = None if args.cat_idx is None else encoder.transform(x[:, args.cat_idx])
+        new_x2 = x[:, num_idx]
+        x = new_x2 if new_x1 is None else np.concatenate([new_x1, new_x2], axis=1)
+
+        return x
+
+
+    def fun_preprocess_to_problem(x):
         nb_features = x.shape[1]
         x_cat = x[:, 0:nb_features - args.num_dense_features]
         x_num_unscaled = x[:, nb_features - args.num_dense_features:nb_features]
@@ -81,7 +95,7 @@ if __name__ == '__main__':
 
     ## sanity check that the original inputs satisfy the constraints
     checker = ConstraintChecker(constraints, tolerance=args.constraint_tolerance)
-    x_test2, _, _ = fun_distance_preprocess(x_test[:args.n_ex])
+    x_test2, _, _ = fun_preprocess_to_problem(x_test[:args.n_ex])
     check_constraints = checker.check_constraints(x_test2, x_test2, pt=True)
     counter = len(check_constraints) - check_constraints.sum()
     print("number of initial inputs not respecting constraints {}/{}".format(counter,len(check_constraints)))
@@ -101,7 +115,7 @@ if __name__ == '__main__':
         adversary = AutoAttack(model=model, arguments=args, constraints=constraints, norm=args.norm, eps=args.epsilon,
                                log_path=args.log_path,
                                version=args.version, verbose=args.verbose,
-                               fun_distance_preprocess=fun_distance_preprocess)
+                               fun_preprocess_to_problem=fun_preprocess_to_problem, fun_preprocess_to_feature=fun_preprocess_to_feature)
 
         if args.version == 'transfer':
             adversary.attacks_to_run = ['transfer']

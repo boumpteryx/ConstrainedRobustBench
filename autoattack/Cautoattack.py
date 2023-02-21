@@ -18,7 +18,7 @@ from constrained_attacks.constraints.constraints_checker import ConstraintChecke
 class AutoAttack():
     def __init__(self, model, arguments, constraints=None, norm='Linf', eps=.3, seed=None, verbose=False,
                  attacks_to_run=[], version='standard', is_tf_model=False,
-                 device='cpu', log_path=None, fun_distance_preprocess=None):
+                 device='cpu', log_path=None, fun_preprocess_to_problem=None, fun_preprocess_to_feature=None):
         self.model = model
         self.arguments = arguments
         self.n_ex = arguments.n_ex
@@ -37,7 +37,8 @@ class AutoAttack():
         self.is_tf_model = is_tf_model
         self.device = device
         self.logger = Logger(log_path)
-        self.fun_preprocess = fun_distance_preprocess
+        self.fun_preprocess_to_problem = fun_preprocess_to_problem
+        self.fun_preprocess_to_feature = fun_preprocess_to_feature
 
         self.experiment = init_comet(vars(arguments),project_name="tabsurvey_eval-minmax")
 
@@ -48,7 +49,7 @@ class AutoAttack():
             from .autopgd_base import APGDAttack
             self.apgd = APGDAttack(self.model, constraints=self.constraints, n_restarts=5, n_iter=100, verbose=self.verbose,#self.verbose,
                 eps=self.epsilon, norm=self.norm, eot_iter=1, rho=.75, seed=self.seed,
-                device=self.device, logger=self.logger, fun_preprocess=fun_distance_preprocess)
+                device=self.device, logger=self.logger, fun_preprocess=fun_preprocess_to_problem)
 
             from .fab_pt import FABAttack_PT
             self.fab = FABAttack_PT(self.model, self.constraints, n_restarts=5, n_iter=100, eps=self.epsilon, seed=self.seed,
@@ -66,11 +67,11 @@ class AutoAttack():
             from constrained_attacks.attacks.moeva.moeva import Moeva2
             if self.arguments.model_name == "Linear" or self.arguments.model_name == "Net":
                 self.moeva2 = Moeva2(classifier_class=self.model, constraints=self.constraints,
-                                     norm=self.norm, fun_distance_preprocess=self.fun_preprocess, n_jobs=1,
-                                     verbose=0)
+                                     norm=self.norm, fun_distance_preprocess=self.fun_preprocess_to_feature, n_jobs=1,
+                                     verbose=self.verbose)
             else:
                 #self.model.model = self.model.model[1] # Remove denormalization as MoeVa is working on features unscaled
-                self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_preprocess, n_jobs=1, verbose=0)
+                self.moeva2 = Moeva2(classifier_class = Classifier(self.model), constraints = self.constraints, norm=self.norm, fun_distance_preprocess=self.fun_preprocess_to_feature, n_jobs=1, verbose=self.verbose)
 
         else:
             from .autopgd_base import APGDAttack
@@ -273,9 +274,12 @@ class AutoAttack():
 
                     elif attack == 'moeva2':
                         self.moeva2.is_targeted = False
-                        adv_curr = self.moeva2.generate(x.cpu().numpy(),y.numpy(),x.shape[0])
+                        x_unscaled, _, _ = self.fun_preprocess_to_problem(x)
+                        x_unscaled[x_unscaled < 1e-20] = 0
+
+                        adv_curr = self.moeva2.generate(x_unscaled.cpu().numpy(),y.numpy(),x_unscaled.shape[0])
                         threshold = {"misclassification":np.array([np.inf, np.inf]),"distance":self.epsilon, "constraints": 0.01}
-                        calcul = ObjectiveCalculator(Classifier(self.model),constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_preprocess)
+                        calcul = ObjectiveCalculator(Classifier(self.model),constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_preprocess_to_problem)
                         adv_curr = calcul.get_successful_attacks(
                             np.array(x.cpu().numpy()),
                             y.numpy(),
@@ -295,7 +299,7 @@ class AutoAttack():
                         threshold = {"misclassification": np.array([np.inf, np.inf]), "distance": self.epsilon,
                                      "constraints": 0.01}
                         calcul = ObjectiveCalculator(Classifier(self.model), constraints=self.constraints, thresholds=threshold,
-                                                     norm=2, fun_distance_preprocess=self.fun_preprocess)
+                                                     norm=2, fun_distance_preprocess=self.fun_preprocess_to_problem)
                         adv_curr = calcul.get_successful_attacks(
                             x.cpu().numpy(),
                             y.numpy(),
@@ -324,8 +328,8 @@ class AutoAttack():
                     if attack in ['moeva2', 'moeva2-t', 'apgd-t-ce-constrained', 'apgd-t-constrained', 'apgd-ce-constrained', 'apgd-dlr-constrained']:
                         # remove outputs that do not respect constraints
                         checker = ConstraintChecker(self.constraints, tolerance=self.arguments.constraint_tolerance)
-                        x_unscaled , _, _ = self.fun_preprocess(x)
-                        adv_unscaled, _, _ = self.fun_preprocess(x)
+                        x_unscaled , _, _ = self.fun_preprocess_to_problem(x)
+                        adv_unscaled, _, _ = self.fun_preprocess_to_problem(x)
 
                         #to balance the softargmax
                         x_unscaled[x_unscaled < 1e-20] = 0
