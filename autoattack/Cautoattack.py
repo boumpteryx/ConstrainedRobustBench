@@ -278,7 +278,8 @@ class AutoAttack():
                         x_unscaled[x_unscaled < 1e-20] = 0
 
                         adv_curr = self.moeva2.generate(x_unscaled.cpu().numpy(),y.numpy(),x_unscaled.shape[0])
-                        threshold = {"misclassification":np.array([np.inf, np.inf]),"distance":self.epsilon, "constraints": 0.01}
+                        adv_curr = np.array([self.fun_preprocess_to_feature(adv_curr[i]) for i in range(len(x_unscaled))])
+                        threshold = {"misclassification":np.array([np.inf, np.inf]),"distance":self.epsilon, "constraints": self.arguments.constraint_tolerance}
                         calcul = ObjectiveCalculator(Classifier(self.model),constraints=self.constraints,thresholds=threshold,norm=2,fun_distance_preprocess=self.fun_preprocess_to_problem)
                         adv_curr = calcul.get_successful_attacks(
                             np.array(x.cpu().numpy()),
@@ -292,12 +293,11 @@ class AutoAttack():
                         )
                         adv_curr = torch.tensor(adv_curr)
 
-
                     elif attack == 'moeva2-t':
                         self.moeva2.is_targeted = True # useless for now
                         adv_curr = self.moeva2.generate(x.cpu().numpy(),y.numpy(),x.shape[0])
                         threshold = {"misclassification": np.array([np.inf, np.inf]), "distance": self.epsilon,
-                                     "constraints": 0.01}
+                                     "constraints": self.arguments.constraint_tolerance}
                         calcul = ObjectiveCalculator(Classifier(self.model), constraints=self.constraints, thresholds=threshold,
                                                      norm=2, fun_distance_preprocess=self.fun_preprocess_to_problem)
                         adv_curr = calcul.get_successful_attacks(
